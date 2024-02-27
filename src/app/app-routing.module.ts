@@ -10,19 +10,19 @@ import { EntryComponent } from './entry/entry.component';
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent
+    component: HomeComponent,
   },
   {
     path: 'about',
-    component: AboutComponent
+    component: AboutComponent,
   },
   {
     path: 'picks',
-    component: EntryComponent
+    component: EntryComponent,
   },
   {
     path: 'scores',
-    component: BracketComponent
+    component: BracketComponent,
   },
   {
     path: 'admin',
@@ -31,7 +31,7 @@ const routes: Routes = [
   },
   {
     path: 'standings',
-    component: StandingsComponent
+    component: StandingsComponent,
   },
 ];
 
@@ -40,4 +40,4 @@ const routes: Routes = [
   exports: [RouterModule],
   // providers: [AdminRouteGuard]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

@@ -8,7 +8,8 @@ import { AboutComponent } from './about/about.component';
 import { BracketComponent } from './bracket/bracket.component';
 import { AdminComponent } from './admin/admin.component';
 import { StandingsComponent } from './standings/standings.component';
-import { EntryComponent } from './entry/entry.component';
+import { HttpClientModule } from '@angular/common/http';
+import { BracketService } from './shared/services/bracket.service';
 
 @NgModule({
   declarations: [
@@ -18,13 +19,9 @@ import { EntryComponent } from './entry/entry.component';
     BracketComponent,
     AdminComponent,
     StandingsComponent,
-    EntryComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  providers: [BracketService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
