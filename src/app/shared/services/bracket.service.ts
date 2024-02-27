@@ -10,8 +10,8 @@ export class BracketService {
   private currentYear: string = '2023';
 
   constructor(private http: HttpClient) {
-    // this.baseUrl = 'https://bowl-pickem-15ea7b3ae3e0.herokuapp.com/api/v1/bracket/';
-    this.baseUrl = 'http://localhost:8081/api/v1/bracket/'
+    this.baseUrl = 'https://bowl-pickem-15ea7b3ae3e0.herokuapp.com/api/v1/bracket/';
+    // this.baseUrl = 'http://localhost:8081/api/v1/bracket/'
   }
 
   public addBracket(request: School) {
