@@ -1,8 +1,8 @@
 export interface Seed {
-  schoolId?: number;
-  schoolName?: string;
-  bracketId?: number;
-  seedId: number;
-  seedNumber?: number;
-  overallSeedNumber?: number;
+  id?: number;
+  school_id?: number;
+  school_name?: string;
+  bracket_id?: number;
+  seed_number?: number;
+  overall_seed_number?: number;
 }

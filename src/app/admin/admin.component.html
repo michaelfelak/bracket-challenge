@@ -1,7 +1,17 @@
-<main>
-  <!-- <add-bowl></add-bowl> -->
-  <!-- <add-bowl-game></add-bowl-game> -->
-  <!-- <paid-status></paid-status>
+<!-- <add-bowl></add-bowl> -->
+<!-- <add-bowl-game></add-bowl-game> -->
+<!-- <paid-status></paid-status>
     <update-scores></update-scores>
     <tiebreakers></tiebreakers> -->
-</main>
+<sky-page layout="tabs">
+  <form [formGroup]="formGroup">
+    <select formControlName="bracketId">
+      <option *ngFor="let bracket of brackets" [ngValue]="bracket.id">
+        {{ bracket.year }}
+      </option>
+    </select>
+  </form>
+  <div *ngIf="selectedBracketId > 0">
+    <app-add-seed [bracketId]="selectedBracketId"></app-add-seed>
+  </div>
+</sky-page>
