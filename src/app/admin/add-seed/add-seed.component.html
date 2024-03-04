@@ -1,0 +1,12 @@
+<form [formGroup]="formGroup">
+  <select formControlName="schoolId">
+    <option *ngFor="let c of schoolList" [ngValue]="c.id">{{ c.name }}</option>
+  </select>
+  <sky-input-box labelText="Seed Number">
+    <input formControlName="seedNumber" type="number" min="1" max="16" />
+  </sky-input-box>
+  <sky-input-box labelText="Overall Seed Number">
+    <input formControlName="overallSeedNumber" type="number" min="1" max="64" />
+  </sky-input-box>
+  <button class="sky-btn" (click)="submit()">Add Seed</button>
+</form>

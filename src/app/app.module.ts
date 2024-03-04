@@ -6,10 +6,10 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { BracketComponent } from './bracket/bracket.component';
-import { AdminComponent } from './admin/admin.component';
 import { StandingsComponent } from './standings/standings.component';
 import { HttpClientModule } from '@angular/common/http';
 import { BracketService } from './shared/services/bracket.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -17,10 +17,9 @@ import { BracketService } from './shared/services/bracket.service';
     HomeComponent,
     AboutComponent,
     BracketComponent,
-    AdminComponent,
     StandingsComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  imports: [BrowserModule, BrowserAnimationsModule, AppRoutingModule, HttpClientModule],
   providers: [BracketService],
   bootstrap: [AppComponent],
 })

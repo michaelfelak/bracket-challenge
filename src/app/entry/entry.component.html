@@ -1,96 +1,96 @@
 <form [formGroup]="entryForm">
   <sky-fluid-grid>
     <sky-row>
-      <sky-column [screenSmall]="2">
+      <sky-column [screenSmall]="4">
         <sky-box>
           <sky-box-header>Region 1</sky-box-header>
           <sky-box-content>
             <p>
               <select formControlName="team1" (change)="changeTeam($event, 2)">
                 <option *ngFor="let team of teams1" [ngValue]="team">
-                  <button type="button">#{{ team.seedNumber }} {{ team.schoolName }}</button>
+                  <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
                 </option>
               </select>
-              <sky-checkbox></sky-checkbox>
+              <sky-checkbox formControlName="teamBonus1"></sky-checkbox>
             </p>
             <p>
-              <select formControlName="team2" (change)="changeTeam($event,2)">
+              <select formControlName="team2" (change)="changeTeam($event, 2)">
                 <option *ngFor="let team of teams1" [ngValue]="team">
-                  <button type="button">#{{ team.seedNumber }} {{ team.schoolName }}</button>
+                  <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
                 </option>
               </select>
-              <sky-checkbox></sky-checkbox>
+              <sky-checkbox formControlName="teamBonus2"></sky-checkbox>
             </p>
           </sky-box-content>
         </sky-box>
       </sky-column>
-      <sky-column [screenSmall]="2">
+      <sky-column [screenSmall]="4">
         <sky-box>
           <sky-box-header>Region 2</sky-box-header>
           <sky-box-content>
             <p>
               <select formControlName="team3" (change)="changeTeam($event, 3)">
                 <option *ngFor="let team of teams4" [ngValue]="team">
-                  <button type="button">#{{ team.seedNumber }} {{ team.schoolName }}</button>
+                  <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
                 </option>
               </select>
-              <sky-checkbox></sky-checkbox>
+              <sky-checkbox formControlName="teamBonus3"></sky-checkbox>
             </p>
             <p>
               <select formControlName="team4" (change)="changeTeam($event, 4)">
                 <option *ngFor="let team of teams4" [ngValue]="team">
-                  <button type="button">#{{ team.seedNumber }} {{ team.schoolName }}</button>
+                  <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
                 </option>
               </select>
-              <sky-checkbox></sky-checkbox>
+              <sky-checkbox formControlName="teamBonus4"></sky-checkbox>
             </p>
           </sky-box-content>
         </sky-box>
       </sky-column>
     </sky-row>
     <sky-row>
-      <sky-column [screenSmall]="2">
+      <sky-column [screenSmall]="4">
         <sky-box>
           <sky-box-header>Region 3</sky-box-header>
           <sky-box-content>
             <p>
               <select formControlName="team5" (change)="changeTeam($event, 5)">
                 <option *ngFor="let team of teams2" [ngValue]="team">
-                  <button type="button">#{{ team.seedNumber }} {{ team.schoolName }}</button>
+                  <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
                 </option>
               </select>
-              <sky-checkbox></sky-checkbox>
+              <sky-checkbox formControlName="teamBonus5"></sky-checkbox>
             </p>
             <p>
               <select formControlName="team6" (change)="changeTeam($event, 6)">
                 <option *ngFor="let team of teams2" [ngValue]="team">
-                  <button type="button">#{{ team.seedNumber }} {{ team.schoolName }}</button>
+                  <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
                 </option>
               </select>
-              <sky-checkbox></sky-checkbox>
+              <sky-checkbox formControlName="teamBonus6"></sky-checkbox>
             </p>
           </sky-box-content>
         </sky-box>
       </sky-column>
-      <sky-column [screenSmall]="2">
+      <sky-column [screenSmall]="4">
         <sky-box>
           <sky-box-header>Region 4</sky-box-header>
           <sky-box-content>
             <p>
               <select formControlName="team7" (change)="changeTeam($event, 7)">
                 <option *ngFor="let team of teams3" [ngValue]="team">
-                  <button type="button">#{{ team.seedNumber }} {{ team.schoolName }}</button>
+                  <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
                 </option>
               </select>
-              <sky-checkbox></sky-checkbox>
+              <sky-checkbox formControlName="teamBonus7"></sky-checkbox>
             </p>
             <p>
               <select formControlName="team8" (change)="changeTeam($event, 8)">
                 <option *ngFor="let team of teams3" [ngValue]="team">
-                  <button type="button">#{{ team.seedNumber }} {{ team.schoolName }}</button>
+                  <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
                 </option>
               </select>
-              <sky-checkbox></sky-checkbox>
+              <sky-checkbox formControlName="teamBonus8"></sky-checkbox>
             </p>
           </sky-box-content>
         </sky-box>
@@ -103,6 +103,14 @@
           <sky-box-content> {{ totalPoints }} </sky-box-content>
         </sky-box>
       </sky-column>
+    </sky-row>
+    <sky-row>
+      <sky-input-box labelText="Name">
+        <input />
+      </sky-input-box>
+      <sky-input-box labelText="Email">
+        <input />
+      </sky-input-box>
     </sky-row>
     <sky-row>
       <button class="sky-btn sky-btn-primary" (click)="submit()">Submit</button>

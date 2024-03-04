@@ -1,0 +1,11 @@
+<form [formGroup]="formGroup">
+  <sky-input-box labelText="School name">
+    <input formControlName="schoolName" type="text" />
+  </sky-input-box>
+  <button type="button" class="sky-btn sky-btn-primary" (click)="addSchool()">Add School</button>
+  <sky-input-box labelText="Bracket">
+    <input type="text" />
+    <button type="button" class="sky-btn sky-btn-primary" (click)="addBracket()">Add School</button>
+  </sky-input-box>
+  <p>add game?</p>
+</form>
