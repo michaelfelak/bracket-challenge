@@ -56,7 +56,9 @@ export class BracketService {
     return this.http.get<School[]>(this.baseUrl + 'schoollist');
   }
 
-  public getSeeds(): Observable<Seed[]> {
-    return this.http.get<Seed[]>(this.baseUrl + 'seedlist');
+  public getSeedList(bracketId: number): Observable<Seed[]> {
+    let url = this.baseUrl + bracketId + '/seedlist';
+    console.log(url)  
+    return this.http.get<Seed[]>(url);
   }
 }

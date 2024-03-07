@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BracketService } from 'src/app/shared/services/bracket.service';
@@ -17,6 +17,9 @@ import { SkyPageModule } from '@skyux/pages';
 export class AddSeedComponent implements OnInit {
   @Input()
   public bracketId: number = 0;
+
+  @Output()
+  public seedAdded = new EventEmitter();
 
   public formGroup: FormGroup<{
     schoolId: FormControl<number | null>;
@@ -63,10 +66,22 @@ export class AddSeedComponent implements OnInit {
       school_id: this.selectedSchoolId,
       seed_number: this.formGroup.controls.seedNumber?.value!,
       overall_seed_number: this.formGroup.controls.overallSeedNumber.value!,
+      region_id: this.formGroup.controls.regionId.value!,
     };
 
-    this.service.addSeed(seed).subscribe((result) => {
-      console.log(result);
-    });
+    if (seed.school_id && seed.seed_number && seed.overall_seed_number && seed.region_id) {
+      this.service.addSeed(seed).subscribe((result) => {
+        console.log(
+          this.schoolList.find((school) => {
+            return school.id === this.selectedSchoolId;
+          })?.name! +
+            ' ' +
+            result
+        );
+        this.seedAdded.emit();
+      });
+    } else {
+      alert('info missing');
+    }
   }
 }

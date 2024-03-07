@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { Bracket } from '../shared/models/bracket';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SkyPageModule } from '@skyux/pages';
+import { Seed } from '../shared/models/seed';
 
 @Component({
   standalone: true,
@@ -26,6 +27,7 @@ export class AdminComponent implements OnInit {
   public selectedBracketId: number = 2024;
 
   public brackets: Bracket[] = [];
+  public existingSeeds: Seed[] = [];
 
   public formGroup: FormGroup<{
     bracketId: FormControl<number | null>;
@@ -36,13 +38,23 @@ export class AdminComponent implements OnInit {
       bracketId: new FormControl(0),
     });
     this.formGroup.controls.bracketId.valueChanges.subscribe((result) => {
+      console.log('bracketid changed to ' + result);
       this.selectedBracketId = result!;
+      this.updateSeeds();
     });
   }
 
   ngOnInit() {
     this.service.getBrackets().subscribe((result) => {
       this.brackets = result;
+    });
+
+    this.updateSeeds();
+  }
+
+  public updateSeeds() {
+    this.service.getSeedList(this.selectedBracketId).subscribe((result) => {
+      this.existingSeeds = result;
     });
   }
 }
