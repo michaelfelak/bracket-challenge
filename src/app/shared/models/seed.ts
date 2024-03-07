@@ -5,4 +5,7 @@ export interface Seed {
   bracket_id?: number;
   seed_number?: number;
   overall_seed_number?: number;
+  region_id?: number;
+  region_name?: string;
+  possible_points?: number
 }

@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
-import { TestData } from '../shared/test-data';
 import { CommonModule } from '@angular/common';
 import { SkyCheckboxModule, SkyInputBoxModule } from '@skyux/forms';
 import { SkyBoxModule, SkyFluidGridModule } from '@skyux/layout';
 import { SkyPageModule } from '@skyux/pages';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BracketService } from '../shared/services/bracket.service';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, takeUntil } from 'rxjs/operators';
 import { Seed } from '../shared/models/seed';
 import { Entry } from '../shared/models/entry.model';
 import { PickRequest } from '../shared/models/pick.model';
+import { Subject } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -25,27 +25,18 @@ import { PickRequest } from '../shared/models/pick.model';
     ReactiveFormsModule,
     SkyInputBoxModule,
   ],
-  providers: [TestData, BracketService],
+  providers: [BracketService],
 })
 export class EntryComponent {
   // assign teams
-  public teams1 = this.testData.TEAMS.filter((team) => {
-    return team.bracket_id === 1;
-  });
-  public teams2 = this.testData.TEAMS.filter((team) => {
-    return team.bracket_id === 2;
-  });
-  public teams3 = this.testData.TEAMS.filter((team) => {
-    return team.bracket_id === 3;
-  });
-  public teams4 = this.testData.TEAMS.filter((team) => {
-    return team.bracket_id === 4;
-  });
-  public selectedB: any;
-  public selectedA: any;
+  public teams1: Seed[] = [];
+  public teams2: Seed[] = [];
+  public teams3: Seed[] = [];
+  public teams4: Seed[] = [];
   public totalPoints = 0;
   public name = '';
   public email = '';
+  public bracketId = 2;
 
   public entryForm: FormGroup<{
     name: FormControl<string>;
@@ -68,7 +59,8 @@ export class EntryComponent {
     teamBonus8: FormControl<boolean | null>;
   }>;
 
-  constructor(private testData: TestData, private service: BracketService) {
+  ngUnsubscribe = new Subject<void>();
+  constructor(private service: BracketService) {
     this.entryForm = new FormGroup({
       name: new FormControl(),
       email: new FormControl(),
@@ -80,18 +72,46 @@ export class EntryComponent {
       team6: new FormControl(),
       team7: new FormControl(),
       team8: new FormControl(),
-      teamBonus1: new FormControl(),
-      teamBonus2: new FormControl(),
-      teamBonus3: new FormControl(),
-      teamBonus4: new FormControl(),
-      teamBonus5: new FormControl(),
-      teamBonus6: new FormControl(),
-      teamBonus7: new FormControl(),
-      teamBonus8: new FormControl(),
+      teamBonus1: new FormControl(false),
+      teamBonus2: new FormControl(false),
+      teamBonus3: new FormControl(false),
+      teamBonus4: new FormControl(false),
+      teamBonus5: new FormControl(false),
+      teamBonus6: new FormControl(false),
+      teamBonus7: new FormControl(false),
+      teamBonus8: new FormControl(false),
     });
+
+    // this.entryForm.controls.teamBonus8.valueChanges
+    // .pipe(takeUntil(this.ngUnsubscribe))
+    // .subscribe((value)=>{
+    //   this.entryForm.controls.teamBonus8.setValue(value);
+    //   this.update();
+    // })
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.service.getSeedList(this.bracketId).subscribe((result) => {
+      result.forEach((r) => {
+        const n = r.seed_number!;
+        r.possible_points = 16 * n;
+      });
+      this.teams1 = result.filter((seed) => {
+        return seed.region_id === 1;
+      });
+      this.teams2 = result.filter((seed) => {
+        return seed.region_id === 2;
+      });
+      this.teams3 = result.filter((seed) => {
+        return seed.region_id === 3;
+      });
+      this.teams4 = result.filter((seed) => {
+        return seed.region_id === 4;
+      });
+
+      console.log(result);
+    });
+  }
 
   public submit2() {
     console.log(this.entryForm);
@@ -164,8 +184,33 @@ export class EntryComponent {
         this.email = this.entryForm.value.email as string;
       });
   }
-  public changeTeam(s: any, i: number) {
-    console.log(s);
+  public update() {
     console.log(this.entryForm.value);
+    this.entryForm.markAllAsTouched();
+    const teams1points = this.entryForm.value.team1?.possible_points ?? 0;
+    const teams2points = this.entryForm.value.team2?.possible_points ?? 0;
+    const teams3points = this.entryForm.value.team3?.possible_points ?? 0;
+    const teams4points = this.entryForm.value.team4?.possible_points ?? 0;
+    const teams5points = this.entryForm.value.team5?.possible_points ?? 0;
+    const teams6points = this.entryForm.value.team6?.possible_points ?? 0;
+    const teams7points = this.entryForm.value.team7?.possible_points ?? 0;
+    const teams8points = this.entryForm.value.team8?.possible_points ?? 0;
+    const teams1bonus = this.entryForm.value.teamBonus1 ? 1.5 : 1;
+    const teams2bonus = this.entryForm.value.teamBonus2 ? 1.5 : 1;
+    const teams3bonus = this.entryForm.value.teamBonus3 ? 1.5 : 1;
+    const teams4bonus = this.entryForm.value.teamBonus4 ? 1.5 : 1;
+    const teams5bonus = this.entryForm.value.teamBonus5 ? 1.5 : 1;
+    const teams6bonus = this.entryForm.value.teamBonus6 ? 1.5 : 1;
+    const teams7bonus = this.entryForm.value.teamBonus7 ? 1.5 : 1;
+    const teams8bonus = this.entryForm.value.teamBonus8 ? 1.5 : 1;
+    this.totalPoints =
+      teams1points * teams1bonus +
+      teams2points * teams2bonus +
+      teams3points * teams3bonus +
+      teams4points * teams4bonus +
+      teams5points * teams5bonus +
+      teams6points * teams6bonus +
+      teams7points * teams7bonus +
+      teams8points * teams8bonus;
   }
 }

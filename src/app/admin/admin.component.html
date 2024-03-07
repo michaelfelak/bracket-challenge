@@ -5,13 +5,45 @@
     <tiebreakers></tiebreakers> -->
 <sky-page layout="tabs">
   <form [formGroup]="formGroup">
-    <select formControlName="bracketId">
-      <option *ngFor="let bracket of brackets" [ngValue]="bracket.id">
-        {{ bracket.year }}
-      </option>
-    </select>
+    <sky-fluid-grid>
+      <sky-row>
+        <sky-column>
+          <app-add-record></app-add-record>
+        </sky-column>
+        <sky-column [screenSmall]="2">
+          <legend>Select Bracket</legend>
+          <select formControlName="bracketId">
+            <option *ngFor="let bracket of brackets" [ngValue]="bracket.id">
+              {{ bracket.year }}
+            </option>
+          </select>
+        </sky-column>
+      </sky-row>
+      <sky-row>
+        <sky-column [screenSmall]="2">
+          <div *ngIf="selectedBracketId > 0">
+            <app-add-seed [bracketId]="selectedBracketId" (seedAdded)="updateSeeds()"></app-add-seed>
+          </div>
+        </sky-column>
+        <sky-column>
+          <table>
+            <tr *ngFor="let s of existingSeeds">
+              <td>
+                {{ s.region_name }}
+              </td>
+              <td>
+                #{{ s.seed_number }}
+              </td>
+              <td>
+                {{ s.school_name }}
+              </td>
+              <td>
+                #{{ s.overall_seed_number }} overall
+              </td>
+            </tr>
+          </table>
+        </sky-column>
+      </sky-row>
+    </sky-fluid-grid>
   </form>
-  <div *ngIf="selectedBracketId > 0">
-    <app-add-seed [bracketId]="selectedBracketId"></app-add-seed>
-  </div>
 </sky-page>
