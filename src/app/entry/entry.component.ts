@@ -10,6 +10,7 @@ import { Seed } from '../shared/models/seed';
 import { Entry } from '../shared/models/entry.model';
 import { PickRequest } from '../shared/models/pick.model';
 import { Subject } from 'rxjs';
+import { SkyAlertModule, SkyKeyInfoModule } from '@skyux/indicators';
 
 @Component({
   standalone: true,
@@ -24,6 +25,8 @@ import { Subject } from 'rxjs';
     SkyFluidGridModule,
     ReactiveFormsModule,
     SkyInputBoxModule,
+    SkyKeyInfoModule,
+    SkyAlertModule,
   ],
   providers: [BracketService],
 })
