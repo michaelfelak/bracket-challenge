@@ -1,119 +1,151 @@
 <form [formGroup]="entryForm">
-  <sky-fluid-grid>
-    <sky-row>
-      <sky-column [screenSmall]="4" [screenMedium]="4" [screenLarge]="4">
-        <sky-box>
-          <sky-box-header>Region 1</sky-box-header>
-          <sky-box-content>
-            <p>
-              <select formControlName="team1" (change)="update()">
-                <option *ngFor="let team of teams1" [ngValue]="team">
-                  <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
-                </option>
-              </select>
-              <sky-checkbox formControlName="teamBonus1"(change)="update()"></sky-checkbox>
-            </p>
-            <p>
-              <select formControlName="team2" (change)="update()">
-                <option *ngFor="let team of teams1" [ngValue]="team">
-                  <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
-                </option>
-              </select>
-              <sky-checkbox formControlName="teamBonus2"(change)="update()"></sky-checkbox>
-            </p>
-          </sky-box-content>
-        </sky-box>
-      </sky-column>
-      <sky-column [screenSmall]="4" [screenMedium]="4" [screenLarge]="4">
-        <sky-box>
-          <sky-box-header>Region 2</sky-box-header>
-          <sky-box-content>
-            <p>
-              <select formControlName="team3" (change)="update()">
-                <option *ngFor="let team of teams4" [ngValue]="team">
-                  <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
-                </option>
-              </select>
-              <sky-checkbox formControlName="teamBonus3"(change)="update()"></sky-checkbox>
-            </p>
-            <p>
-              <select formControlName="team4" (change)="update()">
-                <option *ngFor="let team of teams4" [ngValue]="team">
-                  <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
-                </option>
-              </select>
-              <sky-checkbox formControlName="teamBonus4"(change)="update()"></sky-checkbox>
-            </p>
-          </sky-box-content>
-        </sky-box>
-      </sky-column>
-    </sky-row>
-    <sky-row>
-      <sky-column [screenSmall]="4" [screenMedium]="4" [screenLarge]="4">
-        <sky-box>
-          <sky-box-header>Region 3</sky-box-header>
-          <sky-box-content>
-            <p>
-              <select formControlName="team5" (change)="update()">
-                <option *ngFor="let team of teams2" [ngValue]="team">
-                  <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
-                </option>
-              </select>
-              <sky-checkbox formControlName="teamBonus5"(change)="update()"></sky-checkbox>
-            </p>
-            <p>
-              <select formControlName="team6" (change)="update()">
-                <option *ngFor="let team of teams2" [ngValue]="team">
-                  <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
-                </option>
-              </select>
-              <sky-checkbox formControlName="teamBonus6"(change)="update()"></sky-checkbox>
-            </p>
-          </sky-box-content>
-        </sky-box>
-      </sky-column>
-      <sky-column [screenSmall]="4" [screenMedium]="4" [screenLarge]="4">
-        <sky-box>
-          <sky-box-header>Region 4</sky-box-header>
-          <sky-box-content>
-            <p>
-              <select formControlName="team7" (change)="update()">
-                <option *ngFor="let team of teams3" [ngValue]="team">
-                  <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
-                </option>
-              </select>
-              <sky-checkbox formControlName="teamBonus7"(change)="update()"></sky-checkbox>
-            </p>
-            <p>
-              <select formControlName="team8" (change)="update()">
-                <option *ngFor="let team of teams3" [ngValue]="team">
-                  <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
-                </option>
-              </select>
-              <sky-checkbox formControlName="teamBonus8" (change)="update()"></sky-checkbox>
-            </p>
-          </sky-box-content>
-        </sky-box>
-      </sky-column>
-    </sky-row>
-    <sky-row>
-      <sky-column>
-        <sky-box>
-          <sky-box-header>Total possible points</sky-box-header>
-          <sky-box-content> {{ totalPoints }} </sky-box-content>
-        </sky-box>
-      </sky-column>
-    </sky-row>
-    <sky-row>
-      <sky-column>
-        <sky-input-box labelText="Name">
-          <input />
-        </sky-input-box>
-        <sky-input-box labelText="Email">
-          <input />
-        </sky-input-box>
-      </sky-column>
-    </sky-row>
-  </sky-fluid-grid>
-  <button style="text-align: center" class="sky-btn sky-btn-primary sky-margin-inline-compact" (click)="submit()">Submit</button>
+  <h1 style="text-align: center">Bracket Challenge</h1>
+  <div style="max-width: 90%; margin-left: auto; margin-right: auto">
+    <sky-box style="border: solid 1px #ccc">
+      <table>
+        <tr>
+          <td>
+            <!-- <sky-alert *ngIf="threePointError" alertType="danger" [closeable]="false"> You have exceeded the maximum number of 3 point games. </sky-alert>
+              <sky-alert *ngIf="fivePointError" alertType="danger" [closeable]="false"> You have exceeded the maximum number of 5 point games. </sky-alert>
+              <sky-alert *ngIf="tenPointError" alertType="danger" [closeable]="false"> You have exceeded the maximum number of 10 point games. </sky-alert> -->
+            The goal is to score the most points possible, while picking 2 seeds from each region. You earn points for each win. The points are calculated by multiplying the seed
+            number by the round number. Example: #1 seeded Kansas wins rounds 1, 2, and 3, but loses in round 4. They would receive 1 point, 2 points, and 3 points for a total of 6
+            points. #10 seeded Utah State wins rounds 1 and 2, but loses in round 3. They would receive 10 points and 20 points for a total of 30 points. It can be beneficial to
+            pick higher seeded teams, even if they don't win many games!
+            <ul>
+              <li>Select 2 different teams in each of the 4 regions.</li>
+              <li>You will earn points for each win that your selected teams achieve.</li>
+              <li>Points awarded for a win will be the seed number times the round number.</li>
+              <li>You may choose ONE "superfan" school. This school will be awarded a 50% bonus for each win.</li>
+              <li>
+                Validate all of your picks and points before clicking
+                <span class="sky-emphasized">Submit</span>.
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+    </sky-box>
+  </div>
+
+  <div>
+    <sky-fluid-grid>
+      <sky-row>
+        <sky-column [screenSmall]="4" [screenMedium]="4" [screenLarge]="3" style="margin-left: auto">
+          <sky-box>
+            <sky-box-header class="region-header">Region 1</sky-box-header>
+            <sky-box-content>
+              <p>
+                <sky-checkbox formControlName="teamBonus1" (change)="update()"></sky-checkbox>
+                <select formControlName="team1" (change)="update()">
+                  <option *ngFor="let team of teams1" [ngValue]="team">
+                    <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                  </option>
+                </select>
+              </p>
+              <p>
+                <sky-checkbox formControlName="teamBonus2" (change)="update()"></sky-checkbox>
+                <select formControlName="team2" (change)="update()">
+                  <option *ngFor="let team of teams1" [ngValue]="team">
+                    <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                  </option>
+                </select>
+              </p>
+            </sky-box-content>
+          </sky-box>
+        </sky-column>
+        <sky-column [screenSmall]="3" [screenMedium]="4" [screenLarge]="3" style="margin-right: auto">
+          <sky-box>
+            <sky-box-header class="region-header">Region 2</sky-box-header>
+            <sky-box-content>
+              <p>
+                <sky-checkbox formControlName="teamBonus3" (change)="update()"></sky-checkbox>
+                <select formControlName="team3" (change)="update()">
+                  <option *ngFor="let team of teams4" [ngValue]="team">
+                    <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                  </option>
+                </select>
+              </p>
+              <p>
+                <sky-checkbox formControlName="teamBonus4" (change)="update()"></sky-checkbox>
+                <select formControlName="team4" (change)="update()">
+                  <option *ngFor="let team of teams4" [ngValue]="team">
+                    <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                  </option>
+                </select>
+              </p>
+            </sky-box-content>
+          </sky-box>
+        </sky-column>
+      </sky-row>
+      <sky-row>
+        <sky-column [screenSmall]="3" [screenMedium]="4" [screenLarge]="3" style="margin-left: auto">
+          <sky-box>
+            <sky-box-header class="region-header">Region 3</sky-box-header>
+            <sky-box-content>
+              <p>
+                <sky-checkbox formControlName="teamBonus5" (change)="update()"></sky-checkbox>
+                <select formControlName="team5" (change)="update()">
+                  <option *ngFor="let team of teams2" [ngValue]="team">
+                    <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                  </option>
+                </select>
+              </p>
+              <p>
+                <sky-checkbox formControlName="teamBonus6" (change)="update()"></sky-checkbox>
+                <select formControlName="team6" (change)="update()">
+                  <option *ngFor="let team of teams2" [ngValue]="team">
+                    <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                  </option>
+                </select>
+              </p>
+            </sky-box-content>
+          </sky-box>
+        </sky-column>
+        <sky-column [screenSmall]="3" [screenMedium]="4" [screenLarge]="3" style="margin-right: auto">
+          <sky-box>
+            <sky-box-header class="region-header">Region 4</sky-box-header>
+            <sky-box-content>
+              <p>
+                <sky-checkbox formControlName="teamBonus7" (change)="update()"></sky-checkbox>
+                <select formControlName="team7" (change)="update()">
+                  <option *ngFor="let team of teams3" [ngValue]="team">
+                    <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                  </option>
+                </select>
+              </p>
+              <p>
+                <sky-checkbox formControlName="teamBonus8" (change)="update()"></sky-checkbox>
+                <select formControlName="team8" (change)="update()">
+                  <option *ngFor="let team of teams3" [ngValue]="team">
+                    <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                  </option>
+                </select>
+              </p>
+            </sky-box-content>
+          </sky-box>
+        </sky-column>
+      </sky-row>
+      <sky-row>
+        <sky-column style="max-width: 400px; margin-left: auto; margin-right: auto">
+          <sky-box>
+            <sky-box-header>Total possible points</sky-box-header>
+            <sky-box-content> {{ totalPoints }} </sky-box-content>
+          </sky-box>
+        </sky-column>
+      </sky-row>
+      <!-- </sky-row> -->
+      <sky-row>
+        <sky-column style="max-width: 400px; margin-left: auto; margin-right: auto">
+          <sky-input-box labelText="Name">
+            <input formControlName="name" />
+          </sky-input-box>
+          <sky-input-box labelText="Email">
+            <input formControlName="email" />
+          </sky-input-box>
+          <button style=" margin-left: auto; margin-right: auto" class="sky-btn sky-btn-primary sky-margin-inline-compact" (click)="submit()">Submit</button>
+        </sky-column>
+      </sky-row>
+    </sky-fluid-grid>
+  </div>
 </form>

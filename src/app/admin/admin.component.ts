@@ -3,11 +3,11 @@ import { SkyFluidGridModule } from '@skyux/layout';
 import { AddRecordComponent } from './add-record/add-record.component';
 import { BracketService } from '../shared/services/bracket.service';
 import { AddSeedComponent } from './add-seed/add-seed.component';
-import { CommonModule } from '@angular/common';
 import { Bracket } from '../shared/models/bracket';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SkyPageModule } from '@skyux/pages';
 import { Seed } from '../shared/models/seed';
+import { CommonModule } from '@angular/common';
 
 @Component({
   standalone: true,
