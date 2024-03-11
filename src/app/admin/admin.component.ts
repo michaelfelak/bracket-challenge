@@ -8,6 +8,8 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angul
 import { SkyPageModule } from '@skyux/pages';
 import { Seed } from '../shared/models/seed';
 import { CommonModule } from '@angular/common';
+import { SelectWinnersComponent } from './select-winners/select-winners.component';
+import { SkyRepeaterModule } from '@skyux/lists';
 
 @Component({
   standalone: true,
@@ -18,13 +20,15 @@ import { CommonModule } from '@angular/common';
     AddRecordComponent,
     AddSeedComponent,
     SkyPageModule,
+    SelectWinnersComponent,
+    SkyRepeaterModule
   ],
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
-  public selectedBracketId: number = 2024;
+  public selectedBracketId!: number;
 
   public brackets: Bracket[] = [];
   public existingSeeds: Seed[] = [];
@@ -35,7 +39,7 @@ export class AdminComponent implements OnInit {
 
   constructor(private service: BracketService, private formBuilder: FormBuilder) {
     this.formGroup = this.formBuilder.group({
-      bracketId: new FormControl(0),
+      bracketId: new FormControl(2024),
     });
     this.formGroup.controls.bracketId.valueChanges.subscribe((result) => {
       console.log('bracketid changed to ' + result);

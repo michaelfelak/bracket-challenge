@@ -3,9 +3,8 @@
     <input formControlName="schoolName" type="text" />
   </sky-input-box>
   <button type="button" class="sky-btn sky-btn-primary" (click)="addSchool()">Add School</button> -->
-  <sky-input-box labelText="Bracket">
-    <input formControlName="year" type="number" />
+  <sky-input-box labelText="Bracket" style="max-width: 100px">
+    <input placeholder="Year" formControlName="year" type="number" min="2020" />
   </sky-input-box>
   <button type="button" class="sky-btn sky-btn-primary" (click)="addBracket()">Add Bracket</button>
-  <p>add game?</p>
 </form>

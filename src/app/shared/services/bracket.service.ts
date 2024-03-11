@@ -13,11 +13,11 @@ import { CompletedEntry, StandingsRecord } from '../models/standings.model';
 @Injectable()
 export class BracketService {
   private baseUrl: string;
-  private currentYear: string = '2023';
+  private currentYear: string = '2024';
 
   constructor(private http: HttpClient) {
-    // this.baseUrl = 'https://bowl-pickem-15ea7b3ae3e0.herokuapp.com/api/v1/bracket/';
-    this.baseUrl = 'http://localhost:8081/api/v1/bracket/';
+    this.baseUrl = 'https://bowl-pickem-15ea7b3ae3e0.herokuapp.com/api/v1/bracket/';
+    // this.baseUrl = 'http://localhost:8081/api/v1/bracket/';
   }
 
   public addBracket(request: Bracket) {

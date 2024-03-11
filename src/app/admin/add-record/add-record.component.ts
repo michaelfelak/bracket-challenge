@@ -16,11 +16,13 @@ import { School } from 'src/app/shared/models/school.model';
 export class AddRecordComponent {
   public formGroup: FormGroup<{
     schoolName: FormControl<string | null>;
+    year: FormControl<number | null>;
   }>;
 
   constructor(private service: BracketService, private formBuilder: FormBuilder) {
     this.formGroup = this.formBuilder.group({
       schoolName: new FormControl(''),
+      year: new FormControl(2024)
     });
   }
 
