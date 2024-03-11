@@ -12,7 +12,7 @@ export class PickModel {
   public school_name?: string;
   public seed_number?: number;
   public overall_seed_number?: number;
-  public points?: number;
+  public earned_points?: number;
 }
 
 export class PickResponse {

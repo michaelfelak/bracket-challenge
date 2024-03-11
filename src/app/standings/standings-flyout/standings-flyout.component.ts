@@ -17,7 +17,7 @@ export class StandingsFlyoutComponent implements OnInit {
   public entry!: CompletedEntry;
   public picks: PickModel[] = [];
   public name!: string;
-  public points: number = 0;
+  public totalPoints: number = 0;
 
   constructor(public context: StandingsFlyoutContext, private svc: BracketService) {}
 
@@ -26,9 +26,10 @@ export class StandingsFlyoutComponent implements OnInit {
       this.entry = result;
       this.name = this.entry.entry_name;
       this.picks = this.entry.picks;
+      console.log(result);
       this.picks.forEach((a: PickModel) => {
-        if (a.points) {
-          this.points += a.points;
+        if (a.earned_points) {
+          this.totalPoints += a.earned_points;
         }
       });
     });
