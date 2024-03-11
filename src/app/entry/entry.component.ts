@@ -101,9 +101,9 @@ export class EntryComponent {
   }
 
   ngOnInit() {
-    this.service.getBrackets().subscribe((brackets) => {
-      console.log(brackets);
-    });
+    // this.service.getBrackets().subscribe((brackets) => {
+    //   console.log(brackets);
+    // });
     this.service.getSeedList(this.bracketId).subscribe((result) => {
       result.forEach((r) => {
         const n = r.seed_number!;

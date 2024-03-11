@@ -21,28 +21,27 @@
       </sky-row>
       <sky-row>
         <sky-column [screenSmall]="2">
-          <div *ngIf="selectedBracketId > 0">
+          <div *ngIf="selectedBracketId">
             <app-add-seed [bracketId]="selectedBracketId" (seedAdded)="updateSeeds()"></app-add-seed>
           </div>
         </sky-column>
         <sky-column>
-          <table>
-            <tr *ngFor="let s of existingSeeds">
-              <td>
+          <!-- <sky-repeater expandMode="single" >
+            <sky-repeater-item *ngFor="let s of existingSeeds" [isExpanded]="false">
+              <sky-repeater-item-content>
                 {{ s.region_name }}
-              </td>
-              <td>
-                #{{ s.seed_number }}
-              </td>
-              <td>
-                {{ s.school_name }}
-              </td>
-              <td>
-                #{{ s.overall_seed_number }} overall
-              </td>
-            </tr>
-          </table>
+                <td>#{{ s.seed_number }}</td>
+                <td>
+                  {{ s.school_name }}
+                </td>
+                <td>#{{ s.overall_seed_number }} overall</td>
+              </sky-repeater-item-content>
+            </sky-repeater-item>
+          </sky-repeater> -->
         </sky-column>
+      </sky-row>
+      <sky-row>
+        <app-select-winners *ngIf="selectedBracketId" [bracketId]="selectedBracketId"></app-select-winners>
       </sky-row>
     </sky-fluid-grid>
   </form>

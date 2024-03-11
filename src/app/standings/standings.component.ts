@@ -45,7 +45,7 @@ export class StandingsComponent implements OnInit {
 
   public ngOnInit() {
     this.currentYear = 2023;
-    this.titleService.setTitle("Bowl Pick'em - Standings");
+    this.titleService.setTitle("Bracket Challenge - Standings");
     this.retrieveStandings(this.currentYear);
   }
 
