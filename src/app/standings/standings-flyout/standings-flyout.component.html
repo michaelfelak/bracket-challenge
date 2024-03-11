@@ -1,0 +1,24 @@
+<main>
+  <h3 class="header">Entry Name: {{ name }}</h3>
+  <h3 class="header">Total points: {{ points }}</h3>
+  <table class="center">
+    <tr style="border-bottom: 1px solid black">
+      <th class="team-name" style="border-left: 1px solid black">Seed (Overall)</th>
+      <th class="team-name" style="border-left: 1px solid black">School</th>
+      <th class="team-check" style="border-left: 1px solid black">Points Earned</th>
+      <th class="team-check" style="border-left: 1px solid black">Superfan</th>
+    </tr>
+    <tr *ngFor="let pick of picks">
+      <td class="team-name" style="border-left: 1px solid black">{{ pick.seed_number }} ({{ pick.overall_seed_number }})</td>
+      <td class="team-name" style="border-left: 1px solid black">
+        {{ pick.school_name }}
+      </td>
+      <td class="team-name" style="border-left: 1px solid black">
+        {{ pick.points ?? 0 }}
+      </td>
+      <td class="team-check" style="border-left: 1px solid black">
+        <sky-icon style="color: green" icon="check-circle" *ngIf="pick.is_bonus"></sky-icon>
+      </td>
+    </tr>
+  </table>
+</main>

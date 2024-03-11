@@ -8,6 +8,11 @@ export class PickModel {
   public entry_id?: string;
   public seed_id?: number;
   public is_bonus?: boolean;
+  public region_name?: string;
+  public school_name?: string;
+  public seed_number?: number;
+  public overall_seed_number?: number;
+  public points?: number;
 }
 
 export class PickResponse {

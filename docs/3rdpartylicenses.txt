@@ -41,7 +41,13 @@ MIT
 @angular/router
 MIT
 
+@skyux/config
+MIT
+
 @skyux/core
+MIT
+
+@skyux/flyout
 MIT
 
 @skyux/forms

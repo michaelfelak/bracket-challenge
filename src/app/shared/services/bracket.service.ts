@@ -8,6 +8,7 @@ import { GameResultModel } from '../models/game-result.model';
 import { Game } from '../models/game.model';
 import { PickRequest } from '../models/pick.model';
 import { School } from '../models/school.model';
+import { CompletedEntry, StandingsRecord } from '../models/standings.model';
 
 @Injectable()
 export class BracketService {
@@ -15,8 +16,8 @@ export class BracketService {
   private currentYear: string = '2023';
 
   constructor(private http: HttpClient) {
-    this.baseUrl = 'https://bowl-pickem-15ea7b3ae3e0.herokuapp.com/api/v1/bracket/';
-    // this.baseUrl = 'http://localhost:8081/api/v1/bracket/'
+    // this.baseUrl = 'https://bowl-pickem-15ea7b3ae3e0.herokuapp.com/api/v1/bracket/';
+    this.baseUrl = 'http://localhost:8081/api/v1/bracket/';
   }
 
   public addBracket(request: Bracket) {
@@ -58,7 +59,15 @@ export class BracketService {
 
   public getSeedList(bracketId: number): Observable<Seed[]> {
     let url = this.baseUrl + bracketId + '/seedlist';
-    console.log(url)  
+    console.log(url);
     return this.http.get<Seed[]>(url);
+  }
+
+  public getStandings(year: number): Observable<StandingsRecord[]> {
+    return this.http.get<StandingsRecord[]>(this.baseUrl + year + '/standings');
+  }
+  
+  public getStandingsEntry(id: string | undefined): Observable<CompletedEntry> {
+    return this.http.get<CompletedEntry>(this.baseUrl + 'completedentry/' + id);
   }
 }
