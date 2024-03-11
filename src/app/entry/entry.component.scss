@@ -1,5 +1,20 @@
-.region-header{
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    text-align: center;
-    font-size: x-large;
+.region-header {
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  text-align: center;
+  font-size: x-large;
+}
+
+select {
+  min-width: 300px;
+}
+
+.possible-points {
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.submit-button {
+  margin-left: auto;
+  margin-right: auto;
 }
