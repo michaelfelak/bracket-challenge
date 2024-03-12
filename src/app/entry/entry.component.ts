@@ -11,6 +11,8 @@ import { Entry } from '../shared/models/entry.model';
 import { PickRequest } from '../shared/models/pick.model';
 import { Subject } from 'rxjs';
 import { SkyAlertModule, SkyKeyInfoModule } from '@skyux/indicators';
+import { Region, RegionModel } from '../shared/models/region.model';
+import { Bracket } from '../shared/models/bracket';
 
 @Component({
   standalone: true,
@@ -36,11 +38,20 @@ export class EntryComponent {
   public teams2: Seed[] = [];
   public teams3: Seed[] = [];
   public teams4: Seed[] = [];
+  public regions: Region[] = [];
   public selectedTeams: Seed[] = [];
   public totalPoints = 0;
   public name = '';
   public email = '';
   public bracketId = 2;
+  public bracket: Bracket = {};
+
+  public submitted = false;
+
+  public topLeftRegion: RegionModel = {};
+  public topRightRegion: RegionModel = {};
+  public bottomRightRegion: RegionModel = {};
+  public bottomLeftRegion: RegionModel = {};
 
   public submitDisabled = false;
 
@@ -101,30 +112,64 @@ export class EntryComponent {
   }
 
   ngOnInit() {
-    // this.service.getBrackets().subscribe((brackets) => {
-    //   console.log(brackets);
-    // });
-    this.service.getSeedList(this.bracketId).subscribe((result) => {
-      result.forEach((r) => {
-        const n = r.seed_number!;
-        r.possible_points = 16 * n;
-      });
-      this.teams1 = result.filter((seed) => {
-        return seed.region_id === 1;
-      });
-      this.teams2 = result.filter((seed) => {
-        return seed.region_id === 2;
-      });
-      0;
-      this.teams3 = result.filter((seed) => {
-        return seed.region_id === 3;
-      });
-      this.teams4 = result.filter((seed) => {
-        return seed.region_id === 4;
-      });
+    this.service
+      .getBracket(this.bracketId)
+      .pipe(
+        mergeMap((result: Bracket) => {
+          this.bracket = result;
+          console.log(this.bracket);
+          return this.service.getRegions();
+        }),
+        mergeMap((result: Region[]) => {
+          this.regions = result;
+          console.log(this.regions);
 
-      console.log(result);
-    });
+          this.topLeftRegion = {
+            region_id: this.bracket.region_1_id,
+            region_name: this.regions.find((result) => {
+              return result.id === this.bracket.region_1_id;
+            })?.name,
+          };
+          this.topRightRegion = {
+            region_id: this.bracket.region_2_id,
+            region_name: this.regions.find((result) => {
+              return result.id === this.bracket.region_2_id;
+            })?.name,
+          };
+          this.bottomRightRegion = {
+            region_id: this.bracket.region_3_id,
+            region_name: this.regions.find((result) => {
+              return result.id === this.bracket.region_3_id;
+            })?.name,
+          };
+          this.bottomLeftRegion = {
+            region_id: this.bracket.region_4_id,
+            region_name: this.regions.find((result) => {
+              return result.id === this.bracket.region_4_id;
+            })?.name,
+          };
+
+          return this.service.getSeedList(this.bracketId);
+        })
+      )
+      .subscribe((result) => {
+        result.forEach((r) => {
+          const n = r.seed_number!;
+          r.possible_points = 16 * n;
+        });
+        this.topLeftRegion.seeds = result.filter((seed) => {
+          return seed.region_id === this.topLeftRegion.region_id;
+        });
+        this.topRightRegion.seeds = result.filter((seed) => {
+          return seed.region_id === this.topRightRegion.region_id;
+        });
+        this.bottomLeftRegion.seeds = result.filter((seed) => {
+          return seed.region_id === this.bottomLeftRegion.region_id;
+        });
+        this.bottomRightRegion.seeds = result.filter((seed) => {
+          return seed.region_id === this.bottomRightRegion.region_id;
+        });
+      });
   }
 
   public update() {
@@ -168,9 +213,16 @@ export class EntryComponent {
       teams6points * teams6bonus +
       teams7points * teams7bonus +
       teams8points * teams8bonus;
+
+    this.validate();
   }
 
-  private validate() {}
+  private validate() {
+
+    // add validation
+    // set error on page
+    // disable submit
+  }
 
   public submit() {
     this.validate();
@@ -230,12 +282,10 @@ export class EntryComponent {
           return this.service.addPicks(pickRequest);
         })
       )
-      .subscribe((pickresult: any) => {
-        console.log('pick result');
-        console.log(pickresult);
-
+      .subscribe(() => {
         this.name = this.entryForm.value.name as string;
         this.email = this.entryForm.value.email as string;
+        this.submitted = true;
       });
   }
 

@@ -1,3 +1,11 @@
+@import url("https://fonts.googleapis.com/css?family=Titillium+Web&display=swap");
+main {
+  margin-left: 5%;
+  margin-right: 5%;
+  height: 100%;
+  font-family: "Titillium Web", sans-serif;
+}
+
 .region-header {
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   text-align: center;
@@ -5,7 +13,7 @@
 }
 
 select {
-  min-width: 300px;
+  width: 100%;
 }
 
 p {
@@ -22,4 +30,16 @@ p {
 .submit-button {
   margin-left: auto;
   margin-right: auto;
+}
+
+sky-box {
+  padding-top: 40px;
+}
+
+.team-check {
+  width: 5%;
+}
+.team-name {
+  width: 20%;
+  vertical-align: middle;
 }

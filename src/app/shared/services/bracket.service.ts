@@ -9,6 +9,7 @@ import { Game } from '../models/game.model';
 import { PickRequest } from '../models/pick.model';
 import { School } from '../models/school.model';
 import { CompletedEntry, StandingsRecord } from '../models/standings.model';
+import { Region } from '../models/region.model';
 
 @Injectable()
 export class BracketService {
@@ -45,8 +46,11 @@ export class BracketService {
     return this.http.post(this.baseUrl + 'school', request);
   }
 
-  public getBrackets(): Observable<Bracket[]> {
+  public getBracketList(): Observable<Bracket[]> {
     return this.http.get<Bracket[]>(this.baseUrl + 'bracketlist');
+  }
+  public getBracket(id: number): Observable<Bracket> {
+    return this.http.get<Bracket>(this.baseUrl + 'bracket/' + id);
   }
 
   public getGames(year: string): Observable<Game[]> {
@@ -66,8 +70,11 @@ export class BracketService {
   public getStandings(year: number): Observable<StandingsRecord[]> {
     return this.http.get<StandingsRecord[]>(this.baseUrl + year + '/standings');
   }
-  
+
   public getStandingsEntry(id: string | undefined): Observable<CompletedEntry> {
     return this.http.get<CompletedEntry>(this.baseUrl + 'completedentry/' + id);
+  }
+  public getRegions(): Observable<Region[]> {
+    return this.http.get<Region[]>(this.baseUrl + 'regionlist');
   }
 }
