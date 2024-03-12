@@ -49,7 +49,7 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.service.getBrackets().subscribe((result) => {
+    this.service.getBracketList().subscribe((result) => {
       this.brackets = result;
     });
 
