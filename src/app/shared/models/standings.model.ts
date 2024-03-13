@@ -5,7 +5,7 @@ export class StandingsRecord {
   entry_name?: string;
   current_points?: number;
   rank?: number;
-  total_wins?: number;
+  win_total?: number;
 }
 
 export class CompletedEntry {
