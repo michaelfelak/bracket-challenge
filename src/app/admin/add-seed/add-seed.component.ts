@@ -54,11 +54,6 @@ export class AddSeedComponent implements OnInit {
     this.service.getSchools().subscribe((result) => {
       this.schoolList = result;
     });
-
-    // this.service.getSeeds().subscribe((result) => {
-    //   this.seeds = result;
-    //   console.log(result);
-    // });
   }
   public submit() {
     const seed: Seed = {
@@ -71,13 +66,6 @@ export class AddSeedComponent implements OnInit {
 
     if (seed.school_id && seed.seed_number && seed.overall_seed_number && seed.region_id) {
       this.service.addSeed(seed).subscribe((result) => {
-        console.log(
-          this.schoolList.find((school) => {
-            return school.id === this.selectedSchoolId;
-          })?.name! +
-            ' ' +
-            result
-        );
         this.seedAdded.emit();
       });
     } else {

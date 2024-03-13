@@ -19,9 +19,9 @@ export class SelectWinnersComponent implements OnInit {
   constructor(private service: BracketService) {}
 
   public ngOnInit() {
-    console.log(this.bracketId);
+    // console.log(this.bracketId);
     this.service.getSeedList(this.bracketId!).subscribe((result) => {
-      console.log(result);
+      // console.log(result);
       this.seedList = result;
     });
   }

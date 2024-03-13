@@ -34,11 +34,6 @@ import { Bracket } from '../shared/models/bracket';
 })
 export class EntryComponent {
   // assign teams
-  public teams1: Seed[] = [];
-  public teams2: Seed[] = [];
-  public teams3: Seed[] = [];
-  public teams4: Seed[] = [];
-  public regions: Region[] = [];
   public selectedTeams: Seed[] = [];
   public totalPoints = 0;
   public name = '';
@@ -54,6 +49,8 @@ export class EntryComponent {
   public bottomLeftRegion: RegionModel = {};
 
   public submitDisabled = false;
+  public hasErrors = false;
+  public errorMessage = '';
 
   public get team1() {
     return this.entryForm.controls.team1.value;
@@ -81,8 +78,8 @@ export class EntryComponent {
   }
 
   public entryForm: FormGroup<{
-    name: FormControl<string>;
-    email: FormControl<string>;
+    name: FormControl<string | null>;
+    email: FormControl<string | null>;
     team1: FormControl<Seed | null>;
     team2: FormControl<Seed | null>;
     team3: FormControl<Seed | null>;
@@ -97,8 +94,8 @@ export class EntryComponent {
   ngUnsubscribe = new Subject<void>();
   constructor(private service: BracketService) {
     this.entryForm = new FormGroup({
-      name: new FormControl(),
-      email: new FormControl(),
+      name: new FormControl(''),
+      email: new FormControl(''),
       team1: new FormControl(),
       team2: new FormControl(),
       team3: new FormControl(),
@@ -117,34 +114,32 @@ export class EntryComponent {
       .pipe(
         mergeMap((result: Bracket) => {
           this.bracket = result;
-          console.log(this.bracket);
           return this.service.getRegions();
         }),
         mergeMap((result: Region[]) => {
-          this.regions = result;
-          console.log(this.regions);
+          const regions = result;
 
           this.topLeftRegion = {
             region_id: this.bracket.region_1_id,
-            region_name: this.regions.find((result) => {
+            region_name: regions.find((result) => {
               return result.id === this.bracket.region_1_id;
             })?.name,
           };
           this.topRightRegion = {
             region_id: this.bracket.region_2_id,
-            region_name: this.regions.find((result) => {
+            region_name: regions.find((result) => {
               return result.id === this.bracket.region_2_id;
             })?.name,
           };
           this.bottomRightRegion = {
             region_id: this.bracket.region_3_id,
-            region_name: this.regions.find((result) => {
+            region_name: regions.find((result) => {
               return result.id === this.bracket.region_3_id;
             })?.name,
           };
           this.bottomLeftRegion = {
             region_id: this.bracket.region_4_id,
-            region_name: this.regions.find((result) => {
+            region_name: regions.find((result) => {
               return result.id === this.bracket.region_4_id;
             })?.name,
           };
@@ -213,80 +208,111 @@ export class EntryComponent {
       teams6points * teams6bonus +
       teams7points * teams7bonus +
       teams8points * teams8bonus;
-
-    this.validate();
   }
 
   private validate() {
-
-    // add validation
-    // set error on page
-    // disable submit
+    this.hasErrors = false;
+    this.errorMessage = '';
+    if (this.entryForm.value.name === 'test') {
+      // skip validation
+    } else if (this.selectedTeams.length !== 8) {
+      this.errorMessage = 'You must select 2 schools in each region.';
+      this.hasErrors = true;
+    } else if (this.entryForm.controls.bonusTeam.value === null) {
+      this.errorMessage = 'You must select a superfan school for 50% bonus points.';
+      this.hasErrors = true;
+    } else if (this.entryForm.value.name === null || this.entryForm.value.name === '') {
+      this.errorMessage = 'Please enter an entry name.';
+      this.hasErrors = true;
+    } else if (
+      this.entryForm.value.email === null ||
+      this.entryForm.value.email === undefined ||
+      this.entryForm.value.email === '' ||
+      this.entryForm.value.email.indexOf('@') < 0
+    ) {
+      this.errorMessage = 'Please enter a valid email.';
+      this.hasErrors = true;
+    } else {
+      this.selectedTeams.forEach((team) => {
+        let matches = this.selectedTeams.filter((a) => {
+          return team.school_id === a.school_id;
+        });
+        if (matches.length > 1) {
+          this.errorMessage = 'You may not select the same school twice.';
+          this.hasErrors = true;
+        }
+      });
+    }
   }
 
   public submit() {
     this.validate();
-    const entryRequest: Entry = {
-      email: this.entryForm.value.email!,
-      name: this.entryForm.value.name!,
-    };
-    this.service
-      .addEntry(entryRequest)
-      .pipe(
-        mergeMap((returnEntryId: string) => {
-          let bonusTeamId = this.entryForm.controls.bonusTeam.value?.id;
-          let pickRequest: PickRequest = {
-            picks: [
-              {
-                entry_id: returnEntryId,
-                is_bonus: this.entryForm.value.team1?.id === bonusTeamId,
-                seed_id: this.entryForm.value.team1?.id,
-              },
-              {
-                entry_id: returnEntryId,
-                is_bonus: this.entryForm.value.team2?.id === bonusTeamId,
-                seed_id: this.entryForm.value.team2?.id,
-              },
-              {
-                entry_id: returnEntryId,
-                is_bonus: this.entryForm.value.team3?.id === bonusTeamId,
-                seed_id: this.entryForm.value.team3?.id,
-              },
-              {
-                entry_id: returnEntryId,
-                is_bonus: this.entryForm.value.team4?.id === bonusTeamId,
-                seed_id: this.entryForm.value.team4?.id,
-              },
-              {
-                entry_id: returnEntryId,
-                is_bonus: this.entryForm.value.team5?.id === bonusTeamId,
-                seed_id: this.entryForm.value.team5?.id,
-              },
-              {
-                entry_id: returnEntryId,
-                is_bonus: this.entryForm.value.team6?.id === bonusTeamId,
-                seed_id: this.entryForm.value.team6?.id,
-              },
-              {
-                entry_id: returnEntryId,
-                is_bonus: this.entryForm.value.team7?.id === bonusTeamId,
-                seed_id: this.entryForm.value.team7?.id,
-              },
-              {
-                entry_id: returnEntryId,
-                is_bonus: this.entryForm.value.team8?.id === bonusTeamId,
-                seed_id: this.entryForm.value.team8?.id,
-              },
-            ],
-          };
-          return this.service.addPicks(pickRequest);
-        })
-      )
-      .subscribe(() => {
-        this.name = this.entryForm.value.name as string;
-        this.email = this.entryForm.value.email as string;
-        this.submitted = true;
-      });
+
+    if (!this.hasErrors) {
+      const entryRequest: Entry = {
+        email: this.entryForm.value.email!,
+        name: this.entryForm.value.name!,
+        bracket_id: this.bracketId,
+        is_paid: false,
+      };
+      this.service
+        .addEntry(entryRequest)
+        .pipe(
+          mergeMap((returnEntryId: string) => {
+            let bonusTeamId = this.entryForm.controls.bonusTeam.value?.id;
+            let pickRequest: PickRequest = {
+              picks: [
+                {
+                  entry_id: returnEntryId,
+                  is_bonus: this.entryForm.value.team1?.id === bonusTeamId,
+                  seed_id: this.entryForm.value.team1?.id,
+                },
+                {
+                  entry_id: returnEntryId,
+                  is_bonus: this.entryForm.value.team2?.id === bonusTeamId,
+                  seed_id: this.entryForm.value.team2?.id,
+                },
+                {
+                  entry_id: returnEntryId,
+                  is_bonus: this.entryForm.value.team3?.id === bonusTeamId,
+                  seed_id: this.entryForm.value.team3?.id,
+                },
+                {
+                  entry_id: returnEntryId,
+                  is_bonus: this.entryForm.value.team4?.id === bonusTeamId,
+                  seed_id: this.entryForm.value.team4?.id,
+                },
+                {
+                  entry_id: returnEntryId,
+                  is_bonus: this.entryForm.value.team5?.id === bonusTeamId,
+                  seed_id: this.entryForm.value.team5?.id,
+                },
+                {
+                  entry_id: returnEntryId,
+                  is_bonus: this.entryForm.value.team6?.id === bonusTeamId,
+                  seed_id: this.entryForm.value.team6?.id,
+                },
+                {
+                  entry_id: returnEntryId,
+                  is_bonus: this.entryForm.value.team7?.id === bonusTeamId,
+                  seed_id: this.entryForm.value.team7?.id,
+                },
+                {
+                  entry_id: returnEntryId,
+                  is_bonus: this.entryForm.value.team8?.id === bonusTeamId,
+                  seed_id: this.entryForm.value.team8?.id,
+                },
+              ],
+            };
+            return this.service.addPicks(pickRequest);
+          })
+        )
+        .subscribe(() => {
+          this.name = this.entryForm.value.name as string;
+          this.email = this.entryForm.value.email as string;
+          this.submitted = true;
+        });
+    }
   }
 
   private addTeamIfSelected(seed: Seed) {

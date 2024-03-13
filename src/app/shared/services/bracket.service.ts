@@ -14,7 +14,6 @@ import { Region } from '../models/region.model';
 @Injectable()
 export class BracketService {
   private baseUrl: string;
-  private currentYear: string = '2024';
 
   constructor(private http: HttpClient) {
     this.baseUrl = 'https://bowl-pickem-15ea7b3ae3e0.herokuapp.com/api/v1/bracket/';
@@ -49,6 +48,11 @@ export class BracketService {
   public getBracketList(): Observable<Bracket[]> {
     return this.http.get<Bracket[]>(this.baseUrl + 'bracketlist');
   }
+
+  public getEntryList(bracketId: number): Observable<Entry[]> {
+    return this.http.get<Entry[]>(this.baseUrl + bracketId + '/entrylist');
+  }
+
   public getBracket(id: number): Observable<Bracket> {
     return this.http.get<Bracket>(this.baseUrl + 'bracket/' + id);
   }
@@ -63,7 +67,6 @@ export class BracketService {
 
   public getSeedList(bracketId: number): Observable<Seed[]> {
     let url = this.baseUrl + bracketId + '/seedlist';
-    console.log(url);
     return this.http.get<Seed[]>(url);
   }
 
@@ -76,5 +79,12 @@ export class BracketService {
   }
   public getRegions(): Observable<Region[]> {
     return this.http.get<Region[]>(this.baseUrl + 'regionlist');
+  }
+
+  public togglePaid(id: string): Observable<any> {
+    return this.http.get(this.baseUrl + 'entry/paid/' + id);
+  }
+  public deleteEntry(id: string): Observable<any> {
+    return this.http.delete<any>(this.baseUrl + 'entry/delete/' + id);
   }
 }
