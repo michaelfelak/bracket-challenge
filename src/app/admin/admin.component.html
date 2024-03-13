@@ -1,7 +1,6 @@
 <!-- <add-bowl></add-bowl> -->
 <!-- <add-bowl-game></add-bowl-game> -->
-<!-- <paid-status></paid-status>
-    <update-scores></update-scores>
+<!--    <update-scores></update-scores>
     <tiebreakers></tiebreakers> -->
 <sky-page layout="tabs">
   <form [formGroup]="formGroup">
@@ -26,19 +25,16 @@
           </div>
         </sky-column>
         <sky-column>
-          <!-- <sky-repeater expandMode="single" >
-            <sky-repeater-item *ngFor="let s of existingSeeds" [isExpanded]="false">
-              <sky-repeater-item-content>
-                {{ s.region_name }}
-                <td>#{{ s.seed_number }}</td>
-                <td>
-                  {{ s.school_name }}
-                </td>
-                <td>#{{ s.overall_seed_number }} overall</td>
-              </sky-repeater-item-content>
-            </sky-repeater-item>
-          </sky-repeater> -->
+          <div *ngFor="let s of existingSeeds">
+            {{ s.region_name }}
+            #{{ s.seed_number }}
+            {{ s.school_name }}
+            #{{ s.overall_seed_number }} overall
+          </div>
         </sky-column>
+      </sky-row>
+      <sky-row>
+        <app-paid-status *ngIf="selectedBracketId" [bracketId]="selectedBracketId"></app-paid-status>
       </sky-row>
       <sky-row>
         <app-select-winners *ngIf="selectedBracketId" [bracketId]="selectedBracketId"></app-select-winners>

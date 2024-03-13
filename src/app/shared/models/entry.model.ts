@@ -1,16 +1,17 @@
-export class EntryRequest {
-  public Name: string = '';
-  public Email: string = '';
-  public Tiebreaker1: number = 0;
-  public Tiebreaker2: number = 0;
-  public IsTesting: boolean = false;
-  public Year!: number;
+export interface EntryRequest {
+  Name: string;
+  Email: string;
+  Tiebreaker1: number;
+  Tiebreaker2: number;
+  IsTesting: boolean;
+  Year: number;
 }
 
-export class Entry {
-  public id?: string;
-  public name!: string;
-  public email!: string;
-  public paid?: boolean;
-  public created_date?: string;
+export interface Entry {
+  id?: string;
+  name: string;
+  email: string;
+  is_paid: boolean;
+  created_date?: string;
+  bracket_id: number;
 }

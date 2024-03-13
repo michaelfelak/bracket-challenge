@@ -10,6 +10,7 @@ import { Seed } from '../shared/models/seed';
 import { CommonModule } from '@angular/common';
 import { SelectWinnersComponent } from './select-winners/select-winners.component';
 import { SkyRepeaterModule } from '@skyux/lists';
+import { PaidStatusComponent } from './paid-status/paid-status.component';
 
 @Component({
   standalone: true,
@@ -21,7 +22,8 @@ import { SkyRepeaterModule } from '@skyux/lists';
     AddSeedComponent,
     SkyPageModule,
     SelectWinnersComponent,
-    SkyRepeaterModule
+    SkyRepeaterModule,
+    PaidStatusComponent
   ],
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -42,7 +44,6 @@ export class AdminComponent implements OnInit {
       bracketId: new FormControl(2024),
     });
     this.formGroup.controls.bracketId.valueChanges.subscribe((result) => {
-      console.log('bracketid changed to ' + result);
       this.selectedBracketId = result!;
       this.updateSeeds();
     });

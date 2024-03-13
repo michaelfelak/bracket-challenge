@@ -26,7 +26,6 @@ export class StandingsFlyoutComponent implements OnInit {
       this.entry = result;
       this.name = this.entry.entry_name;
       this.picks = this.entry.picks;
-      console.log(result);
       this.picks.forEach((a: PickModel) => {
         if (a.earned_points) {
           this.totalPoints += a.earned_points;

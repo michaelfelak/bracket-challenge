@@ -149,6 +149,7 @@
                 <sky-input-box labelText="Email">
                   <input formControlName="email" />
                 </sky-input-box>
+                <sky-alert *ngIf="hasErrors">{{ errorMessage }}</sky-alert>
                 <button class="submit-button sky-btn sky-btn-primary sky-margin-inline-compact" [disabled]="submitDisabled" (click)="submit()">Submit</button>
               </sky-box>
             </sky-column>
