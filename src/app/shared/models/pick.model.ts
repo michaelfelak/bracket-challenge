@@ -13,6 +13,7 @@ export class PickModel {
   public seed_number?: number;
   public overall_seed_number?: number;
   public earned_points?: number;
+  public wins?: number;
 }
 
 export class PickResponse {
