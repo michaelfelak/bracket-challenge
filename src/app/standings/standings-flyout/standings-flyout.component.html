@@ -11,8 +11,14 @@
     <tr *ngFor="let pick of picks">
       <td class="team-name" style="border-left: 1px solid black">{{ pick.seed_number }} ({{ pick.overall_seed_number }})</td>
       <td class="team-name" style="border-left: 1px solid black">
-        {{ pick.school_name }}
-        <sky-icon style="color: green" icon="check-circle" *ngIf="pick.is_bonus"></sky-icon>
+        <div *ngIf="!pick.play_in_school_name">
+          <sky-icon style="color: green" icon="check-circle" *ngIf="pick.is_bonus"></sky-icon>
+          {{ pick.school_name }}
+        </div>
+        <div *ngIf="pick.play_in_school_name">
+          <sky-icon style="color: green" icon="check-circle" *ngIf="pick.is_bonus"></sky-icon>
+          {{ pick.school_name }} / {{ pick.play_in_school_name }}
+        </div>
       </td>
       <td class="team-name" style="border-left: 1px solid black">
         {{ pick.earned_points ?? 0 }}
@@ -22,5 +28,5 @@
       </td>
     </tr>
   </table>
-  <div><br><sky-icon style="color: green" icon="check-circle"></sky-icon> Superfan school = 50% points bonus</div>
+  <div><br /><sky-icon style="color: green" icon="check-circle"></sky-icon> Superfan school = 50% points bonus</div>
 </main>

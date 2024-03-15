@@ -14,6 +14,7 @@ export class PickModel {
   public overall_seed_number?: number;
   public earned_points?: number;
   public wins?: number;
+  public play_in_school_name?: string;
 }
 
 export class PickResponse {
