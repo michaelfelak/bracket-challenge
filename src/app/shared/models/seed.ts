@@ -7,5 +7,7 @@ export interface Seed {
   overall_seed_number?: number;
   region_id?: number;
   region_name?: string;
-  possible_points?: number
+  possible_points?: number;
+  play_in_school_id?: number;
+  play_in_school_name?: string;
 }

@@ -37,14 +37,24 @@
                   <p>
                     <select formControlName="team1" (change)="update()">
                       <option *ngFor="let team of topLeftRegion.seeds" [ngValue]="team">
-                        <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                        <div *ngIf="!team.play_in_school_id">
+                          <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                        </div>
+                        <div *ngIf="team.play_in_school_id">
+                          <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
+                        </div>
                       </option>
                     </select>
                   </p>
                   <p>
                     <select formControlName="team2" (change)="update()">
                       <option *ngFor="let team of topLeftRegion.seeds" [ngValue]="team">
-                        <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                        <div *ngIf="!team.play_in_school_id">
+                          <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                        </div>
+                        <div *ngIf="team.play_in_school_id">
+                          <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
+                        </div>
                       </option>
                     </select>
                   </p>
@@ -58,14 +68,24 @@
                   <p>
                     <select formControlName="team3" (change)="update()">
                       <option *ngFor="let team of topRightRegion.seeds" [ngValue]="team">
-                        <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                        <div *ngIf="!team.play_in_school_id">
+                          <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                        </div>
+                        <div *ngIf="team.play_in_school_id">
+                          <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
+                        </div>
                       </option>
                     </select>
                   </p>
                   <p>
                     <select formControlName="team4" (change)="update()">
                       <option *ngFor="let team of topRightRegion.seeds" [ngValue]="team">
-                        <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                        <div *ngIf="!team.play_in_school_id">
+                          <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                        </div>
+                        <div *ngIf="team.play_in_school_id">
+                          <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
+                        </div>
                       </option>
                     </select>
                   </p>
@@ -81,14 +101,24 @@
                   <p>
                     <select formControlName="team7" (change)="update()">
                       <option *ngFor="let team of bottomLeftRegion.seeds" [ngValue]="team">
-                        <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                        <div *ngIf="!team.play_in_school_id">
+                          <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                        </div>
+                        <div *ngIf="team.play_in_school_id">
+                          <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
+                        </div>
                       </option>
                     </select>
                   </p>
                   <p>
                     <select formControlName="team8" (change)="update()">
                       <option *ngFor="let team of bottomLeftRegion.seeds" [ngValue]="team">
-                        <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                        <div *ngIf="!team.play_in_school_id">
+                          <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                        </div>
+                        <div *ngIf="team.play_in_school_id">
+                          <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
+                        </div>
                       </option>
                     </select>
                   </p>
@@ -102,14 +132,24 @@
                   <p>
                     <select formControlName="team5" (change)="update()">
                       <option *ngFor="let team of bottomRightRegion.seeds" [ngValue]="team">
-                        <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                        <div *ngIf="!team.play_in_school_id">
+                          <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                        </div>
+                        <div *ngIf="team.play_in_school_id">
+                          <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
+                        </div>
                       </option>
                     </select>
                   </p>
                   <p>
                     <select formControlName="team6" (change)="update()">
                       <option *ngFor="let team of bottomRightRegion.seeds" [ngValue]="team">
-                        <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                        <div *ngIf="!team.play_in_school_id">
+                          <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                        </div>
+                        <div *ngIf="team.play_in_school_id">
+                          <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
+                        </div>
                       </option>
                     </select>
                   </p>
@@ -125,7 +165,12 @@
                   The school you select here will receive 50% more points than normal.
                   <select class="possible-points" formControlName="bonusTeam" (change)="update()">
                     <option *ngFor="let team of selectedTeams" [ngValue]="team">
-                      <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                      <div *ngIf="!team.play_in_school_id">
+                        <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
+                      </div>
+                      <div *ngIf="team.play_in_school_id">
+                        <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
+                      </div>
                     </option>
                   </select>
                 </sky-box-content>

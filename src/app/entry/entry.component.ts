@@ -148,6 +148,7 @@ export class EntryComponent {
         })
       )
       .subscribe((result) => {
+        console.log(result);
         result.forEach((r) => {
           const n = r.seed_number!;
           r.possible_points = 16 * n;
