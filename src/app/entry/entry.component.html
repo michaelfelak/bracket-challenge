@@ -12,7 +12,7 @@
                   <li>Select 2 different teams in each of the 4 regions.</li>
                   <li>You will earn points for each win that your selected teams achieve.</li>
                   <li>Points awarded for a win will be the seed number times the round number.</li>
-                  <li>You may choose ONE "superfan" school. This school will be awarded a 50% bonus for each win.</li>
+                  <li>You may choose ONE "superfan" team from the 8 teams you select. This team will be awarded a 50% bonus for each win.</li>
                   <li>
                     Validate all of your picks and points before clicking
                     <span class="sky-emphasized">Submit</span>.
@@ -161,9 +161,9 @@
             <sky-row>
               <sky-column style="max-width: 400px; margin-left: auto; margin-right: auto">
                 <sky-box>
-                  <sky-box-header class="region-header">Superfan School 50% bonus</sky-box-header>
+                  <sky-box-header class="region-header">Superfan Team 50% Bonus</sky-box-header>
                   <sky-box-content>
-                    The school you select here will receive 50% more points than normal.
+                    The team you select here will receive 50% more points than normal.
                     <select class="possible-points" formControlName="bonusTeam" (change)="update()">
                       <option *ngFor="let team of selectedTeams" [ngValue]="team">
                         <div *ngIf="!team.play_in_school_id">

@@ -14,7 +14,7 @@ import { Settings } from '../models/settings.model';
 
 @Injectable()
 export class BracketService {
-  private local = true;
+  private local = false;
   private baseUrlPrefix: string;
   private baseUrl: string;
 
