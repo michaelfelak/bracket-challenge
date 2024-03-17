@@ -31,7 +31,7 @@ import { Settings } from '../shared/models/settings.model';
   styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
-  public selectedBracketId!: number;
+  public selectedBracketId: number = 3;
 
   public settings: Settings | undefined;
   public brackets: Bracket[] = [];
@@ -58,10 +58,6 @@ export class AdminComponent implements OnInit {
     });
 
     this.updateSeeds();
-
-    this.service.getSettings().subscribe((result) => {
-      console.log(result);
-    });
   }
 
   public updateSeeds() {
