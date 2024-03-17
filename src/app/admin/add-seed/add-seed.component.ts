@@ -6,11 +6,12 @@ import { School } from 'src/app/shared/models/school.model';
 import { Seed } from 'src/app/shared/models/seed';
 import { SkyInputBoxModule } from '@skyux/forms';
 import { SkyPageModule } from '@skyux/pages';
+import { SkyRepeaterModule } from '@skyux/lists';
 
 @Component({
   selector: 'app-add-seed',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SkyInputBoxModule, SkyPageModule],
+  imports: [CommonModule, ReactiveFormsModule, SkyInputBoxModule, SkyPageModule, SkyRepeaterModule],
   templateUrl: './add-seed.component.html',
   styleUrls: ['./add-seed.component.scss'],
 })
@@ -54,7 +55,15 @@ export class AddSeedComponent implements OnInit {
     this.service.getSchools().subscribe((result) => {
       this.schoolList = result;
     });
+    this.updateSeeds();
   }
+
+  public updateSeeds() {
+    this.service.getSeedList(this.bracketId).subscribe((result) => {
+      this.seeds = result;
+    });
+  }
+
   public submit() {
     const seed: Seed = {
       bracket_id: this.bracketId,
@@ -67,6 +76,7 @@ export class AddSeedComponent implements OnInit {
     if (seed.school_id && seed.seed_number && seed.overall_seed_number && seed.region_id) {
       this.service.addSeed(seed).subscribe((result) => {
         this.seedAdded.emit();
+        this.updateSeeds();
       });
     } else {
       alert('info missing');

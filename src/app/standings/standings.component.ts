@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
 export class StandingsComponent implements OnInit {
   public standings: StandingsRecord[] = [];
   public flyout: SkyFlyoutInstance<any> | undefined;
-  public showStandingsLink: boolean = true; // this shows the flyout links, only enable after bowls start
+  public showStandingsLink: boolean = false;
   public currentYear!: number;
   public years: number[] = [2024];
 
@@ -40,10 +40,14 @@ export class StandingsComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.currentYear = 2024;
     this.titleService.setTitle('Bracket Challenge - Standings');
-    this.retrieveStandings(this.currentYear);
     this.service.addPageVisit('bracket/standings', 'load').subscribe();
+
+    this.service.getSettings().subscribe((settings) => {
+      this.showStandingsLink = settings.flyout_enabled;
+      this.currentYear = settings.current_year;
+      this.retrieveStandings(this.currentYear);
+    });
   }
 
   public retrieveStandings(year: number) {

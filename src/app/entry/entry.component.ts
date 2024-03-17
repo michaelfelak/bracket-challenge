@@ -111,6 +111,10 @@ export class EntryComponent {
   }
 
   ngOnInit() {
+    this.service.getSettings().subscribe((settings) => {
+      this.bracketFinalized = settings.entry_enabled;
+    });
+
     this.service.addPageVisit('bracket/entry', 'load').subscribe();
     this.service
       .getBracket(this.bracketId)
@@ -168,16 +172,6 @@ export class EntryComponent {
           this.bottomRightRegion.seeds = result.filter((seed) => {
             return seed.region_id === this.bottomRightRegion.region_id;
           });
-
-          // only show dropdowns if all seeds are in
-          if (
-            this.topLeftRegion.seeds.length === 16 &&
-            this.topRightRegion.seeds.length === 16 &&
-            this.bottomLeftRegion.seeds.length === 16 &&
-            this.bottomRightRegion.seeds.length === 16
-          ) {
-            this.bracketFinalized = true;
-          }
         }
       });
   }
