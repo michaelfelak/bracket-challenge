@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { SelectWinnersComponent } from './select-winners/select-winners.component';
 import { SkyRepeaterModule } from '@skyux/lists';
 import { PaidStatusComponent } from './paid-status/paid-status.component';
+import { Settings } from '../shared/models/settings.model';
 
 @Component({
   standalone: true,
@@ -23,7 +24,7 @@ import { PaidStatusComponent } from './paid-status/paid-status.component';
     SkyPageModule,
     SelectWinnersComponent,
     SkyRepeaterModule,
-    PaidStatusComponent
+    PaidStatusComponent,
   ],
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -32,6 +33,7 @@ import { PaidStatusComponent } from './paid-status/paid-status.component';
 export class AdminComponent implements OnInit {
   public selectedBracketId!: number;
 
+  public settings: Settings | undefined;
   public brackets: Bracket[] = [];
   public existingSeeds: Seed[] = [];
 
@@ -50,16 +52,38 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getSettings();
     this.service.getBracketList().subscribe((result) => {
       this.brackets = result;
     });
 
     this.updateSeeds();
+
+    this.service.getSettings().subscribe((result) => {
+      console.log(result);
+    });
   }
 
   public updateSeeds() {
     this.service.getSeedList(this.selectedBracketId).subscribe((result) => {
       this.existingSeeds = result;
+    });
+  }
+
+  public toggleEntryVisible() {
+    this.service.updateEntryEnabled().subscribe(() => {
+      this.getSettings();
+    });
+  }
+  public toggleFlyoutVisible() {
+    this.service.updateFlyoutEnabled().subscribe(() => {
+      this.getSettings();
+    });
+  }
+
+  private getSettings() {
+    this.service.getSettings().subscribe((settings) => {
+      this.settings = settings;
     });
   }
 }

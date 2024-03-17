@@ -4,41 +4,39 @@
     <tiebreakers></tiebreakers> -->
 <sky-page layout="tabs">
   <form [formGroup]="formGroup">
-    <sky-fluid-grid>
+    <!-- <sky-fluid-grid>
       <sky-row>
+        <sky-column> -->
+    <app-add-record></app-add-record>
+    <!-- </sky-column> -->
+    <!-- <sky-column [screenSmall]="2"> -->
+    <legend>Select Bracket</legend>
+    <select formControlName="bracketId">
+      <option *ngFor="let bracket of brackets" [ngValue]="bracket.id">
+        {{ bracket.year }}
+      </option>
+    </select>
+    <!-- </sky-column>
+        <sky-column [screenSmall]="2"> -->
+    <p>Flyout Enabled: {{ settings?.flyout_enabled }} <button class="sky-btn sky-btn-primary" (click)="toggleFlyoutVisible()">Toggle Flyout</button></p>
+    <p>Entry Enabled: {{ settings?.entry_enabled }} <button class="sky-btn sky-btn-primary" (click)="toggleEntryVisible()">Toggle Entry</button></p>
+    <!-- </sky-column>
+      </sky-row> -->
+    <!-- <sky-row>
+        <sky-column [screenSmall]="2"> -->
+    <div *ngIf="selectedBracketId">
+      <app-add-seed [bracketId]="selectedBracketId" (seedAdded)="updateSeeds()"></app-add-seed>
+    </div>
+    <!-- </sky-column>
         <sky-column>
-          <app-add-record></app-add-record>
-        </sky-column>
-        <sky-column [screenSmall]="2">
-          <legend>Select Bracket</legend>
-          <select formControlName="bracketId">
-            <option *ngFor="let bracket of brackets" [ngValue]="bracket.id">
-              {{ bracket.year }}
-            </option>
-          </select>
         </sky-column>
       </sky-row>
-      <sky-row>
-        <sky-column [screenSmall]="2">
-          <div *ngIf="selectedBracketId">
-            <app-add-seed [bracketId]="selectedBracketId" (seedAdded)="updateSeeds()"></app-add-seed>
-          </div>
-        </sky-column>
-        <sky-column>
-          <div *ngFor="let s of existingSeeds">
-            {{ s.region_name }}
-            #{{ s.seed_number }}
-            {{ s.school_name }}
-            #{{ s.overall_seed_number }} overall
-          </div>
-        </sky-column>
-      </sky-row>
-      <sky-row>
-        <app-paid-status *ngIf="selectedBracketId" [bracketId]="selectedBracketId"></app-paid-status>
-      </sky-row>
-      <sky-row>
-        <app-select-winners *ngIf="selectedBracketId" [bracketId]="selectedBracketId"></app-select-winners>
-      </sky-row>
-    </sky-fluid-grid>
+      <sky-row> -->
+    <app-paid-status *ngIf="selectedBracketId" [bracketId]="selectedBracketId"></app-paid-status>
+    <!-- </sky-row> -->
+    <!-- <sky-row> -->
+    <app-select-winners *ngIf="selectedBracketId" [bracketId]="selectedBracketId"></app-select-winners>
+    <!-- </sky-row>
+    </sky-fluid-grid> -->
   </form>
 </sky-page>

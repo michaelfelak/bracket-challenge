@@ -10,6 +10,7 @@ import { PickRequest } from '../models/pick.model';
 import { School } from '../models/school.model';
 import { CompletedEntry, StandingsRecord } from '../models/standings.model';
 import { Region } from '../models/region.model';
+import { Settings } from '../models/settings.model';
 
 @Injectable()
 export class BracketService {
@@ -102,5 +103,17 @@ export class BracketService {
   }
   public deleteEntry(id: string): Observable<any> {
     return this.http.delete<any>(this.baseUrl + 'entry/delete/' + id);
+  }
+
+  public updateFlyoutEnabled() {
+    return this.http.get(this.baseUrl + 'toggleflyout');
+  }
+  
+  public updateEntryEnabled() {
+    return this.http.get(this.baseUrl + 'toggleentry');
+  }
+  
+  public getSettings(): Observable<Settings> {
+    return this.http.get<Settings>(this.baseUrl + 'settings');
   }
 }
