@@ -19,10 +19,10 @@ export class StandingsFlyoutComponent implements OnInit {
   public name!: string;
   public totalPoints: number = 0;
 
-  constructor(public context: StandingsFlyoutContext, private svc: BracketService) {}
+  constructor(public context: StandingsFlyoutContext, private service: BracketService) {}
 
   public ngOnInit() {
-    this.svc.getStandingsEntry(this.context.entryId).subscribe((result: any) => {
+    this.service.getStandingsEntry(this.context.entryId).subscribe((result: any) => {
       this.entry = result;
       this.name = this.entry.entry_name;
       this.picks = this.entry.picks;
@@ -32,5 +32,7 @@ export class StandingsFlyoutComponent implements OnInit {
         }
       });
     });
+
+    this.service.addPageVisit('bracket/completedentry/' + this.context.entryId, 'load').subscribe();
   }
 }

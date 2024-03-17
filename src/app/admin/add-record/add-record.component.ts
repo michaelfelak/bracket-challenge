@@ -36,7 +36,7 @@ export class AddRecordComponent {
   }
   public addBracket() {
     this.service
-      .addBracket({ year: 2023, region_1_id: 1, region_2_id: 2, region_3_id: 3, region_4_id: 4 })
+      .addBracket({ year: this.formGroup.value.year!, region_1_id: 1, region_2_id: 2, region_3_id: 3, region_4_id: 4 })
       .subscribe((result) => {
         console.log(result);
       });

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Seed } from '../models/seed';
 import { Bracket } from '../models/bracket';
 import { Entry } from '../models/entry.model';
@@ -13,11 +13,27 @@ import { Region } from '../models/region.model';
 
 @Injectable()
 export class BracketService {
+  private local = false;
+  private baseUrlPrefix: string;
   private baseUrl: string;
 
   constructor(private http: HttpClient) {
-    this.baseUrl = 'https://bowl-pickem-15ea7b3ae3e0.herokuapp.com/api/v1/bracket/';
-    // this.baseUrl = 'http://localhost:8081/api/v1/bracket/';
+    if (this.local) {
+      this.baseUrlPrefix = 'http://localhost:8081/api/v1/';
+    } else {
+      this.baseUrlPrefix = 'https://bowl-pickem-15ea7b3ae3e0.herokuapp.com/api/v1/';
+    }
+    this.baseUrl = this.baseUrlPrefix + 'bracket/';
+  }
+
+  public addPageVisit(page: string, action: string): Observable<object> {
+    if (!this.local) {
+      return this.http.post(this.baseUrlPrefix + 'pagevisit', { page: page, action: action });
+    } else {
+      console.log(page, action);
+      console.log(this.baseUrlPrefix + 'pagevisit');
+      return of({});
+    }
   }
 
   public addBracket(request: Bracket) {

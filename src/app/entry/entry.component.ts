@@ -38,8 +38,10 @@ export class EntryComponent {
   public totalPoints = 0;
   public name = '';
   public email = '';
-  public bracketId = 2;
+  public bracketId = 3;
   public bracket: Bracket = {};
+
+  public bracketFinalized = false;
 
   public submitted = false;
 
@@ -109,6 +111,7 @@ export class EntryComponent {
   }
 
   ngOnInit() {
+    this.service.addPageVisit('bracket/entry', 'load').subscribe();
     this.service
       .getBracket(this.bracketId)
       .pipe(
@@ -148,23 +151,34 @@ export class EntryComponent {
         })
       )
       .subscribe((result) => {
-        console.log(result);
-        result.forEach((r) => {
-          const n = r.seed_number!;
-          r.possible_points = 16 * n;
-        });
-        this.topLeftRegion.seeds = result.filter((seed) => {
-          return seed.region_id === this.topLeftRegion.region_id;
-        });
-        this.topRightRegion.seeds = result.filter((seed) => {
-          return seed.region_id === this.topRightRegion.region_id;
-        });
-        this.bottomLeftRegion.seeds = result.filter((seed) => {
-          return seed.region_id === this.bottomLeftRegion.region_id;
-        });
-        this.bottomRightRegion.seeds = result.filter((seed) => {
-          return seed.region_id === this.bottomRightRegion.region_id;
-        });
+        if (result) {
+          result.forEach((r) => {
+            const n = r.seed_number!;
+            r.possible_points = 16 * n;
+          });
+          this.topLeftRegion.seeds = result.filter((seed) => {
+            return seed.region_id === this.topLeftRegion.region_id;
+          });
+          this.topRightRegion.seeds = result.filter((seed) => {
+            return seed.region_id === this.topRightRegion.region_id;
+          });
+          this.bottomLeftRegion.seeds = result.filter((seed) => {
+            return seed.region_id === this.bottomLeftRegion.region_id;
+          });
+          this.bottomRightRegion.seeds = result.filter((seed) => {
+            return seed.region_id === this.bottomRightRegion.region_id;
+          });
+
+          // only show dropdowns if all seeds are in
+          if (
+            this.topLeftRegion.seeds.length === 16 &&
+            this.topRightRegion.seeds.length === 16 &&
+            this.bottomLeftRegion.seeds.length === 16 &&
+            this.bottomRightRegion.seeds.length === 16
+          ) {
+            this.bracketFinalized = true;
+          }
+        }
       });
   }
 
@@ -250,6 +264,8 @@ export class EntryComponent {
     this.validate();
 
     if (!this.hasErrors) {
+      this.service.addPageVisit('bracket/entry', 'submit').subscribe();
+
       const entryRequest: Entry = {
         email: this.entryForm.value.email!,
         name: this.entryForm.value.name!,
