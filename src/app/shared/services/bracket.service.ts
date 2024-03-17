@@ -28,13 +28,13 @@ export class BracketService {
   }
 
   public addPageVisit(page: string, action: string): Observable<object> {
-    if (!this.local) {
-      return this.http.post(this.baseUrlPrefix + 'pagevisit', { page: page, action: action });
-    } else {
-      console.log(page, action);
-      console.log(this.baseUrlPrefix + 'pagevisit');
+    // if (!this.local) {
+    //   return this.http.post(this.baseUrlPrefix + 'pagevisit', { page: page, action: action });
+    // } else {
+    //   console.log(page, action);
+    //   console.log(this.baseUrlPrefix + 'pagevisit');
       return of({});
-    }
+    // }
   }
 
   public addBracket(request: Bracket) {

@@ -7,6 +7,7 @@ import { Seed } from 'src/app/shared/models/seed';
 import { SkyInputBoxModule } from '@skyux/forms';
 import { SkyPageModule } from '@skyux/pages';
 import { SkyRepeaterModule } from '@skyux/lists';
+import { Subject, distinctUntilChanged, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-add-seed',
@@ -34,6 +35,8 @@ export class AddSeedComponent implements OnInit {
 
   private selectedSchoolId = 0;
 
+  private ngUnsubscribe = new Subject<void>();
+
   constructor(private service: BracketService, private formBuilder: FormBuilder) {
     this.formGroup = this.formBuilder.group({
       schoolId: new FormControl(0),
@@ -42,9 +45,11 @@ export class AddSeedComponent implements OnInit {
       overallSeedNumber: new FormControl(0),
     });
 
-    this.formGroup.controls.schoolId.valueChanges.subscribe((result) => {
-      this.selectedSchoolId = result!;
-    });
+    this.formGroup.controls.schoolId.valueChanges
+      .pipe(distinctUntilChanged(), takeUntil(this.ngUnsubscribe))
+      .subscribe((result) => {
+        this.selectedSchoolId = result!;
+      });
   }
 
   public ngOnInit() {
@@ -54,6 +59,7 @@ export class AddSeedComponent implements OnInit {
   private initializeData() {
     this.service.getSchools().subscribe((result) => {
       this.schoolList = result;
+      console.log(result);
     });
     this.updateSeeds();
   }
