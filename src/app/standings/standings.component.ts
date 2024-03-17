@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { BracketService } from '../shared/services/bracket.service';
-import {
-  SkyFlyoutService,
-  SkyFlyoutInstance,
-  SkyFlyoutConfig
-} from '@skyux/flyout';
+import { SkyFlyoutService, SkyFlyoutInstance, SkyFlyoutConfig } from '@skyux/flyout';
 import { StandingsFlyoutComponent } from './standings-flyout/standings-flyout.component';
 import { StandingsFlyoutContext } from './standings-flyout/standings-flyout.context';
 import { SkyWaitService } from '@skyux/indicators';
@@ -17,7 +13,7 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   selector: 'app-standings',
   templateUrl: './standings.component.html',
-  styleUrls: ['./standings.component.scss']
+  styleUrls: ['./standings.component.scss'],
 })
 export class StandingsComponent implements OnInit {
   public standings: StandingsRecord[] = [];
@@ -38,21 +34,22 @@ export class StandingsComponent implements OnInit {
 
   constructor(
     private titleService: Title,
-    private svc: BracketService,
+    private service: BracketService,
     private flyoutService: SkyFlyoutService,
-    private waitSvc: SkyWaitService,
+    private waitSvc: SkyWaitService
   ) {}
 
   public ngOnInit() {
-    this.currentYear = 2023;
-    this.titleService.setTitle("Bracket Challenge - Standings");
+    this.currentYear = 2024;
+    this.titleService.setTitle('Bracket Challenge - Standings');
     this.retrieveStandings(this.currentYear);
+    this.service.addPageVisit('bracket/standings', 'load').subscribe();
   }
 
   public retrieveStandings(year: number) {
     this.waitSvc.beginNonBlockingPageWait();
 
-    this.svc.getStandings(year).subscribe((result: StandingsRecord[]) => {
+    this.service.getStandings(year).subscribe((result: StandingsRecord[]) => {
       this.standings = result;
       this.assignRank();
       this.waitSvc.endNonBlockingPageWait();
@@ -62,19 +59,17 @@ export class StandingsComponent implements OnInit {
 
   public assignRank() {
     if (this.standings) {
-      this.standings = this.standings.sort(
-        (a: StandingsRecord, b: StandingsRecord) => {
-          if (a.current_points! > b.current_points!) {
-            return -1;
-          }
-
-          if (a.current_points! < b.current_points!) {
-            return 1;
-          }
-
-          return 0;
+      this.standings = this.standings.sort((a: StandingsRecord, b: StandingsRecord) => {
+        if (a.current_points! > b.current_points!) {
+          return -1;
         }
-      );
+
+        if (a.current_points! < b.current_points!) {
+          return 1;
+        }
+
+        return 0;
+      });
 
       let rank = 1;
       let nextRank = 1;
@@ -100,15 +95,12 @@ export class StandingsComponent implements OnInit {
       providers: [
         {
           provide: StandingsFlyoutContext,
-          useValue: record
-        }
+          useValue: record,
+        },
       ],
-      defaultWidth: 500
+      defaultWidth: 500,
     };
-    this.flyout = this.flyoutService.open(
-      StandingsFlyoutComponent,
-      flyoutConfig
-    );
+    this.flyout = this.flyoutService.open(StandingsFlyoutComponent, flyoutConfig);
 
     this.flyout.closed.subscribe(() => {
       this.flyout = undefined;
@@ -122,10 +114,7 @@ export class StandingsComponent implements OnInit {
 
   public sortByCurrentPoints() {
     this.sortCurrentPoints = true;
-    this.sortRemainingPoints =
-      this.sortPossiblePoints =
-      this.sortCorrectPicks =
-        false;
+    this.sortRemainingPoints = this.sortPossiblePoints = this.sortCorrectPicks = false;
     this.currentPointsDesc = !this.currentPointsDesc;
 
     if (this.standings) {
