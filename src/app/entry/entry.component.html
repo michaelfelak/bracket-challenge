@@ -17,11 +17,15 @@
                     Validate all of your picks and points before clicking
                     <span class="sky-emphasized">Submit</span>.
                   </li>
-                  <p><span class="sky-emphasized">***NOTE***</span>: If you choose a play-in game team, you will get points for either team that advances to the field of 64.</p>
+                  <p>
+                    <span class="sky-emphasized">***NOTE***</span>: If you choose a play-in game team, you will get points for either team that advances to the field of 64. No
+                    points are awarded for winning a play-in game.
+                  </p>
                   <p>
                     <span class="sky-emphasized">***NOTE***</span>: Total possible points does not take into account that only one team will be able to advance out of each region.
                     The total points is the sum of all possible points for each team, and does not reflect your highest possible point total.
                   </p>
+                  <p>Deadline to submit: <span class="sky-emphasized"> Thursday, March 21st at 12:00 PM ET</span>.</p>
                 </ul>
               </div>
             </sky-column>
@@ -181,22 +185,21 @@
             <sky-row>
               <sky-column class="possible-points">
                 <sky-box>
-                  <sky-box-header>Total possible points</sky-box-header>
-                  <sky-box-content> {{ totalPoints }} </sky-box-content>
-                </sky-box>
-              </sky-column>
-            </sky-row>
-            <sky-row>
-              <sky-column class="possible-points">
-                <sky-box style="max-width: 600px; margin-left: auto; margin-right: auto">
-                  <sky-input-box labelText="Name">
-                    <input formControlName="name" />
-                  </sky-input-box>
-                  <sky-input-box labelText="Email">
-                    <input formControlName="email" />
-                  </sky-input-box>
-                  <sky-alert *ngIf="hasErrors">{{ errorMessage }}</sky-alert>
-                  <button class="submit-button sky-btn sky-btn-primary sky-margin-inline-compact" [disabled]="submitDisabled" (click)="submit()">Submit</button>
+                  <sky-box-header style="text-align: center" class="region-header">Pick summary</sky-box-header>
+                  <sky-box-content>
+                    <p style="text-align: center; padding-bottom: 20px">Total possible points: {{ totalPoints }}</p>
+                    <sky-input-box labelText="Entry Name" style="padding-left: 20px; padding-right: 20px">
+                      <input formControlName="name" type="text" />
+                    </sky-input-box>
+                    <sky-input-box labelText="Email" stacked="true" style="padding-left: 20px; padding-right: 20px">
+                      <input formControlName="email" type="text" />
+                    </sky-input-box>
+                    <sky-alert *ngIf="hasErrors">{{ errorMessage }}</sky-alert>
+                    <div style="text-align: center">
+                      <button class="submit-button sky-btn sky-btn-primary sky-margin-inline-compact" [disabled]="submitDisabled" (click)="submit()">Submit</button>
+                    </div>
+                    <p>Details to confirm entry will be sent to the provided email.</p>
+                  </sky-box-content>
                 </sky-box>
               </sky-column>
             </sky-row>
