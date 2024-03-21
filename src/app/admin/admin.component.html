@@ -1,4 +1,5 @@
 <main>
+  <!-- <app-admin-bracket></app-admin-bracket> -->
   <div *ngIf="settings?.entry_enabled">
     <app-add-record></app-add-record>
     <legend>Select Bracket</legend>
@@ -10,9 +11,9 @@
   </div>
   <p>Flyout Enabled: {{ settings?.flyout_enabled }} <button class="sky-btn sky-btn-primary" (click)="toggleFlyoutVisible()">Toggle Flyout</button></p>
   <p>Entry Enabled: {{ settings?.entry_enabled }} <button class="sky-btn sky-btn-primary" (click)="toggleEntryVisible()">Toggle Entry</button></p>
-  <!-- <div>
+  <div *ngIf="settings?.entry_enabled">
     <app-add-seed [bracketId]="selectedBracketId"></app-add-seed>
-  </div> -->
+  </div>
   <app-paid-status [bracketId]="selectedBracketId"></app-paid-status>
   <app-select-winners [bracketId]="selectedBracketId"></app-select-winners>
 </main>

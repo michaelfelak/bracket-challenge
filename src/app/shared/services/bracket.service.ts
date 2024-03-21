@@ -64,6 +64,10 @@ export class BracketService {
     return this.http.post(this.baseUrl + 'winner', request);
   }
 
+  public addLoser(request: AddWinnerRequest) {
+    return this.http.post(this.baseUrl + 'loser', request);
+  }
+
   public addSchool(request: School) {
     return this.http.post(this.baseUrl + 'school', request);
   }

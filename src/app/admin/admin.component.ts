@@ -11,6 +11,7 @@ import { SelectWinnersComponent } from './select-winners/select-winners.componen
 import { SkyRepeaterModule } from '@skyux/lists';
 import { PaidStatusComponent } from './paid-status/paid-status.component';
 import { Settings } from '../shared/models/settings.model';
+import { AdminBracketComponent } from './admin-bracket/admin-bracket.component';
 
 @Component({
   standalone: true,
@@ -23,6 +24,7 @@ import { Settings } from '../shared/models/settings.model';
     SelectWinnersComponent,
     SkyRepeaterModule,
     PaidStatusComponent,
+    AdminBracketComponent
   ],
   selector: 'app-admin',
   templateUrl: './admin.component.html',

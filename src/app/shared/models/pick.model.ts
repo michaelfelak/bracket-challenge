@@ -15,6 +15,7 @@ export class PickModel {
   public earned_points?: number;
   public wins?: number;
   public play_in_school_name?: string;
+  public eliminated?: boolean;
 }
 
 export class PickResponse {

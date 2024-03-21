@@ -12,6 +12,7 @@
         <th class="team-check">Wins</th>
         <th class="team-check">Entries Selected</th>
         <th class="team-check">Bonus Selected</th>
+        <th class="team-check">Lost</th>
       </tr>
       <tr *ngFor="let winner of winners">
         <td class="team-check">{{ winner.region_name }}</td>
@@ -21,6 +22,9 @@
         <td class="team-check">{{ winner.wins }}</td>
         <td class="team-check">{{ winner.entries_selected }}</td>
         <td class="team-check">{{ winner.bonus_selected }}</td>
+        <td class="team-check">
+          <sky-icon style="color: red" *ngIf="winner.eliminated" icon="times"></sky-icon>
+        </td>
       </tr>
     </table>
   </div>

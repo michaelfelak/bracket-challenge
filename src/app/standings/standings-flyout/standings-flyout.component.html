@@ -5,8 +5,9 @@
     <tr style="border-bottom: 1px solid black">
       <th class="team-name" style="border-left: 1px solid black">Seed (Overall)</th>
       <th class="team-name" style="border-left: 1px solid black">School</th>
-      <th class="team-check" style="border-left: 1px solid black">Points Earned</th>
+      <th class="team-check" style="border-left: 1px solid black">Lost</th>
       <th class="team-check" style="border-left: 1px solid black">Wins</th>
+      <th class="team-check" style="border-left: 1px solid black">Points Earned</th>
     </tr>
     <tr *ngFor="let pick of picks">
       <td class="team-name" style="border-left: 1px solid black">{{ pick.seed_number }} ({{ pick.overall_seed_number }})</td>
@@ -20,11 +21,14 @@
           {{ pick.school_name }} / {{ pick.play_in_school_name }}
         </div>
       </td>
-      <td class="team-name" style="border-left: 1px solid black">
-        {{ pick.earned_points ?? 0 }}
+      <td class="team-check" style="border-left: 1px solid black">
+        <sky-icon style="color: red" *ngIf="pick.eliminated" icon="times"></sky-icon>
       </td>
       <td class="team-check" style="border-left: 1px solid black">
         {{ pick.wins ?? 0 }}
+      </td>
+      <td class="team-name" style="border-left: 1px solid black">
+        {{ pick.earned_points ?? 0 }}
       </td>
     </tr>
   </table>

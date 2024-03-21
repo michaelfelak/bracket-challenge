@@ -35,6 +35,8 @@ export class SelectWinnersComponent implements OnInit {
   public round6teams: WinnerByRound[] = [];
   public champion: WinnerByRound = {};
 
+  public message: string = '';
+
   constructor(private service: BracketService) {}
 
   public ngOnInit() {
@@ -122,6 +124,7 @@ export class SelectWinnersComponent implements OnInit {
     this.service.addWinner(request).subscribe((result) => {
       console.log(result);
       this.refresh();
+      this.message = winner.school_name + ' marked as winner';
     });
   }
 
@@ -130,6 +133,21 @@ export class SelectWinnersComponent implements OnInit {
     this.service.deleteWinner(winner.winner_id).subscribe((result) => {
       console.log(result);
       this.refresh();
+    });
+  }
+
+  public addLoser(winner: any, round: number) {
+    console.log(winner);
+    console.log('Loser added: ' + winner.school_name + ' round: ' + round);
+    const request: AddWinnerRequest = {
+      bracket_id: this.bracketId,
+      round: round,
+      seed_id: winner.id!,
+    };
+    this.service.addLoser(request).subscribe((result) => {
+      console.log(result);
+      this.refresh();
+      this.message = winner.school_name + ' marked as loser';
     });
   }
 }
