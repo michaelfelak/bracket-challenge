@@ -1,16 +1,18 @@
-<sky-page layout="tabs">
-  <app-add-record></app-add-record>
-  <!-- <legend>Select Bracket</legend> -->
-  <!-- <select>
-    <option *ngFor="let bracket of brackets" [ngValue]="bracket.id">
-      {{ bracket.year }}
-    </option>
-  </select> -->
+<main>
+  <div *ngIf="settings?.entry_enabled">
+    <app-add-record></app-add-record>
+    <legend>Select Bracket</legend>
+    <select>
+      <option *ngFor="let bracket of brackets" [ngValue]="bracket.id">
+        {{ bracket.year }}
+      </option>
+    </select>
+  </div>
   <p>Flyout Enabled: {{ settings?.flyout_enabled }} <button class="sky-btn sky-btn-primary" (click)="toggleFlyoutVisible()">Toggle Flyout</button></p>
   <p>Entry Enabled: {{ settings?.entry_enabled }} <button class="sky-btn sky-btn-primary" (click)="toggleEntryVisible()">Toggle Entry</button></p>
-  <div>
+  <!-- <div>
     <app-add-seed [bracketId]="selectedBracketId"></app-add-seed>
-  </div>
+  </div> -->
   <app-paid-status [bracketId]="selectedBracketId"></app-paid-status>
   <app-select-winners [bracketId]="selectedBracketId"></app-select-winners>
-</sky-page>
+</main>
