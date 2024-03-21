@@ -8,7 +8,7 @@ import { BracketService } from './shared/services/bracket.service';
 })
 export class AppComponent {
   public showAdmin = false;
-  public showPicks = false;
+  public entriesLocked = false;
 
   constructor(private service : BracketService) {
     const queryString = window.location.search;
@@ -21,7 +21,7 @@ export class AppComponent {
       console.log('Logged in as administrator');
     }
     this.service.getSettings().subscribe((result)=>{
-      this.showPicks = result.entry_enabled;
+      this.entriesLocked = result.entry_enabled;
     })
   }
 }
