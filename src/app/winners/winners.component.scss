@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Titillium+Web&display=swap");
 main {
+  margin-left: 5%;
+  margin-right: 5%;
   height: 100%;
   font-family: "Titillium Web", sans-serif;
 }
@@ -8,12 +10,12 @@ main {
   width: 20px;
 }
 .team-name {
-  width: 150px;
+  width: 20%;
   vertical-align: middle;
 }
 
 table {
-  width: 400px;
+  width: 700px;
 }
 table.center {
   margin-left: auto;

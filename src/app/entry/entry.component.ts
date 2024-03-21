@@ -13,6 +13,7 @@ import { Subject } from 'rxjs';
 import { SkyAlertModule, SkyKeyInfoModule } from '@skyux/indicators';
 import { Region, RegionModel } from '../shared/models/region.model';
 import { Bracket } from '../shared/models/bracket';
+import { FooterComponent } from '../shared/footer/footer.component';
 
 @Component({
   standalone: true,
@@ -29,6 +30,7 @@ import { Bracket } from '../shared/models/bracket';
     SkyInputBoxModule,
     SkyKeyInfoModule,
     SkyAlertModule,
+    FooterComponent
   ],
   providers: [BracketService],
 })
