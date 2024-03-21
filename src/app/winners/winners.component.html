@@ -1,0 +1,28 @@
+<main>
+  <div>
+    <h1 style="text-align: center">Points Earned Per Seed</h1>
+  </div>
+  <div style="margin-left: 5%; margin-right: 10%">
+    <table class="center">
+      <tr>
+        <th class="team-check">Region</th>
+        <th class="team-check">Seed Number</th>
+        <th class="team-check">School</th>
+        <th class="team-check">Points</th>
+        <th class="team-check">Wins</th>
+        <th class="team-check">Entries Selected</th>
+        <th class="team-check">Bonus Selected</th>
+      </tr>
+      <tr *ngFor="let winner of winners">
+        <td class="team-check">{{ winner.region_name }}</td>
+        <td class="team-check">{{ winner.seed_number }}</td>
+        <td class="team-check">{{ winner.school_name }}</td>
+        <td class="team-check">{{ winner.points }}</td>
+        <td class="team-check">{{ winner.wins }}</td>
+        <td class="team-check">{{ winner.entries_selected }}</td>
+        <td class="team-check">{{ winner.bonus_selected }}</td>
+      </tr>
+    </table>
+  </div>
+  <app-footer></app-footer>
+</main>

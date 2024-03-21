@@ -11,6 +11,7 @@ import { School } from '../models/school.model';
 import { CompletedEntry, StandingsRecord } from '../models/standings.model';
 import { Region } from '../models/region.model';
 import { Settings } from '../models/settings.model';
+import { Winner } from '../models/winner.model';
 
 @Injectable()
 export class BracketService {
@@ -33,7 +34,7 @@ export class BracketService {
     // } else {
     //   console.log(page, action);
     //   console.log(this.baseUrlPrefix + 'pagevisit');
-      return of({});
+    return of({});
     // }
   }
 
@@ -108,12 +109,16 @@ export class BracketService {
   public updateFlyoutEnabled() {
     return this.http.get(this.baseUrl + 'toggleflyout');
   }
-  
+
   public updateEntryEnabled() {
     return this.http.get(this.baseUrl + 'toggleentry');
   }
-  
+
   public getSettings(): Observable<Settings> {
     return this.http.get<Settings>(this.baseUrl + 'settings');
+  }
+
+  public getWinners(id: number): Observable<Winner[]> {
+    return this.http.get<Winner[]>(this.baseUrl + id + '/winners');
   }
 }

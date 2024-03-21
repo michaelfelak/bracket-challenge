@@ -7,10 +7,11 @@ import { StandingsFlyoutContext } from './standings-flyout/standings-flyout.cont
 import { SkyWaitService } from '@skyux/indicators';
 import { StandingsRecord } from '../shared/models/standings.model';
 import { CommonModule } from '@angular/common';
+import { FooterComponent } from '../shared/footer/footer.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FooterComponent],
   selector: 'app-standings',
   templateUrl: './standings.component.html',
   styleUrls: ['./standings.component.scss'],

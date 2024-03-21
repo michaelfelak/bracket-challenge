@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { BracketService } from '../shared/services/bracket.service';
+import { FooterComponent } from '../shared/footer/footer.component';
 
 @Component({
+  standalone: true,
   selector: 'app-home',
+  imports: [FooterComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })

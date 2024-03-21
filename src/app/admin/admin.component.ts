@@ -42,15 +42,7 @@ export class AdminComponent implements OnInit {
     this.service.getBracketList().subscribe((result) => {
       this.brackets = result;
     });
-
-    // this.updateSeeds();
   }
-
-  // public updateSeeds() {
-  //   this.service.getSeedList(this.selectedBracketId).subscribe((result) => {
-  //     this.existingSeeds = result;
-  //   });
-  // }
 
   public toggleEntryVisible() {
     this.service.updateEntryEnabled().subscribe(() => {

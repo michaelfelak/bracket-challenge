@@ -81,8 +81,9 @@
   /> -->
   <p>Bracket Challenge</p>
   <a routerLink="">Home</a>
-  <a routerLink="picks">Submit Entry</a>
+  <a *ngIf="showPicks" routerLink="picks">Submit Entry</a>
   <a routerLink="scores">Bracket</a>
+  <a routerLink="winners">Winners</a>
   <a routerLink="standings">Standings</a>
   <!-- <a routerLink="scenario-generator">Scenario Generator</a> -->
   <a routerLink="about">About</a>

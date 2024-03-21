@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BracketService } from './shared/services/bracket.service';
 
 @Component({
   selector: 'app-root',
@@ -7,8 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent {
   public showAdmin = false;
+  public showPicks = false;
 
-  constructor() {
+  constructor(private service : BracketService) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const id = urlParams.get('id');
@@ -18,5 +20,8 @@ export class AppComponent {
       this.showAdmin = true;
       console.log('Logged in as administrator');
     }
+    this.service.getSettings().subscribe((result)=>{
+      this.showPicks = result.entry_enabled;
+    })
   }
 }

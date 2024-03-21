@@ -59,7 +59,6 @@ export class AddSeedComponent implements OnInit {
   private initializeData() {
     this.service.getSchools().subscribe((result) => {
       this.schoolList = result;
-      console.log(result);
     });
     this.updateSeeds();
   }
