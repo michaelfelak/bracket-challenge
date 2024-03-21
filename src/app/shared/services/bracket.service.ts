@@ -11,7 +11,7 @@ import { School } from '../models/school.model';
 import { CompletedEntry, StandingsRecord } from '../models/standings.model';
 import { Region } from '../models/region.model';
 import { Settings } from '../models/settings.model';
-import { Winner } from '../models/winner.model';
+import { AddWinnerRequest, Winner, WinnerByRound } from '../models/winner.model';
 
 @Injectable()
 export class BracketService {
@@ -59,6 +59,11 @@ export class BracketService {
   // public addRegion(request: Region) {
   //   return this.http.post(this.baseUrl + 'region', request);
   // }
+
+  public addWinner(request: AddWinnerRequest) {
+    return this.http.post(this.baseUrl + 'winner', request);
+  }
+
   public addSchool(request: School) {
     return this.http.post(this.baseUrl + 'school', request);
   }
@@ -120,5 +125,12 @@ export class BracketService {
 
   public getWinners(id: number): Observable<Winner[]> {
     return this.http.get<Winner[]>(this.baseUrl + id + '/winners');
+  }
+  public getWinnersByRound(id: number): Observable<WinnerByRound[]> {
+    return this.http.get<WinnerByRound[]>(this.baseUrl + id + '/winnersbyround');
+  }
+
+  public deleteWinner(id: number) {
+    return this.http.delete(this.baseUrl + 'winner/' + id);
   }
 }
