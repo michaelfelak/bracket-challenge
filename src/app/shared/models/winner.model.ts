@@ -6,6 +6,7 @@ export interface Winner {
   wins: number;
   entries_selected: number;
   bonus_selected: number;
+  eliminated: boolean
 }
 
 export interface WinnerByRound {
