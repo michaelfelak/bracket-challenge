@@ -1,200 +1,206 @@
-{{ message }}
-<sky-repeater expandMode="single">
-  <sky-repeater-item [isExpanded]="false" *ngIf="round6teams.length > 0">
-    <sky-repeater-item-title>Championship</sky-repeater-item-title>
-    <sky-repeater-item-content>
-      <table>
-        <tr>
-          <td>Region</td>
-          <td>Seeds</td>
-          <td>Mark</td>
-        </tr>
-        <tr *ngFor="let winner of round6teams">
-          <td>East</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 6)">Winner</button></td>
-          <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 6)">Loser</button></td>
-        </tr>
-      </table>
-    </sky-repeater-item-content>
-  </sky-repeater-item>
-  <sky-repeater-item [isExpanded]="false" *ngIf="round5teams.length > 0">
-    <sky-repeater-item-title>Final Four</sky-repeater-item-title>
-    <sky-repeater-item-content>
-      <table>
-        <tr>
-          <td>Region</td>
-          <td>Seeds</td>
-          <td>Mark</td>
-        </tr>
-        <tr *ngFor="let winner of round5teams">
-          <td>East</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 5)">Winner</button></td>
-          <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 5)">Loser</button></td>
-        </tr>
-      </table>
-    </sky-repeater-item-content>
-  </sky-repeater-item>
-  <sky-repeater-item [isExpanded]="false" *ngIf="round4teamsEast.length > 0">
-    <sky-repeater-item-title>Elite Eight</sky-repeater-item-title>
-    <sky-repeater-item-content>
-      <table>
-        <tr>
-          <td>Region</td>
-          <td>Seeds</td>
-          <td>Mark</td>
-        </tr>
-        <tr *ngFor="let winner of round4teamsEast">
-          <td>East</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 4)">Winner</button></td>
-          <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 4)">Loser</button></td>
-        </tr>
-        <tr *ngFor="let winner of round4teamsWest">
-          <td>West</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 4)">Winner</button></td>
-          <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 4)">Loser</button></td>
-        </tr>
-        <tr *ngFor="let winner of round4teamsSouth">
-          <td>South</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 4)">Winner</button></td>
-          <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 4)">Loser</button></td>
-        </tr>
-        <tr *ngFor="let winner of round4teamsMidwest">
-          <td>Midwest</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 4)">Winner</button></td>
-          <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 4)">Loser</button></td>
-        </tr>
-      </table>
-    </sky-repeater-item-content>
-  </sky-repeater-item>
-  <sky-repeater-item [isExpanded]="false" *ngIf="round3teamsEast.length > 0">
-    <sky-repeater-item-title>Sweet Sixteen</sky-repeater-item-title>
-    <sky-repeater-item-content>
-      <table>
-        <tr>
-          <td>Region</td>
-          <td>Seeds</td>
-          <td>Mark</td>
-        </tr>
-        <tr *ngFor="let winner of round3teamsEast">
-          <td>East</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 3)">Winner</button></td>
-          <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 3)">Loser</button></td>
-        </tr>
-        <tr *ngFor="let winner of round3teamsWest">
-          <td>West</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 3)">Winner</button></td>
-          <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 3)">Loser</button></td>
-        </tr>
-        <tr *ngFor="let winner of round3teamsSouth">
-          <td>South</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 3)">Winner</button></td>
-          <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 3)">Loser</button></td>
-        </tr>
-        <tr *ngFor="let winner of round3teamsMidwest">
-          <td>Midwest</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 3)">Winner</button></td>
-          <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 3)">Loser</button></td>
-        </tr>
-      </table>
-    </sky-repeater-item-content>
-  </sky-repeater-item>
-  <sky-repeater-item [isExpanded]="false" *ngIf="round2teamsEast.length + round2teamsMidwest.length + round2teamsSouth.length + round2teamsWest.length > 0">
-    <sky-repeater-item-title>Round of 32</sky-repeater-item-title>
-    <sky-repeater-item-content>
-      <table>
-        <tr>
-          <td>Region</td>
-          <td>Seeds</td>
-          <td>Mark</td>
-          <td>Mark</td>
-        </tr>
-        <tr *ngFor="let winner of round2teamsEast">
-          <td>East</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 2)">Winner</button></td>
-          <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 2)">Loser</button></td>
-        </tr>
-        <tr *ngFor="let winner of round2teamsWest">
-          <td>West</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 2)">Winner</button></td>
-          <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 2)">Loser</button></td>
-        </tr>
-        <tr *ngFor="let winner of round2teamsSouth">
-          <td>South</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 2)">Winner</button></td>
-          <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 2)">Loser</button></td>
-        </tr>
-        <tr *ngFor="let winner of round2teamsMidwest">
-          <td>Midwest</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 2)">Winner</button></td>
-          <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 2)">Loser</button></td>
-        </tr>
-      </table>
-    </sky-repeater-item-content>
-  </sky-repeater-item>
-  <sky-repeater-item [isExpanded]="false">
-    <sky-repeater-item-title>Field of 64</sky-repeater-item-title>
-    <sky-repeater-item-content>
-      {{ message }}
-      <table>
-        <tr>
-          <td>Region</td>
-          <td>Seeds</td>
-          <td>Mark</td>
-          <td>Mark</td>
-        </tr>
-        <tr *ngFor="let winner of round1teamsEast">
-          <td>East</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 1)">Winner</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 1)">Loser</button></td>
-        </tr>
-        <tr *ngFor="let winner of round1teamsWest">
-          <td>West</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 1)">Winner</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 1)">Loser</button></td>
-        </tr>
-        <tr *ngFor="let winner of round1teamsSouth">
-          <td>South</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 1)">Winner</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 1)">Loser</button></td>
-        </tr>
-        <tr *ngFor="let winner of round1teamsMidwest">
-          <td>Midwest</td>
-          <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
-          <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 1)">Winner</button></td>
-          <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 1)">Loser</button></td>
-        </tr>
-      </table>
-    </sky-repeater-item-content>
-  </sky-repeater-item>
-</sky-repeater>
+<button class="sky-btn sky-btn-primary" (click)="refresh()">Refresh</button>
+<sky-box>
+  <sky-repeater expandMode="single">
+    <sky-repeater-item [isExpanded]="false" *ngIf="round6teams.length > 0">
+      <sky-repeater-item-title>Championship</sky-repeater-item-title>
+      <sky-repeater-item-content>
+        <table>
+          <tr>
+            <td>Region</td>
+            <td>Seeds</td>
+            <td>Mark</td>
+            <td>Mark</td>
+          </tr>
+          <tr *ngFor="let winner of round6teams">
+            <td>East</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 6)">Winner</button></td>
+            <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 6)">Loser</button></td>
+          </tr>
+        </table>
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+    <sky-repeater-item [isExpanded]="false" *ngIf="round5teams.length > 0">
+      <sky-repeater-item-title>Final Four ({{ round5teams.length }})</sky-repeater-item-title>
+      <sky-repeater-item-content>
+        <table>
+          <tr>
+            <td>Region</td>
+            <td>Seeds</td>
+            <td>Mark</td>
+            <td>Mark</td>
+          </tr>
+          <tr *ngFor="let winner of round5teams">
+            <td>East</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 5)">Winner</button></td>
+            <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 5)">Loser</button></td>
+          </tr>
+        </table>
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+    <sky-repeater-item [isExpanded]="false" *ngIf="round4teamsEast.length > 0">
+      <sky-repeater-item-title>Elite Eight ({{ round4teamsEast.length + round4teamsMidwest.length + round4teamsSouth.length + round4teamsWest.length }})</sky-repeater-item-title>
+      <sky-repeater-item-content>
+        <table>
+          <tr>
+            <td>Region</td>
+            <td>Seeds</td>
+            <td>Mark</td>
+            <td>Mark</td>
+          </tr>
+          <tr *ngFor="let winner of round4teamsEast">
+            <td>East</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 4)">Winner</button></td>
+            <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 4)">Loser</button></td>
+          </tr>
+          <tr *ngFor="let winner of round4teamsWest">
+            <td>West</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 4)">Winner</button></td>
+            <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 4)">Loser</button></td>
+          </tr>
+          <tr *ngFor="let winner of round4teamsSouth">
+            <td>South</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 4)">Winner</button></td>
+            <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 4)">Loser</button></td>
+          </tr>
+          <tr *ngFor="let winner of round4teamsMidwest">
+            <td>Midwest</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 4)">Winner</button></td>
+            <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 4)">Loser</button></td>
+          </tr>
+        </table>
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+    <sky-repeater-item [isExpanded]="false" *ngIf="round3teamsEast.length > 0">
+      <sky-repeater-item-title>Sweet Sixteen ({{ round3teamsEast.length + round3teamsMidwest.length + round3teamsSouth.length + round3teamsWest.length }})</sky-repeater-item-title>
+      <sky-repeater-item-content>
+        <table>
+          <tr>
+            <td>Region</td>
+            <td>Seeds</td>
+            <td>Mark</td>
+            <td>Mark</td>
+          </tr>
+          <tr *ngFor="let winner of round3teamsEast">
+            <td>East</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 3)">Winner</button></td>
+            <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 3)">Loser</button></td>
+          </tr>
+          <tr *ngFor="let winner of round3teamsWest">
+            <td>West</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 3)">Winner</button></td>
+            <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 3)">Loser</button></td>
+          </tr>
+          <tr *ngFor="let winner of round3teamsSouth">
+            <td>South</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 3)">Winner</button></td>
+            <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 3)">Loser</button></td>
+          </tr>
+          <tr *ngFor="let winner of round3teamsMidwest">
+            <td>Midwest</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 3)">Winner</button></td>
+            <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 3)">Loser</button></td>
+          </tr>
+        </table>
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+    <sky-repeater-item [isExpanded]="false" *ngIf="round2teamsEast.length + round2teamsMidwest.length + round2teamsSouth.length + round2teamsWest.length > 0">
+      <sky-repeater-item-title>Round of 32 ({{ round2teamsEast.length + round2teamsMidwest.length + round2teamsSouth.length + round2teamsWest.length }})</sky-repeater-item-title>
+      <sky-repeater-item-content>
+        <table>
+          <tr>
+            <td>Region</td>
+            <td>Seeds</td>
+            <td>Mark</td>
+            <td>Mark</td>
+          </tr>
+          <tr *ngFor="let winner of round2teamsEast">
+            <td>East</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 2)">Winner</button></td>
+            <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 2)">Loser</button></td>
+          </tr>
+          <tr *ngFor="let winner of round2teamsWest">
+            <td>West</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 2)">Winner</button></td>
+            <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 2)">Loser</button></td>
+          </tr>
+          <tr *ngFor="let winner of round2teamsSouth">
+            <td>South</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 2)">Winner</button></td>
+            <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 2)">Loser</button></td>
+          </tr>
+          <tr *ngFor="let winner of round2teamsMidwest">
+            <td>Midwest</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 2)">Winner</button></td>
+            <td><button class="sky-btn" (click)="removeWinner(winner)">Remove</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 2)">Loser</button></td>
+          </tr>
+        </table>
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+    <sky-repeater-item [isExpanded]="false">
+      <sky-repeater-item-title>Field of 64 ({{ round1teamsEast.length + round1teamsMidwest.length + round1teamsSouth.length + round1teamsWest.length }})</sky-repeater-item-title>
+      <sky-repeater-item-content>
+        {{ message }}
+        <table>
+          <tr>
+            <td>Region</td>
+            <td>Seeds</td>
+            <td>Mark</td>
+            <td>Mark</td>
+          </tr>
+          <tr *ngFor="let winner of round1teamsEast">
+            <td>East</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 1)">Winner</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 1)">Loser</button></td>
+          </tr>
+          <tr *ngFor="let winner of round1teamsWest">
+            <td>West</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 1)">Winner</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 1)">Loser</button></td>
+          </tr>
+          <tr *ngFor="let winner of round1teamsSouth">
+            <td>South</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 1)">Winner</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 1)">Loser</button></td>
+          </tr>
+          <tr *ngFor="let winner of round1teamsMidwest">
+            <td>Midwest</td>
+            <td>{{ winner.seed_number }} {{ winner.school_name }}</td>
+            <td><button class="sky-btn sky-btn-primary" (click)="addWinner(winner, 1)">Winner</button></td>
+            <td><button class="sky-btn" style="background-color: #ff746b" (click)="addLoser(winner, 1)">Loser</button></td>
+          </tr>
+        </table>
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+  </sky-repeater>
+</sky-box>
