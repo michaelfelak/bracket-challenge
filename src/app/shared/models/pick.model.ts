@@ -22,3 +22,8 @@ export class PickResponse {
   public name!: string;
   public picks!: PickModel[];
 }
+
+export class SeedPicks {
+  public entry_name?: string;
+  public is_bonus?: boolean;
+}

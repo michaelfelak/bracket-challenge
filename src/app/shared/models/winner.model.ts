@@ -1,4 +1,5 @@
 export interface Winner {
+  seed_id: string;
   region_name: string;
   seed_number: number;
   school_name: string;

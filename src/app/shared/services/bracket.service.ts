@@ -6,7 +6,7 @@ import { Bracket } from '../models/bracket';
 import { Entry } from '../models/entry.model';
 import { GameResultModel } from '../models/game-result.model';
 import { Game } from '../models/game.model';
-import { PickRequest } from '../models/pick.model';
+import { PickRequest, SeedPicks } from '../models/pick.model';
 import { School } from '../models/school.model';
 import { CompletedEntry, StandingsRecord } from '../models/standings.model';
 import { Region } from '../models/region.model';
@@ -136,5 +136,9 @@ export class BracketService {
 
   public deleteWinner(id: number) {
     return this.http.delete(this.baseUrl + 'winner/' + id);
+  }
+
+  public getPicksBySchool(seedId: string):Observable<SeedPicks[]> {
+    return this.http.get<SeedPicks[]>(this.baseUrl + 'schoolpicks/' + seedId);
   }
 }

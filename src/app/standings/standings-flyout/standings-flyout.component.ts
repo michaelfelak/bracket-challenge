@@ -9,7 +9,6 @@ import { PickModel } from 'src/app/shared/models/pick.model';
 @Component({
   standalone: true,
   imports: [CommonModule, SkyIconModule],
-  selector: 'app-standings-flyout',
   templateUrl: './standings-flyout.component.html',
   styleUrls: ['./standings-flyout.component.scss'],
 })
