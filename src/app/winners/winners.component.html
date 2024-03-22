@@ -17,7 +17,10 @@
       <tr *ngFor="let winner of winners">
         <td class="team-check">{{ winner.region_name }}</td>
         <td class="team-check">{{ winner.seed_number }}</td>
-        <td class="team-check">{{ winner.school_name }}</td>
+        <td class="team-check">
+          <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(winner.seed_id, winner.school_name)">
+            {{ winner.school_name }}
+          </button></td>
         <td class="team-check">{{ winner.points }}</td>
         <td class="team-check">{{ winner.wins }}</td>
         <td class="team-check">{{ winner.entries_selected }}</td>

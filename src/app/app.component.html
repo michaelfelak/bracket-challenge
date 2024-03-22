@@ -74,14 +74,13 @@
 </style>
 
 <!-- Toolbar -->
-<div class="toolbar" role="banner">
-  <img width="100" src="https://upload.wikimedia.org/wikipedia/commons/2/28/March_Madness_logo.svg" />
-  <p>Bracket Challenge</p>
+<div  class="toolbar" role="banner">
+  <!-- <img width="100" src="https://upload.wikimedia.org/wikipedia/commons/2/28/March_Madness_logo.svg" /> -->
   <a routerLink="" queryParamsHandling="merge">Home</a>
   <a *ngIf="entriesLocked" routerLink="picks" queryParamsHandling="merge">Submit Entry</a>
   <a routerLink="standings" queryParamsHandling="merge">Standings</a>
-  <a *ngIf="!entriesLocked" routerLink="winners" queryParamsHandling="merge">Points Earned</a>
-  <a routerLink="scores" queryParamsHandling="merge">Official Bracket</a>
+  <a *ngIf="!entriesLocked" routerLink="winners" queryParamsHandling="merge">Points</a>
+  <a routerLink="scores" queryParamsHandling="merge">Bracket</a>
   <!-- <a routerLink="scenario-generator">Scenario Generator</a> -->
   <a routerLink="about" queryParamsHandling="merge">About</a>
   <a *ngIf="showAdmin" routerLink="admin" queryParamsHandling="merge">Admin</a>

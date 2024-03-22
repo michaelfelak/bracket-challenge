@@ -1,0 +1,16 @@
+<main>
+  <h3 class="header">School: {{ schoolName }}</h3>
+  <h3 class="header"># Selected: {{ count }}</h3>
+  <table class="center">
+    <tr style="border-bottom: 1px solid black">
+      <th class="team-name" style="border-left: 1px solid black">Entry Name</th>
+      <th class="team-check" style="border-left: 1px solid black">Superfan</th>
+    </tr>
+    <tr *ngFor="let pick of picks">
+      <td class="team-name" style="border-left: 1px solid black">{{ pick.entry_name }}</td>
+      <td class="team-name" style="border-left: 1px solid black">
+        <sky-icon style="color: green" icon="check-circle" *ngIf="pick.is_bonus"></sky-icon>
+      </td>
+    </tr>
+  </table>
+</main>
