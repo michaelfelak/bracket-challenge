@@ -143,7 +143,7 @@ export class SelectWinnersComponent implements OnInit {
     const request: AddWinnerRequest = {
       bracket_id: this.bracketId,
       round: round,
-      seed_id: winner.id!,
+      seed_id: winner.id ?? winner.seed_id,
     };
     this.service.addWinner(request).subscribe((result) => {
       console.log(result);
@@ -161,7 +161,7 @@ export class SelectWinnersComponent implements OnInit {
     const request: AddWinnerRequest = {
       bracket_id: this.bracketId,
       round: round,
-      seed_id: winner.id!,
+      seed_id: winner.id ?? winner.seed_id
     };
     this.service.addLoser(request).subscribe((result) => {
       console.log(result);
