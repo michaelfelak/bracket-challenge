@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './recap-2.component.html',
-  styleUrls: ['./recap-2.component.scss']
+  styleUrls: ['../recap.component.scss'],
 })
 export class Recap2Component {
 
