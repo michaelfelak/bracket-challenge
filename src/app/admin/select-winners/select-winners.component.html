@@ -41,7 +41,7 @@
         </table>
       </sky-repeater-item-content>
     </sky-repeater-item>
-    <sky-repeater-item [isExpanded]="false" *ngIf="round4teamsEast.length > 0">
+    <sky-repeater-item [isExpanded]="false" *ngIf="round4teamsEast.length + round4teamsMidwest.length + round4teamsSouth.length + round4teamsWest.length > 0">
       <sky-repeater-item-title>Elite Eight ({{ round4teamsEast.length + round4teamsMidwest.length + round4teamsSouth.length + round4teamsWest.length }})</sky-repeater-item-title>
       <sky-repeater-item-content>
         <table>
@@ -82,7 +82,7 @@
         </table>
       </sky-repeater-item-content>
     </sky-repeater-item>
-    <sky-repeater-item [isExpanded]="false" *ngIf="round3teamsEast.length > 0">
+    <sky-repeater-item [isExpanded]="false" *ngIf="round3teamsEast.length + round3teamsMidwest.length + round3teamsSouth.length + round3teamsWest.length > 0">
       <sky-repeater-item-title>Sweet Sixteen ({{ round3teamsEast.length + round3teamsMidwest.length + round3teamsSouth.length + round3teamsWest.length }})</sky-repeater-item-title>
       <sky-repeater-item-content>
         <table>
