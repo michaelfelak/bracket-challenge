@@ -24,6 +24,24 @@ export class WinnersComponent implements OnInit {
 
   public flyout: SkyFlyoutInstance<any> | undefined;
 
+  public sortRegion = false;
+  public sortSeedNumber = false;
+  public sortSchool = false;
+  public sortPoints = false;
+  public sortWins = false;
+  public sortEntriesSelected = false;
+  public sortBonusSelected = false;
+  public sortLost = false;
+
+  public regionDesc = false;
+  public seedNumberDesc = false;
+  public schoolDesc = false;
+  public pointsDesc = false;
+  public winsDesc = false;
+  public entriesSelectedDesc = false;
+  public bonusSelectedDesc = false;
+  public lostDesc = false;
+
   constructor(
     private titleService: Title,
     private service: BracketService,
@@ -57,5 +75,164 @@ export class WinnersComponent implements OnInit {
     // this.flyout.closed.subscribe(() => {
     //   this.flyout = undefined;
     // });
+  }
+
+  private resetSort() {
+    this.sortPoints =
+      this.sortBonusSelected =
+      this.sortEntriesSelected =
+      this.sortLost =
+      this.sortRegion =
+      this.sortSchool =
+      this.sortSeedNumber =
+      this.sortWins =
+        false;
+  }
+
+  public sortBySeedNumber() {
+    this.resetSort();
+    this.sortSeedNumber = true;
+
+    this.seedNumberDesc = !this.seedNumberDesc;
+
+    if (this.winners) {
+      if (this.seedNumberDesc) {
+        this.winners.sort((a: Winner, b: Winner) => {
+          return a.seed_number! > b.seed_number! ? -1 : 1;
+        });
+      } else {
+        this.winners.sort((a: Winner, b: Winner) => {
+          return a.seed_number! < b.seed_number! ? -1 : 1;
+        });
+      }
+    }
+  }
+
+  public sortBySchool() {
+    this.resetSort();
+    this.sortSchool = true;
+
+    this.schoolDesc = !this.schoolDesc;
+
+    if (this.winners) {
+      if (this.schoolDesc) {
+        this.winners.sort((a: Winner, b: Winner) => {
+          return a.school_name! > b.school_name! ? -1 : 1;
+        });
+      } else {
+        this.winners.sort((a: Winner, b: Winner) => {
+          return a.school_name! < b.school_name! ? -1 : 1;
+        });
+      }
+    }
+  }
+  public sortByPoints() {
+    this.resetSort();
+    this.sortPoints = true;
+
+    this.pointsDesc = !this.pointsDesc;
+
+    if (this.winners) {
+      if (this.pointsDesc) {
+        this.winners.sort((a: Winner, b: Winner) => {
+          return a.points! > b.points! ? -1 : 1;
+        });
+      } else {
+        this.winners.sort((a: Winner, b: Winner) => {
+          return a.points! < b.points! ? -1 : 1;
+        });
+      }
+    }
+  }
+  public sortByWins() {
+    this.resetSort();
+    this.sortWins = true;
+
+    this.winsDesc = !this.winsDesc;
+
+    if (this.winners) {
+      if (this.winsDesc) {
+        this.winners.sort((a: Winner, b: Winner) => {
+          return a.wins! > b.wins! ? -1 : 1;
+        });
+      } else {
+        this.winners.sort((a: Winner, b: Winner) => {
+          return a.wins! < b.wins! ? -1 : 1;
+        });
+      }
+    }
+  }
+  public sortByEntriesSelected() {
+    this.resetSort();
+    this.sortEntriesSelected = true;
+
+    this.entriesSelectedDesc = !this.entriesSelectedDesc;
+
+    if (this.winners) {
+      if (this.entriesSelectedDesc) {
+        this.winners.sort((a: Winner, b: Winner) => {
+          return a.entries_selected! > b.entries_selected! ? -1 : 1;
+        });
+      } else {
+        this.winners.sort((a: Winner, b: Winner) => {
+          return a.entries_selected! < b.entries_selected! ? -1 : 1;
+        });
+      }
+    }
+  }
+  public sortByBonusSelected() {
+    this.resetSort();
+    this.sortBonusSelected = true;
+
+    this.bonusSelectedDesc= !this.bonusSelectedDesc;
+
+    if (this.winners) {
+      if (this.bonusSelectedDesc) {
+        this.winners.sort((a: Winner, b: Winner) => {
+          return a.bonus_selected! > b.bonus_selected! ? -1 : 1;
+        });
+      } else {
+        this.winners.sort((a: Winner, b: Winner) => {
+          return a.bonus_selected! < b.bonus_selected! ? -1 : 1;
+        });
+      }
+    }
+  }
+  public sortByLost() {
+    this.resetSort();
+    this.sortLost = true;
+
+    this.lostDesc = !this.lostDesc;
+
+    if (this.winners) {
+      if (this.lostDesc) {
+        this.winners.sort((a: Winner, b: Winner) => {
+          return a.eliminated! > b.eliminated! ? -1 : 1;
+        });
+      } else {
+        this.winners.sort((a: Winner, b: Winner) => {
+          return a.eliminated! < b.eliminated! ? -1 : 1;
+        });
+      }
+    }
+  }
+
+  public sortByRegion() {
+    this.resetSort();
+    this.sortRegion = true;
+
+    this.regionDesc = !this.regionDesc;
+
+    if (this.winners) {
+      if (this.regionDesc) {
+        this.winners.sort((a: Winner, b: Winner) => {
+          return a.region_name! > b.region_name! ? -1 : 1;
+        });
+      } else {
+        this.winners.sort((a: Winner, b: Winner) => {
+          return a.region_name! < b.region_name! ? -1 : 1;
+        });
+      }
+    }
   }
 }

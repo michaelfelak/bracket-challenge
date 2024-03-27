@@ -6,32 +6,20 @@
     <tr>
       <th class="team-check">Rank</th>
       <th class="team-name">Entry Name</th>
-      <th *ngIf="!sortCurrentPoints" class="team-check" (click)="sortByCurrentPoints()">
-        <a>Current<br />Points</a>
+      <th class="team-check" (click)="sortByCurrentPoints()">
+        <div *ngIf="sortCurrentPoints && currentPointsDesc" style="float: left">&darr;</div>
+        <div *ngIf="sortCurrentPoints && !currentPointsDesc" style="float: left">&uarr;</div>
+        <a>Current Points</a>
       </th>
-      <th *ngIf="sortCurrentPoints && currentPointsDesc" class="team-check" (click)="sortByCurrentPoints()">
-        &darr;<a>Current<br />Points</a>
+      <th class="team-check" (click)="sortByCorrectPicks()">
+        <div *ngIf="sortCorrectPicks && correctPicksDesc" style="float: left">&darr;</div>
+        <div *ngIf="sortCorrectPicks && !correctPicksDesc" style="float: left">&uarr;</div>
+        <a>Total Wins</a>
       </th>
-      <th *ngIf="sortCurrentPoints && !currentPointsDesc" class="team-check" (click)="sortByCurrentPoints()">
-        &uarr;<a>Current<br />Points</a>
-      </th>
-      <th *ngIf="!sortCorrectPicks" class="team-check" (click)="sortByCorrectPicks()">
-        <a>Total<br />Wins</a>
-      </th>
-      <th *ngIf="sortCorrectPicks && correctPicksDesc" class="team-check" (click)="sortByCorrectPicks()">
-        &darr;<a>Total<br />Wins</a>
-      </th>
-      <th *ngIf="sortCorrectPicks && !correctPicksDesc" class="team-check" (click)="sortByCorrectPicks()">
-        &uarr;<a>Total<br />Wins</a>
-      </th>
-      <th *ngIf="!sortRemainingPoints" class="team-check" (click)="sortByRemainingPoints()">
-        <a>Remaining<br />Teams</a>
-      </th>
-      <th *ngIf="sortRemainingPoints && remainingPointsDesc" class="team-check" (click)="sortByRemainingPoints()">
-        &darr;<a>Remaining<br />Teams</a>
-      </th>
-      <th *ngIf="sortRemainingPoints && !remainingPointsDesc" class="team-check" (click)="sortByRemainingPoints()">
-        &uarr;<a>Remaining<br />Teams</a>
+      <th class="team-check" (click)="sortByRemainingPoints()">
+        <div *ngIf="sortRemainingPoints && remainingPointsDesc" style="float: left">&darr;</div>
+        <div *ngIf="sortRemainingPoints && !remainingPointsDesc" style="float: left">&uarr;</div>
+        <a>Remaining Teams</a>
       </th>
     </tr>
     <tr *ngFor="let pick of standings">
