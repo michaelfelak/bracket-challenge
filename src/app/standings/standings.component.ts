@@ -135,65 +135,39 @@ export class StandingsComponent implements OnInit {
     }
   }
 
-  // public sortByCorrectPicks() {
-  //   this.sortCorrectPicks = true;
-  //   this.sortRemainingPoints =
-  //     this.sortPossiblePoints =
-  //     this.sortCurrentPoints =
-  //       false;
-  //   this.correctPicksDesc = !this.correctPicksDesc;
+  public sortByCorrectPicks() {
+    this.sortCorrectPicks = true;
+    this.sortRemainingPoints = this.sortPossiblePoints = this.sortCurrentPoints = false;
+    this.correctPicksDesc = !this.correctPicksDesc;
 
-  //   if (this.standings) {
-  //     if (this.correctPicksDesc) {
-  //       this.standings.sort((a: StandingsRecord, b: StandingsRecord) => {
-  //         return a.correct_picks! > b.correct_picks! ? -1 : 1;
-  //       });
-  //     } else {
-  //       this.standings.sort((a: StandingsRecord, b: StandingsRecord) => {
-  //         return a.correct_picks! < b.correct_picks! ? -1 : 1;
-  //       });
-  //     }
-  //   }
-  // }
+    if (this.standings) {
+      if (this.correctPicksDesc) {
+        this.standings.sort((a: StandingsRecord, b: StandingsRecord) => {
+          return a.win_total! > b.win_total! ? -1 : 1;
+        });
+      } else {
+        this.standings.sort((a: StandingsRecord, b: StandingsRecord) => {
+          return a.win_total! < b.win_total! ? -1 : 1;
+        });
+      }
+    }
+  }
 
-  // public sortByRemainingPoints() {
-  //   this.sortRemainingPoints = true;
-  //   this.sortPossiblePoints =
-  //     this.sortCorrectPicks =
-  //     this.sortCurrentPoints =
-  //       false;
-  //   this.remainingPointsDesc = !this.remainingPointsDesc;
+  public sortByRemainingPoints() {
+    this.sortRemainingPoints = true;
+    this.sortPossiblePoints = this.sortCorrectPicks = this.sortCurrentPoints = false;
+    this.remainingPointsDesc = !this.remainingPointsDesc;
 
-  //   if (this.standings) {
-  //     if (this.remainingPointsDesc) {
-  //       this.standings.sort((a: StandingsRecord, b: StandingsRecord) => {
-  //         return a.remaining_points > b.remaining_points ? -1 : 1;
-  //       });
-  //     } else {
-  //       this.standings.sort((a: StandingsRecord, b: StandingsRecord) => {
-  //         return a.remaining_points < b.remaining_points ? -1 : 1;
-  //       });
-  //     }
-  //   }
-  // }
-  // public sortByPossiblePoints() {
-  //   this.sortPossiblePoints = true;
-  //   this.sortCorrectPicks =
-  //     this.sortRemainingPoints =
-  //     this.sortCurrentPoints =
-  //       false;
-  //   this.possiblePointsDesc = !this.possiblePointsDesc;
-
-  //   if (this.standings) {
-  //     if (this.possiblePointsDesc) {
-  //       this.standings.sort((a: StandingsRecord, b: StandingsRecord) => {
-  //         return a.possible_points > b.possible_points ? -1 : 1;
-  //       });
-  //     } else {
-  //       this.standings.sort((a: StandingsRecord, b: StandingsRecord) => {
-  //         return a.possible_points < b.possible_points ? -1 : 1;
-  //       });
-  //     }
-  //   }
-  // }
+    if (this.standings) {
+      if (this.remainingPointsDesc) {
+        this.standings.sort((a: StandingsRecord, b: StandingsRecord) => {
+          return a.teams_remaining! > b.teams_remaining! ? -1 : 1;
+        });
+      } else {
+        this.standings.sort((a: StandingsRecord, b: StandingsRecord) => {
+          return a.teams_remaining! < b.teams_remaining! ? -1 : 1;
+        });
+      }
+    }
+  }
 }
