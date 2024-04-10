@@ -8,6 +8,7 @@ import { SkyWaitService } from '@skyux/indicators';
 import { StandingsRecord } from '../shared/models/standings.model';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../shared/footer/footer.component';
+import { StaticBracketService } from '../shared/services/static-bracket.service';
 
 @Component({
   standalone: true,
@@ -17,6 +18,8 @@ import { FooterComponent } from '../shared/footer/footer.component';
   styleUrls: ['./standings.component.scss'],
 })
 export class StandingsComponent implements OnInit {
+  private useStatic = false;
+
   public standings: StandingsRecord[] = [];
   public flyout: SkyFlyoutInstance<any> | undefined;
   public showStandingsLink: boolean = false;
@@ -37,7 +40,8 @@ export class StandingsComponent implements OnInit {
     private titleService: Title,
     private service: BracketService,
     private flyoutService: SkyFlyoutService,
-    private waitSvc: SkyWaitService
+    private waitSvc: SkyWaitService,
+    private staticService: StaticBracketService
   ) {}
 
   public ngOnInit() {
@@ -45,13 +49,23 @@ export class StandingsComponent implements OnInit {
     this.service.addPageVisit('bracket/standings', 'load').subscribe();
 
     this.service.getSettings().subscribe((settings) => {
-      this.showStandingsLink = settings.flyout_enabled;
+      this.showStandingsLink = settings.flyout_enabled && !this.useStatic;
       this.currentYear = settings.current_year;
       this.retrieveStandings(this.currentYear);
     });
   }
 
   public retrieveStandings(year: number) {
+    if (this.useStatic) {
+      this.standings = this.staticService.getStandings();
+      console.log(this.standings);
+      this.assignRank();
+    } else {
+      this.retrieveLiveStandings(year);
+    }
+  }
+
+  public retrieveLiveStandings(year: number) {
     this.waitSvc.beginNonBlockingPageWait();
 
     this.service.getStandings(year).subscribe((result: StandingsRecord[]) => {
