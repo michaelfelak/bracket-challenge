@@ -23,7 +23,7 @@ export class BracketService {
     if (this.local) {
       this.baseUrlPrefix = 'http://localhost:8081/api/v1/';
     } else {
-      this.baseUrlPrefix = 'https://bowl-pickem-15ea7b3ae3e0.herokuapp.com/api/v1/';
+      this.baseUrlPrefix = 'https://bowl-pickem-service-5a26054c7915.herokuapp.com/api/v1/';
     }
     this.baseUrl = this.baseUrlPrefix + 'bracket/';
   }
