@@ -24,7 +24,7 @@ export class StandingsComponent implements OnInit {
   public flyout: SkyFlyoutInstance<any> | undefined;
   public showStandingsLink: boolean = false;
   public currentYear!: number;
-  public years: number[] = [2024];
+  public years: number[] = [2025, 2024];
 
   public sortCurrentPoints = false;
   public sortRemainingPoints = false;
@@ -58,7 +58,6 @@ export class StandingsComponent implements OnInit {
   public retrieveStandings(year: number) {
     if (this.useStatic) {
       this.standings = this.staticService.getStandings();
-      console.log(this.standings);
       this.assignRank();
     } else {
       this.retrieveLiveStandings(year);
@@ -66,12 +65,12 @@ export class StandingsComponent implements OnInit {
   }
 
   public retrieveLiveStandings(year: number) {
-    this.waitSvc.beginNonBlockingPageWait();
+    // this.waitSvc.beginNonBlockingPageWait();
 
     this.service.getStandings(year).subscribe((result: StandingsRecord[]) => {
       this.standings = result;
       this.assignRank();
-      this.waitSvc.endNonBlockingPageWait();
+      // this.waitSvc.endNonBlockingPageWait();
       return result;
     });
   }

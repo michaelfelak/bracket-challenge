@@ -22,7 +22,7 @@ export class AddRecordComponent {
   constructor(private service: BracketService, private formBuilder: FormBuilder) {
     this.formGroup = this.formBuilder.group({
       schoolName: new FormControl(''),
-      year: new FormControl(2024)
+      year: new FormControl(2025)
     });
   }
 

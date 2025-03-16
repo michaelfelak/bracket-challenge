@@ -40,7 +40,7 @@ export class EntryComponent {
   public totalPoints = 0;
   public name = '';
   public email = '';
-  public bracketId = 3;
+  public bracketId = 4;
   public bracket: Bracket = {};
 
   public bracketFinalized = false;

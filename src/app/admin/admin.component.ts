@@ -24,14 +24,13 @@ import { AdminBracketComponent } from './admin-bracket/admin-bracket.component';
     SelectWinnersComponent,
     SkyRepeaterModule,
     PaidStatusComponent,
-    AdminBracketComponent
   ],
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
-  public selectedBracketId: number = 3;
+  public selectedBracketId: number = 4;
 
   public settings: Settings | undefined;
   public brackets: Bracket[] = [];
