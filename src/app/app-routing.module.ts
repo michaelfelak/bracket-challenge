@@ -23,10 +23,10 @@ const routes: Routes = [
     path: 'picks',
     component: EntryComponent,
   },
-  {
-    path: 'timeline',
-    component: TimelineComponent,
-  },
+  // {
+  //   path: 'timeline',
+  //   component: TimelineComponent,
+  // },
   {
     path: 'winners',
     component: WinnersComponent,
