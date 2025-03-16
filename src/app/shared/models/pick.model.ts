@@ -1,4 +1,3 @@
-// tslint:disable variable-name
 export class PickRequest {
   public picks?: PickModel[];
 }

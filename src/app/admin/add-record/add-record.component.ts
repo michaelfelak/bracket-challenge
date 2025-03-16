@@ -30,7 +30,7 @@ export class AddRecordComponent {
     const request: School = {
       name: this.formGroup.value.schoolName!,
     };
-    this.service.addSchool(request).subscribe((result) => {
+    this.service.addSchool(request).subscribe(() => {
       // console.log(result);
     });
   }

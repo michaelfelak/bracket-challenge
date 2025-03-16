@@ -21,9 +21,9 @@ import {
 })
 export class PaidStatusComponent implements OnInit {
   @Input()
-  public bracketId: number = -1;
-  public numUnpaidEntries: number = 0;
-  public numPaidEntries: number = 0;
+  public bracketId = -1;
+  public numUnpaidEntries = 0;
+  public numPaidEntries = 0;
   public selectedAction: any;
   public selectedText: any;
 
@@ -61,7 +61,7 @@ export class PaidStatusComponent implements OnInit {
     this.service
       .togglePaid(id)
       .pipe(
-        mergeMap((result: any) => {
+        mergeMap(() => {
           return this.service.getEntryList(this.bracketId);
         })
       )

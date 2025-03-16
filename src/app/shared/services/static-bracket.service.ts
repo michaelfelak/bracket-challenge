@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import standings from '../../../assets/2024-standings.json';
 
 @Injectable()

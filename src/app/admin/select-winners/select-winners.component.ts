@@ -15,7 +15,7 @@ import { SkyBoxModule } from '@skyux/layout';
 })
 export class SelectWinnersComponent implements OnInit {
   @Input()
-  public bracketId: number = 0;
+  public bracketId = 0;
 
   public round1teamsEast: WinnerByRound[] = [];
   public round1teamsWest: WinnerByRound[] = [];
@@ -37,7 +37,7 @@ export class SelectWinnersComponent implements OnInit {
   public round6teams: WinnerByRound[] = [];
   public champion: WinnerByRound = {};
 
-  public message: string = '';
+  public message = '';
 
   constructor(private service: BracketService) {}
 
@@ -145,7 +145,7 @@ export class SelectWinnersComponent implements OnInit {
       round: round,
       seed_id: winner.id ?? winner.seed_id,
     };
-    this.service.addWinner(request).subscribe((result) => {
+    this.service.addWinner(request).subscribe(() => {
       this.message = winner.school_name + ' marked as winner';
     });
   }
@@ -160,7 +160,7 @@ export class SelectWinnersComponent implements OnInit {
     const request: AddWinnerRequest = {
       bracket_id: this.bracketId,
       round: round,
-      seed_id: winner.id ?? winner.seed_id
+      seed_id: winner.id ?? winner.seed_id,
     };
     this.service.addLoser(request).subscribe((result) => {
       console.log(result);

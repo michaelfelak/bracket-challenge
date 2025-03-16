@@ -14,7 +14,7 @@ import { SeedPicks } from 'src/app/shared/models/pick.model';
 export class WinnersFlyoutComponent implements OnInit {
   public picks: SeedPicks[] = [];
   public schoolName!: string;
-  public count: number = 0;
+  public count = 0;
 
   constructor(public context: WinnersFlyoutContext, private service: BracketService) {}
       

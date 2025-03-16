@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SkyCheckboxModule, SkyInputBoxModule } from '@skyux/forms';
 import { SkyBoxModule, SkyFluidGridModule } from '@skyux/layout';
@@ -30,11 +30,11 @@ import { FooterComponent } from '../shared/footer/footer.component';
     SkyInputBoxModule,
     SkyKeyInfoModule,
     SkyAlertModule,
-    FooterComponent
+    FooterComponent,
   ],
   providers: [BracketService],
 })
-export class EntryComponent {
+export class EntryComponent implements OnInit {
   // assign teams
   public selectedTeams: Seed[] = [];
   public totalPoints = 0;
@@ -117,7 +117,6 @@ export class EntryComponent {
       this.bracketFinalized = settings.entry_enabled;
     });
 
-    this.service.addPageVisit('bracket/entry', 'load').subscribe();
     this.service
       .getBracket(this.bracketId)
       .pipe(
@@ -245,7 +244,7 @@ export class EntryComponent {
       this.hasErrors = true;
     } else {
       this.selectedTeams.forEach((team) => {
-        let matches = this.selectedTeams.filter((a) => {
+        const matches = this.selectedTeams.filter((a) => {
           return team.school_id === a.school_id;
         });
         if (matches.length > 1) {
@@ -260,8 +259,6 @@ export class EntryComponent {
     this.validate();
 
     if (!this.hasErrors) {
-      this.service.addPageVisit('bracket/entry', 'submit').subscribe();
-
       const entryRequest: Entry = {
         email: this.entryForm.value.email!,
         name: this.entryForm.value.name!,
@@ -272,8 +269,8 @@ export class EntryComponent {
         .addEntry(entryRequest)
         .pipe(
           mergeMap((returnEntryId: string) => {
-            let bonusTeamId = this.entryForm.controls.bonusTeam.value?.id;
-            let pickRequest: PickRequest = {
+            const bonusTeamId = this.entryForm.controls.bonusTeam.value?.id;
+            const pickRequest: PickRequest = {
               picks: [
                 {
                   entry_id: returnEntryId,
