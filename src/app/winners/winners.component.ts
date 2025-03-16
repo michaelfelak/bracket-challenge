@@ -7,8 +7,6 @@ import { Winner } from '../shared/models/winner.model';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { WinnersFlyoutContext } from './winners-flyout/winners-flyout.context';
 import { SkyFlyoutService, SkyFlyoutConfig, SkyFlyoutInstance } from '@skyux/flyout';
-import { StandingsFlyoutComponent } from '../standings/standings-flyout/standings-flyout.component';
-import { StandingsFlyoutContext } from '../standings/standings-flyout/standings-flyout.context';
 import { WinnersFlyoutComponent } from './winners-flyout/winners-flyout.component';
 
 @Component({
@@ -19,7 +17,7 @@ import { WinnersFlyoutComponent } from './winners-flyout/winners-flyout.componen
   styleUrls: ['./winners.component.scss'],
 })
 export class WinnersComponent implements OnInit {
-  public bracketId = 3;
+  public bracketId = 4;
   public winners: Winner[] = [];
 
   public flyout: SkyFlyoutInstance<any> | undefined;
@@ -57,9 +55,10 @@ export class WinnersComponent implements OnInit {
   }
 
   public onNameClick(id: string, schoolName: string) {
-    let record: WinnersFlyoutContext = new WinnersFlyoutContext();
-    record.seedId = id!.toString();
-    record.schoolName = schoolName;
+    const record: WinnersFlyoutContext = {
+      seedId: id!.toString(),
+      schoolName: schoolName,
+    };
 
     const flyoutConfig: SkyFlyoutConfig = {
       providers: [
@@ -184,7 +183,7 @@ export class WinnersComponent implements OnInit {
     this.resetSort();
     this.sortBonusSelected = true;
 
-    this.bonusSelectedDesc= !this.bonusSelectedDesc;
+    this.bonusSelectedDesc = !this.bonusSelectedDesc;
 
     if (this.winners) {
       if (this.bonusSelectedDesc) {

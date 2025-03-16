@@ -11,7 +11,6 @@ import { SelectWinnersComponent } from './select-winners/select-winners.componen
 import { SkyRepeaterModule } from '@skyux/lists';
 import { PaidStatusComponent } from './paid-status/paid-status.component';
 import { Settings } from '../shared/models/settings.model';
-import { AdminBracketComponent } from './admin-bracket/admin-bracket.component';
 
 @Component({
   standalone: true,
@@ -30,7 +29,7 @@ import { AdminBracketComponent } from './admin-bracket/admin-bracket.component';
   styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
-  public selectedBracketId: number = 4;
+  public selectedBracketId = 4;
 
   public settings: Settings | undefined;
   public brackets: Bracket[] = [];

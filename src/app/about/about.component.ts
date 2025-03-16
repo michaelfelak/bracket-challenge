@@ -11,8 +11,4 @@ import { FooterComponent } from '../shared/footer/footer.component';
 })
 export class AboutComponent {
   constructor(private service: BracketService) {}
-
-  ngOnInit() {
-    this.service.addPageVisit('bracket/about', 'load').subscribe();
-  }
 }

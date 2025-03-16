@@ -16,7 +16,7 @@ export class StandingsFlyoutComponent implements OnInit {
   public entry!: CompletedEntry;
   public picks: PickModel[] = [];
   public name!: string;
-  public totalPoints: number = 0;
+  public totalPoints = 0;
 
   constructor(public context: StandingsFlyoutContext, private service: BracketService) {}
 
@@ -31,7 +31,5 @@ export class StandingsFlyoutComponent implements OnInit {
         }
       });
     });
-
-    this.service.addPageVisit('bracket/completedentry/' + this.context.entryId, 'load').subscribe();
   }
 }

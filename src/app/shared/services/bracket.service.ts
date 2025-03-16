@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable} from 'rxjs';
 import { Seed } from '../models/seed';
 import { Bracket } from '../models/bracket';
 import { Entry } from '../models/entry.model';
@@ -26,16 +26,6 @@ export class BracketService {
       this.baseUrlPrefix = 'https://bowl-pickem-service-5a26054c7915.herokuapp.com/api/v1/';
     }
     this.baseUrl = this.baseUrlPrefix + 'bracket/';
-  }
-
-  public addPageVisit(page: string, action: string): Observable<object> {
-    // if (!this.local) {
-    //   return this.http.post(this.baseUrlPrefix + 'pagevisit', { page: page, action: action });
-    // } else {
-    //   console.log(page, action);
-    //   console.log(this.baseUrlPrefix + 'pagevisit');
-    return of({});
-    // }
   }
 
   public addBracket(request: Bracket) {
@@ -93,8 +83,7 @@ export class BracketService {
   }
 
   public getSeedList(bracketId: number): Observable<Seed[]> {
-    let url = this.baseUrl + bracketId + '/seedlist';
-    return this.http.get<Seed[]>(url);
+    return this.http.get<Seed[]>(this.baseUrl + bracketId + '/seedlist');
   }
 
   public getStandings(year: number): Observable<StandingsRecord[]> {

@@ -22,7 +22,7 @@ export class StandingsComponent implements OnInit {
 
   public standings: StandingsRecord[] = [];
   public flyout: SkyFlyoutInstance<any> | undefined;
-  public showStandingsLink: boolean = false;
+  public showStandingsLink = false;
   public currentYear!: number;
   public years: number[] = [2025, 2024];
 
@@ -46,7 +46,6 @@ export class StandingsComponent implements OnInit {
 
   public ngOnInit() {
     this.titleService.setTitle('Bracket Challenge - Standings');
-    this.service.addPageVisit('bracket/standings', 'load').subscribe();
 
     this.service.getSettings().subscribe((settings) => {
       this.showStandingsLink = settings.flyout_enabled && !this.useStatic;
@@ -107,8 +106,10 @@ export class StandingsComponent implements OnInit {
   }
 
   public onNameClick(id: string | undefined) {
-    let record: StandingsFlyoutContext = new StandingsFlyoutContext();
-    record.entryId = id!.toString();
+    const record: StandingsFlyoutContext = {
+      entryId: id!.toString(),
+    };
+
     const flyoutConfig: SkyFlyoutConfig = {
       providers: [
         {

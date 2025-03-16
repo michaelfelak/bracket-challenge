@@ -18,7 +18,7 @@ import { Subject, distinctUntilChanged, takeUntil } from 'rxjs';
 })
 export class AddSeedComponent implements OnInit {
   @Input()
-  public bracketId: number = 0;
+  public bracketId = 0;
 
   @Output()
   public seedAdded = new EventEmitter();
@@ -79,7 +79,7 @@ export class AddSeedComponent implements OnInit {
     };
 
     if (seed.school_id && seed.seed_number && seed.overall_seed_number && seed.region_id) {
-      this.service.addSeed(seed).subscribe((result) => {
+      this.service.addSeed(seed).subscribe(() => {
         this.seedAdded.emit();
         this.updateSeeds();
       });
