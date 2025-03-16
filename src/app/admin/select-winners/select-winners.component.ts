@@ -146,7 +146,6 @@ export class SelectWinnersComponent implements OnInit {
       seed_id: winner.id ?? winner.seed_id,
     };
     this.service.addWinner(request).subscribe((result) => {
-      console.log(result);
       this.message = winner.school_name + ' marked as winner';
     });
   }
