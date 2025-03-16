@@ -15,7 +15,7 @@ import { AddWinnerRequest, Winner, WinnerByRound } from '../models/winner.model'
 
 @Injectable()
 export class BracketService {
-  private local = true;
+  private local = false;
   private baseUrlPrefix: string;
   private baseUrl: string;
 
