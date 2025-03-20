@@ -217,14 +217,38 @@
               <h1 style="text-align: center">Picks submitted</h1>
               <p>Entry Name: {{ name }}</p>
               <p>E-mail: {{ email }}</p>
-              <p>{{ team1?.region_name }} - #{{ team1?.seed_number }} {{ team1?.school_name }} - {{ team1?.possible_points }} points</p>
-              <p>{{ team2?.region_name }} - #{{ team2?.seed_number }} {{ team2?.school_name }} - {{ team2?.possible_points }} points</p>
-              <p>{{ team3?.region_name }} - #{{ team3?.seed_number }} {{ team3?.school_name }} - {{ team3?.possible_points }} points</p>
-              <p>{{ team4?.region_name }} - #{{ team4?.seed_number }} {{ team4?.school_name }} - {{ team4?.possible_points }} points</p>
-              <p>{{ team5?.region_name }} - #{{ team5?.seed_number }} {{ team5?.school_name }} - {{ team5?.possible_points }} points</p>
-              <p>{{ team6?.region_name }} - #{{ team6?.seed_number }} {{ team6?.school_name }} - {{ team6?.possible_points }} points</p>
-              <p>{{ team7?.region_name }} - #{{ team7?.seed_number }} {{ team7?.school_name }} - {{ team7?.possible_points }} points</p>
-              <p>{{ team8?.region_name }} - #{{ team8?.seed_number }} {{ team8?.school_name }} - {{ team8?.possible_points }} points</p>
+              <p>
+                {{ team1?.region_name }} - #{{ team1?.seed_number }} {{ team1?.school_name }} <span *ngIf="team1?.play_in_school_name"> / {{ team1?.play_in_school_name }}</span> -
+                {{ team1?.possible_points }} points
+              </p>
+              <p>
+                {{ team2?.region_name }} - #{{ team2?.seed_number }} {{ team2?.school_name }} <span *ngIf="team2?.play_in_school_name"> / {{ team2?.play_in_school_name }}</span> -
+                {{ team2?.possible_points }} points
+              </p>
+              <p>
+                {{ team3?.region_name }} - #{{ team3?.seed_number }} {{ team3?.school_name }} <span *ngIf="team3?.play_in_school_name"> / {{ team3?.play_in_school_name }}</span> -
+                {{ team3?.possible_points }} points
+              </p>
+              <p>
+                {{ team4?.region_name }} - #{{ team4?.seed_number }} {{ team4?.school_name }} <span *ngIf="team4?.play_in_school_name"> / {{ team4?.play_in_school_name }}</span> -
+                {{ team4?.possible_points }} points
+              </p>
+              <p>
+                {{ team5?.region_name }} - #{{ team5?.seed_number }} {{ team5?.school_name }} <span *ngIf="team5?.play_in_school_name"> / {{ team5?.play_in_school_name }}</span> -
+                {{ team5?.possible_points }} points
+              </p>
+              <p>
+                {{ team6?.region_name }} - #{{ team6?.seed_number }} {{ team6?.school_name }} <span *ngIf="team6?.play_in_school_name"> / {{ team6?.play_in_school_name }}</span> -
+                {{ team6?.possible_points }} points
+              </p>
+              <p>
+                {{ team7?.region_name }} - #{{ team7?.seed_number }} {{ team7?.school_name }} <span *ngIf="team7?.play_in_school_name"> / {{ team7?.play_in_school_name }}</span> -
+                {{ team7?.possible_points }} points
+              </p>
+              <p>
+                {{ team8?.region_name }} - #{{ team8?.seed_number }} {{ team8?.school_name }} <span *ngIf="team8?.play_in_school_name"> / {{ team8?.play_in_school_name }}</span> -
+                {{ team8?.possible_points }} points
+              </p>
               <p>Total points from all seeds: {{ totalPoints }}</p>
             </sky-box-content>
           </sky-box>
