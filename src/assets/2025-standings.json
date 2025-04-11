@@ -1,0 +1,364 @@
+{
+  "standings": [
+    {
+      "entry_id": 189,
+      "entry_name": "Rick's Terrible WAGs",
+      "current_points": 109.5,
+      "win_total": 25,
+      "teams_remaining": 1,
+      "rank": 1
+    },
+    {
+      "entry_id": 226,
+      "entry_name": "Golfing62$",
+      "current_points": 107.5,
+      "win_total": 29,
+      "teams_remaining": 1,
+      "rank": 2
+    },
+    {
+      "entry_id": 229,
+      "entry_name": "CuTiger77",
+      "current_points": 103,
+      "win_total": 24,
+      "teams_remaining": 1,
+      "rank": 3
+    },
+    {
+      "entry_id": 231,
+      "entry_name": "JHall",
+      "current_points": 99,
+      "win_total": 25,
+      "teams_remaining": 1,
+      "rank": 4
+    },
+    {
+      "entry_id": 239,
+      "entry_name": "Colonel Forbin",
+      "current_points": 98,
+      "win_total": 25,
+      "teams_remaining": 1,
+      "rank": 5
+    },
+    {
+      "entry_id": 243,
+      "entry_name": "Squantos",
+      "current_points": 97,
+      "win_total": 18,
+      "teams_remaining": 0,
+      "rank": 6
+    },
+    {
+      "entry_id": 220,
+      "entry_name": "Keepdiggin",
+      "current_points": 96,
+      "win_total": 12,
+      "teams_remaining": 0,
+      "rank": 7
+    },
+    {
+      "entry_id": 238,
+      "entry_name": "Wyatt Franken",
+      "current_points": 95.5,
+      "win_total": 21,
+      "teams_remaining": 1,
+      "rank": 8
+    },
+    {
+      "entry_id": 246,
+      "entry_name": "Lopey’ s Vikings",
+      "current_points": 93.5,
+      "win_total": 21,
+      "teams_remaining": 1,
+      "rank": 9
+    },
+    {
+      "entry_id": 228,
+      "entry_name": "Beachnow",
+      "current_points": 93,
+      "win_total": 20,
+      "teams_remaining": 1,
+      "rank": 10
+    },
+    {
+      "entry_id": 191,
+      "entry_name": "Soup Kitchen",
+      "current_points": 87,
+      "win_total": 17,
+      "teams_remaining": 1,
+      "rank": 11
+    },
+    {
+      "entry_id": 185,
+      "entry_name": "Let It Ride",
+      "current_points": 87,
+      "win_total": 20,
+      "teams_remaining": 0,
+      "rank": 11
+    },
+    {
+      "entry_id": 244,
+      "entry_name": "JB",
+      "current_points": 87,
+      "win_total": 11,
+      "teams_remaining": 0,
+      "rank": 11
+    },
+    {
+      "entry_id": 235,
+      "entry_name": "Stormps Janley",
+      "current_points": 87,
+      "win_total": 19,
+      "teams_remaining": 1,
+      "rank": 11
+    },
+    {
+      "entry_id": 152,
+      "entry_name": "The General",
+      "current_points": 81,
+      "win_total": 17,
+      "teams_remaining": 1,
+      "rank": 15
+    },
+    {
+      "entry_id": 186,
+      "entry_name": "Starvin Marvin ",
+      "current_points": 80.5,
+      "win_total": 20,
+      "teams_remaining": 1,
+      "rank": 16
+    },
+    {
+      "entry_id": 245,
+      "entry_name": "John Overton",
+      "current_points": 80,
+      "win_total": 23,
+      "teams_remaining": 1,
+      "rank": 17
+    },
+    {
+      "entry_id": 190,
+      "entry_name": "Tntkingmom",
+      "current_points": 74,
+      "win_total": 15,
+      "teams_remaining": 1,
+      "rank": 18
+    },
+    {
+      "entry_id": 234,
+      "entry_name": "Ticknor",
+      "current_points": 73,
+      "win_total": 15,
+      "teams_remaining": 0,
+      "rank": 19
+    },
+    {
+      "entry_id": 233,
+      "entry_name": "Natreyk",
+      "current_points": 71,
+      "win_total": 15,
+      "teams_remaining": 0,
+      "rank": 20
+    },
+    {
+      "entry_id": 222,
+      "entry_name": "Chili",
+      "current_points": 70,
+      "win_total": 8,
+      "teams_remaining": 0,
+      "rank": 21
+    },
+    {
+      "entry_id": 223,
+      "entry_name": "WINTERGREEN ZYN POUCH",
+      "current_points": 70,
+      "win_total": 5,
+      "teams_remaining": 0,
+      "rank": 21
+    },
+    {
+      "entry_id": 242,
+      "entry_name": "Phil",
+      "current_points": 70,
+      "win_total": 19,
+      "teams_remaining": 1,
+      "rank": 21
+    },
+    {
+      "entry_id": 241,
+      "entry_name": "Tiger18",
+      "current_points": 70,
+      "win_total": 14,
+      "teams_remaining": 0,
+      "rank": 21
+    },
+    {
+      "entry_id": 221,
+      "entry_name": "Square Grouper ",
+      "current_points": 67.5,
+      "win_total": 21,
+      "teams_remaining": 1,
+      "rank": 25
+    },
+    {
+      "entry_id": 224,
+      "entry_name": "TigerAl",
+      "current_points": 67,
+      "win_total": 18,
+      "teams_remaining": 0,
+      "rank": 26
+    },
+    {
+      "entry_id": 227,
+      "entry_name": "Rev",
+      "current_points": 66,
+      "win_total": 18,
+      "teams_remaining": 1,
+      "rank": 27
+    },
+    {
+      "entry_id": 188,
+      "entry_name": "Bug Man",
+      "current_points": 65,
+      "win_total": 20,
+      "teams_remaining": 1,
+      "rank": 28
+    },
+    {
+      "entry_id": 240,
+      "entry_name": "March Sadness",
+      "current_points": 64,
+      "win_total": 11,
+      "teams_remaining": 0,
+      "rank": 29
+    },
+    {
+      "entry_id": 122,
+      "entry_name": "Trey Meyer",
+      "current_points": 64,
+      "win_total": 10,
+      "teams_remaining": 0,
+      "rank": 29
+    },
+    {
+      "entry_id": 249,
+      "entry_name": "Mommalack",
+      "current_points": 62,
+      "win_total": 18,
+      "teams_remaining": 1,
+      "rank": 31
+    },
+    {
+      "entry_id": 237,
+      "entry_name": "FatTiger87",
+      "current_points": 61,
+      "win_total": 15,
+      "teams_remaining": 1,
+      "rank": 32
+    },
+    {
+      "entry_id": 187,
+      "entry_name": "Bogey",
+      "current_points": 60,
+      "win_total": 18,
+      "teams_remaining": 1,
+      "rank": 33
+    },
+    {
+      "entry_id": 121,
+      "entry_name": "Uncle Ed",
+      "current_points": 58.5,
+      "win_total": 13,
+      "teams_remaining": 0,
+      "rank": 34
+    },
+    {
+      "entry_id": 251,
+      "entry_name": "cookin up a win",
+      "current_points": 58,
+      "win_total": 10,
+      "teams_remaining": 0,
+      "rank": 35
+    },
+    {
+      "entry_id": 120,
+      "entry_name": "DUNE DIDDLER",
+      "current_points": 57,
+      "win_total": 11,
+      "teams_remaining": 0,
+      "rank": 36
+    },
+    {
+      "entry_id": 218,
+      "entry_name": "Beavis",
+      "current_points": 56.5,
+      "win_total": 4,
+      "teams_remaining": 0,
+      "rank": 37
+    },
+    {
+      "entry_id": 219,
+      "entry_name": "Butthead",
+      "current_points": 56,
+      "win_total": 11,
+      "teams_remaining": 0,
+      "rank": 38
+    },
+    {
+      "entry_id": 236,
+      "entry_name": "Andrew",
+      "current_points": 53,
+      "win_total": 14,
+      "teams_remaining": 1,
+      "rank": 39
+    },
+    {
+      "entry_id": 247,
+      "entry_name": "Sal Diego",
+      "current_points": 53,
+      "win_total": 10,
+      "teams_remaining": 0,
+      "rank": 39
+    },
+    {
+      "entry_id": 250,
+      "entry_name": "What Could Go Wrong",
+      "current_points": 50,
+      "win_total": 9,
+      "teams_remaining": 0,
+      "rank": 41
+    },
+    {
+      "entry_id": 230,
+      "entry_name": "Zman",
+      "current_points": 49,
+      "win_total": 7,
+      "teams_remaining": 0,
+      "rank": 42
+    },
+    {
+      "entry_id": 232,
+      "entry_name": "Boom Goes the Dynamite",
+      "current_points": 38,
+      "win_total": 6,
+      "teams_remaining": 0,
+      "rank": 43
+    },
+    {
+      "entry_id": 248,
+      "entry_name": "Clunk Dunk",
+      "current_points": 26,
+      "win_total": 4,
+      "teams_remaining": 0,
+      "rank": 44
+    },
+    {
+      "entry_id": 225,
+      "entry_name": "Boomshockalocka",
+      "current_points": 5,
+      "win_total": 2,
+      "teams_remaining": 0,
+      "rank": 45
+    }
+  ]
+}

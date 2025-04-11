@@ -8,6 +8,7 @@ import { FooterComponent } from '../shared/footer/footer.component';
 import { WinnersFlyoutContext } from './winners-flyout/winners-flyout.context';
 import { SkyFlyoutService, SkyFlyoutConfig, SkyFlyoutInstance } from '@skyux/flyout';
 import { WinnersFlyoutComponent } from './winners-flyout/winners-flyout.component';
+import { StaticBracketService } from '../shared/services/static-bracket.service';
 
 @Component({
   selector: 'app-winners',
@@ -17,6 +18,7 @@ import { WinnersFlyoutComponent } from './winners-flyout/winners-flyout.componen
   styleUrls: ['./winners.component.scss'],
 })
 export class WinnersComponent implements OnInit {
+  public useStatic = true;
   public bracketId = 4;
   public winners: Winner[] = [];
 
@@ -43,15 +45,21 @@ export class WinnersComponent implements OnInit {
   constructor(
     private titleService: Title,
     private service: BracketService,
-    private flyoutService: SkyFlyoutService
+    private flyoutService: SkyFlyoutService,
+    private staticService: StaticBracketService
   ) {
     this.titleService.setTitle('Bracket Challenge - Winners');
   }
 
   ngOnInit() {
-    this.service.getWinners(this.bracketId).subscribe((result) => {
-      this.winners = result;
-    });
+    console.log(this.useStatic);
+    if (this.useStatic) {
+      this.winners = this.staticService.getPoints();
+    } else {
+      this.service.getWinners(this.bracketId).subscribe((result) => {
+        this.winners = result;
+      });
+    }
   }
 
   public onNameClick(id: string, schoolName: string) {

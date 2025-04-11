@@ -18,7 +18,7 @@ import { StaticBracketService } from '../shared/services/static-bracket.service'
   styleUrls: ['./standings.component.scss'],
 })
 export class StandingsComponent implements OnInit {
-  private useStatic = false;
+  private useStatic = true;
 
   public standings: StandingsRecord[] = [];
   public flyout: SkyFlyoutInstance<any> | undefined;
@@ -69,8 +69,7 @@ export class StandingsComponent implements OnInit {
     this.service.getStandings(year).subscribe((result: StandingsRecord[]) => {
       this.standings = result;
       this.assignRank();
-      // this.waitSvc.endNonBlockingPageWait();
-      return result;
+      console.log(this.standings);
     });
   }
 
