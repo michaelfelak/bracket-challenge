@@ -4,7 +4,6 @@ import { BracketService } from '../shared/services/bracket.service';
 import { SkyFlyoutService, SkyFlyoutInstance, SkyFlyoutConfig } from '@skyux/flyout';
 import { StandingsFlyoutComponent } from './standings-flyout/standings-flyout.component';
 import { StandingsFlyoutContext } from './standings-flyout/standings-flyout.context';
-import { SkyWaitService } from '@skyux/indicators';
 import { StandingsRecord } from '../shared/models/standings.model';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../shared/footer/footer.component';
@@ -40,36 +39,30 @@ export class StandingsComponent implements OnInit {
     private titleService: Title,
     private service: BracketService,
     private flyoutService: SkyFlyoutService,
-    private waitSvc: SkyWaitService,
     private staticService: StaticBracketService
   ) {}
 
   public ngOnInit() {
     this.titleService.setTitle('Bracket Challenge - Standings');
 
-    this.service.getSettings().subscribe((settings) => {
-      this.showStandingsLink = settings.flyout_enabled && !this.useStatic;
-      this.currentYear = settings.current_year;
-      this.retrieveStandings(this.currentYear);
-    });
-  }
-
-  public retrieveStandings(year: number) {
     if (this.useStatic) {
       this.standings = this.staticService.getStandings();
       this.assignRank();
     } else {
-      this.retrieveLiveStandings(year);
+      this.service.getSettings().subscribe((settings) => {
+        this.showStandingsLink = settings.flyout_enabled && !this.useStatic;
+        this.currentYear = settings.current_year;
+        this.retrieveLiveStandings(this.currentYear);
+      });
     }
   }
 
-  public retrieveLiveStandings(year: number) {
+  private retrieveLiveStandings(year: number) {
     // this.waitSvc.beginNonBlockingPageWait();
 
     this.service.getStandings(year).subscribe((result: StandingsRecord[]) => {
       this.standings = result;
       this.assignRank();
-      console.log(this.standings);
     });
   }
 
@@ -127,7 +120,7 @@ export class StandingsComponent implements OnInit {
 
   public updateYear(year: number) {
     this.currentYear = year;
-    this.retrieveStandings(year);
+    this.retrieveLiveStandings(year);
   }
 
   public sortByCurrentPoints() {
