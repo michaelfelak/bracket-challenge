@@ -1,7 +1,27 @@
 @import url("https://fonts.googleapis.com/css?family=Titillium+Web&display=swap");
+
 main {
   margin-left: 5%;
   margin-right: 5%;
   height: 100%;
   font-family: "Titillium Web", sans-serif;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  main {
+    margin-left: 2%;
+    margin-right: 2%;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }

@@ -1,24 +1,67 @@
 @import url("https://fonts.googleapis.com/css?family=Titillium+Web&display=swap");
+
 main {
-  margin-left: 5%;
-  margin-right: 5%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  max-width: 1200px;
   height: 100%;
-  font-family: "Titillium Web", sans-serif;
+  font-family: Arial, Helvetica, "Titillium Web", sans-serif;
+  font-size: 1.1rem;
+}
+
+h1 {
+  text-align: center;
+  color: #006EB8;
+  font-size: 2.8rem;
+  margin-bottom: 30px;
+  margin-top: 20px;
+  font-weight: 700;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .region-header {
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   text-align: center;
-  font-size: x-large;
+  font-size: 2.2rem;
+  color: #006EB8;
+  font-weight: 700;
+  margin-bottom: 20px;
+  padding: 20px 0 !important;
+  letter-spacing: 0.5px;
 }
 
 select {
   width: 100%;
+  padding: 15px;
+  border: 2px solid #006EB8;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  font-family: "Titillium Web", Arial, sans-serif;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  min-height: 50px;
+  font-weight: 500;
+  
+  option {
+    padding: 10px;
+    font-size: 1.2rem;
+    font-family: "Titillium Web", Arial, sans-serif;
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 5px rgba(0, 102, 204, 0.3);
+  }
 }
 
 p {
-  margin-left: auto;
-  margin-right: auto;
+  margin: 15px auto;
+  line-height: 1.7;
+  font-size: 1.15rem;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .possible-points {
@@ -28,18 +71,391 @@ p {
 }
 
 .submit-button {
-  margin-left: auto;
-  margin-right: auto;
+  margin: 20px auto;
+  background-color: #0066cc !important;
+  padding: 12px 40px !important;
+  font-size: 1rem !important;
+  border-radius: 4px !important;
+  transition: background-color 0.3s !important;
+  
+  &:hover:not(:disabled) {
+    background-color: #0052a3 !important;
+  }
+  
+  &:disabled {
+    background-color: #cccccc !important;
+    cursor: not-allowed;
+  }
 }
 
 sky-box {
-  padding-top: 40px;
+  margin-bottom: 35px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #0066cc;
+}
+
+sky-box-header {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #006EB8;
+  padding: 15px !important;
+}
+
+sky-box-content {
+  padding: 30px !important;
 }
 
 .team-check {
   width: 5%;
 }
+
 .team-name {
   width: 20%;
   vertical-align: middle;
+}
+
+/* Instructions section styling */
+ul {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  font-family: Arial, Helvetica, sans-serif;
+  
+  li {
+    margin-bottom: 15px;
+    line-height: 1.7;
+    font-size: 1.1rem;
+  }
+  
+  p {
+    margin: 15px 0;
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+}
+
+/* Rules container styling */
+.rules-container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.rules-title {
+  color: #006EB8;
+  font-size: 2.4rem;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 700;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.rules-section {
+  margin-bottom: 35px;
+  
+  h3 {
+    color: #0066cc;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    margin-top: 0;
+    border-bottom: 2px solid #0066cc;
+    padding-bottom: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+}
+
+.rules-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  
+  li {
+    margin-bottom: 20px;
+    line-height: 1.9;
+    padding-left: 30px;
+    position: relative;
+    font-size: 1.15rem;
+    font-family: Arial, Helvetica, sans-serif;
+    
+    &:before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: #0066cc;
+      font-weight: bold;
+      font-size: 1.3rem;
+    }
+    
+    strong {
+      color: #006EB8;
+      font-weight: 700;
+    }
+  }
+}
+
+.deadline-section {
+  background-color: #e8f4f8;
+  padding: 15px;
+  border-radius: 4px;
+  
+  p {
+    margin: 0;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #006EB8;
+  }
+}
+
+.sky-emphasized {
+  color: #0066cc;
+  font-weight: 700;
+}
+
+/* Alert styling */
+sky-alert {
+  margin: 15px auto !important;
+  max-width: 400px;
+}
+
+/* Input box improvements */
+sky-input-box {
+  width: 100%;
+  font-size: 1.1rem;
+  
+  input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    font-family: Arial, Helvetica, sans-serif;
+    
+    &:focus {
+      outline: none;
+      border-color: #0066cc;
+      box-shadow: 0 0 5px rgba(0, 102, 204, 0.3);
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  main {
+    padding: 12px;
+    max-width: 100%;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
+  
+  .region-header {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    padding: 15px 0 !important;
+  }
+  
+  select {
+    padding: 12px;
+    font-size: 1rem;
+    min-height: 45px;
+  }
+  
+  p {
+    font-size: 1rem;
+    margin: 12px auto;
+  }
+  
+  .possible-points {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .submit-button {
+    margin: 15px auto;
+    padding: 10px 30px !important;
+    font-size: 0.9rem !important;
+    width: 90%;
+    max-width: 300px;
+  }
+  
+  sky-box {
+    margin-bottom: 20px;
+  }
+  
+  sky-box-header {
+    padding: 12px !important;
+  }
+  
+  sky-box-content {
+    padding: 20px !important;
+  }
+  
+  ul {
+    padding: 12px;
+    margin: 15px auto;
+    
+    li {
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+  }
+  
+  .rules-container {
+    padding: 15px;
+    margin: 15px auto;
+  }
+  
+  .rules-title {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+  }
+  
+  .rules-section {
+    margin-bottom: 20px;
+    
+    h3 {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+  }
+  
+  .rules-list li {
+    margin-bottom: 15px;
+    padding-left: 25px;
+    font-size: 0.95rem;
+  }
+  
+  .deadline-section {
+    padding: 12px;
+    
+    p {
+      font-size: 0.95rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: 10px;
+    max-width: 100%;
+  }
+  
+  h1 {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    margin-top: 8px;
+  }
+  
+  .region-header {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    padding: 10px 0 !important;
+  }
+  
+  select {
+    padding: 10px;
+    font-size: 0.95rem;
+    min-height: 40px;
+  }
+  
+  p {
+    font-size: 0.9rem;
+    margin: 10px auto;
+  }
+  
+  .possible-points {
+    max-width: 100%;
+    font-size: 0.9rem;
+  }
+  
+  .submit-button {
+    margin: 12px auto;
+    padding: 10px 24px !important;
+    font-size: 0.85rem !important;
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  sky-box {
+    margin-bottom: 15px;
+    border-left: 3px solid #0066cc;
+  }
+  
+  sky-box-header {
+    padding: 10px !important;
+    font-size: 0.95rem;
+  }
+  
+  sky-box-content {
+    padding: 15px !important;
+  }
+  
+  ul {
+    padding: 10px;
+    margin: 12px auto;
+    
+    li {
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+    }
+    
+    p {
+      font-size: 0.9rem;
+      margin: 10px 0;
+    }
+  }
+  
+  .rules-container {
+    padding: 12px;
+    margin: 12px auto;
+  }
+  
+  .rules-title {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+  }
+  
+  .rules-section {
+    margin-bottom: 15px;
+    
+    h3 {
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+  }
+  
+  .rules-list li {
+    margin-bottom: 12px;
+    padding-left: 20px;
+    font-size: 0.85rem;
+    
+    &:before {
+      font-size: 1.1rem;
+    }
+  }
+  
+  .deadline-section {
+    padding: 10px;
+    margin: 15px 0;
+    
+    p {
+      font-size: 0.85rem;
+    }
+  }
+  
+  .sky-emphasized {
+    font-weight: 600;
+  }
+  
+  sky-alert {
+    max-width: 100% !important;
+    margin: 12px auto !important;
+  }
 }

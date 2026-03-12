@@ -1,96 +1,118 @@
 <main>
   <div *ngIf="!submitted">
     <form [formGroup]="entryForm">
-      <h1 style="text-align: center">Submit an entry</h1>
+      <h1>Submit an entry</h1>
 
       <div>
         <sky-fluid-grid>
+          <!-- Instructions Section -->
           <sky-row>
             <sky-column>
-              <div style="font-size: large; max-width: 80%; margin-left: auto; margin-right: auto">
-                <ul>
-                  <li>Select 2 different teams in each of the 4 regions.</li>
-                  <li>You will earn points for each win that your selected teams achieve.</li>
-                  <li>Points awarded for a win will be the seed number times the round number.</li>
-                  <li>You may choose ONE "superfan" team from the 8 teams you select. This team will be awarded a 50% bonus for each win.</li>
-                  <li>
-                    Validate all of your picks and points before clicking
-                    <span class="sky-emphasized">Submit</span>.
-                  </li>
-                  <p>
-                    <span class="sky-emphasized">***NOTE***</span>: If you choose a play-in game team, you will get points for either team that advances to the field of 64. No
-                    points are awarded for winning a play-in game.
-                  </p>
-                  <p>
-                    <span class="sky-emphasized">***NOTE***</span>: Total possible points does not take into account that only one team will be able to advance out of each region.
-                    The total points is the sum of all possible points for each team, and does not reflect your highest possible point total.
-                  </p>
-                  <p>Deadline to submit: <span class="sky-emphasized"> Thursday, March 20th at 12:00 PM ET</span>.</p>
-                </ul>
+              <div class="rules-container">
+                <h2 class="rules-title">How to Play</h2>
+                
+                <div class="rules-section">
+                  <h3>Basic Rules</h3>
+                  <ul class="rules-list">
+                    <li>
+                      <strong>Select Your Teams:</strong> Choose 2 different teams from each of the 4 regions (8 teams total). 
+                      You cannot select the same team twice.
+                    </li>
+                    <li>
+                      <strong>Earn Points from Wins:</strong> Each time one of your selected teams wins in the tournament, 
+                      you earn points based on that win's value.
+                    </li>
+                    <li>
+                      <strong>Point Calculation:</strong> Points for each win = <span class="sky-emphasized">Seed Number × Round Number</span>
+                      <br/>
+                      <span style="margin-left: 20px; display: inline-block;">Example: A #5 seed winning in Round 2 = 5 × 2 = 10 points</span>
+                    </li>
+                    <li>
+                      <strong>Superfan Bonus (Optional):</strong> You may designate ONE of your 8 teams as your "superfan" team. 
+                      This team earns a 50% bonus on all wins (points × 1.5).
+                      <br/>
+                      <span style="margin-left: 20px; display: inline-block;">Example: Your superfan #5 seed winning in Round 2 = 5 × 2 × 1.5 = 15 points</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="rules-section">
+                  <h3>Important Notes</h3>
+                  <ul class="rules-list">
+                    <li>
+                      <span class="sky-emphasized">Play-in Games:</span> If you select a play-in game team, you receive points 
+                      when that team advances to the main bracket (Field of 64). You do NOT receive points for winning the play-in game itself.
+                    </li>
+                    <li>
+                      <span class="sky-emphasized">Total Possible Points:</span> The "Total Possible Points" shown is a theoretical maximum 
+                      if ALL your teams won every game. However, this is mathematically impossible since only one team from each region can advance 
+                      to the next round. This number is meant as a reference point, not your likely maximum score.
+                    </li>
+                    <li>
+                      <span class="sky-emphasized">Review Before Submitting:</span> Carefully validate all of your picks and verify the points 
+                      calculation before clicking <span class="sky-emphasized">Submit</span>.
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="rules-section deadline-section">
+                  <p><span class="sky-emphasized">📅 Submission Deadline: Thursday, March 19th, 2026 at 12:00 PM ET</span></p>
+                </div>
               </div>
             </sky-column>
           </sky-row>
+
+          <!-- Status Message -->
           <sky-row *ngIf="!bracketFinalized">
-            <h1>Brackets not finalized. Please stay tuned for an announcement that the entry is live!</h1>
+            <sky-column>
+              <sky-box>
+                <sky-box-content>
+                  <h2 style="text-align: center; color: #006EB8;">Brackets not finalized. Please stay tuned for an announcement that the entry is live!</h2>
+                </sky-box-content>
+              </sky-box>
+            </sky-column>
           </sky-row>
+
+          <!-- Team Selection Section -->
           <div *ngIf="bracketFinalized">
+            <!-- Top Regions (Region 1 and Region 2) -->
             <sky-row>
-              <sky-column [screenSmall]="3" [screenMedium]="4" [screenLarge]="3" style="margin-left: auto">
+              <sky-column [screenSmall]="6" [screenMedium]="6" [screenLarge]="6">
                 <sky-box>
+                  <sky-box-header class="region-header">{{ topLeftRegion.region_name }} Region</sky-box-header>
                   <sky-box-content>
-                    <p class="region-header">{{ topLeftRegion.region_name }} Region</p>
                     <p>
                       <select formControlName="team1" (change)="update()">
                         <option *ngFor="let team of topLeftRegion.seeds" [ngValue]="team">
-                          <div *ngIf="!team.play_in_school_id">
-                            <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
-                          </div>
-                          <div *ngIf="team.play_in_school_id">
-                            <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
-                          </div>
+                          #{{ team.seed_number }} {{ team.school_name }}<span *ngIf="team.play_in_school_id"> / {{ team.play_in_school_name }}</span>
                         </option>
                       </select>
                     </p>
                     <p>
                       <select formControlName="team2" (change)="update()">
                         <option *ngFor="let team of topLeftRegion.seeds" [ngValue]="team">
-                          <div *ngIf="!team.play_in_school_id">
-                            <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
-                          </div>
-                          <div *ngIf="team.play_in_school_id">
-                            <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
-                          </div>
+                          #{{ team.seed_number }} {{ team.school_name }}<span *ngIf="team.play_in_school_id"> / {{ team.play_in_school_name }}</span>
                         </option>
                       </select>
                     </p>
                   </sky-box-content>
                 </sky-box>
               </sky-column>
-              <sky-column [screenSmall]="3" [screenMedium]="4" [screenLarge]="3" style="margin-right: auto">
+              <sky-column [screenSmall]="6" [screenMedium]="6" [screenLarge]="6">
                 <sky-box>
+                  <sky-box-header class="region-header">{{ topRightRegion.region_name }} Region</sky-box-header>
                   <sky-box-content>
-                    <p class="region-header">{{ topRightRegion.region_name }} Region</p>
                     <p>
                       <select formControlName="team3" (change)="update()">
                         <option *ngFor="let team of topRightRegion.seeds" [ngValue]="team">
-                          <div *ngIf="!team.play_in_school_id">
-                            <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
-                          </div>
-                          <div *ngIf="team.play_in_school_id">
-                            <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
-                          </div>
+                          #{{ team.seed_number }} {{ team.school_name }}<span *ngIf="team.play_in_school_id"> / {{ team.play_in_school_name }}</span>
                         </option>
                       </select>
                     </p>
                     <p>
                       <select formControlName="team4" (change)="update()">
                         <option *ngFor="let team of topRightRegion.seeds" [ngValue]="team">
-                          <div *ngIf="!team.play_in_school_id">
-                            <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
-                          </div>
-                          <div *ngIf="team.play_in_school_id">
-                            <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
-                          </div>
+                          #{{ team.seed_number }} {{ team.school_name }}<span *ngIf="team.play_in_school_id"> / {{ team.play_in_school_name }}</span>
                         </option>
                       </select>
                     </p>
@@ -98,63 +120,45 @@
                 </sky-box>
               </sky-column>
             </sky-row>
+
+            <!-- Bottom Regions (Region 3 and Region 4) -->
             <sky-row>
-              <sky-column [screenSmall]="3" [screenMedium]="4" [screenLarge]="3" style="margin-left: auto">
+              <sky-column [screenSmall]="6" [screenMedium]="6" [screenLarge]="6">
                 <sky-box>
+                  <sky-box-header class="region-header">{{ bottomLeftRegion.region_name }} Region</sky-box-header>
                   <sky-box-content>
-                    <p class="region-header">{{ bottomLeftRegion.region_name }} Region</p>
                     <p>
                       <select formControlName="team7" (change)="update()">
                         <option *ngFor="let team of bottomLeftRegion.seeds" [ngValue]="team">
-                          <div *ngIf="!team.play_in_school_id">
-                            <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
-                          </div>
-                          <div *ngIf="team.play_in_school_id">
-                            <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
-                          </div>
+                          #{{ team.seed_number }} {{ team.school_name }}<span *ngIf="team.play_in_school_id"> / {{ team.play_in_school_name }}</span>
                         </option>
                       </select>
                     </p>
                     <p>
                       <select formControlName="team8" (change)="update()">
                         <option *ngFor="let team of bottomLeftRegion.seeds" [ngValue]="team">
-                          <div *ngIf="!team.play_in_school_id">
-                            <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
-                          </div>
-                          <div *ngIf="team.play_in_school_id">
-                            <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
-                          </div>
+                          #{{ team.seed_number }} {{ team.school_name }}<span *ngIf="team.play_in_school_id"> / {{ team.play_in_school_name }}</span>
                         </option>
                       </select>
                     </p>
                   </sky-box-content>
                 </sky-box>
               </sky-column>
-              <sky-column [screenSmall]="3" [screenMedium]="4" [screenLarge]="3" style="margin-right: auto">
+              <sky-column [screenSmall]="6" [screenMedium]="6" [screenLarge]="6">
                 <sky-box>
+                  <sky-box-header class="region-header">{{ bottomRightRegion.region_name }} Region</sky-box-header>
                   <sky-box-content>
-                    <p class="region-header">{{ bottomRightRegion.region_name }} Region</p>
                     <p>
                       <select formControlName="team5" (change)="update()">
                         <option *ngFor="let team of bottomRightRegion.seeds" [ngValue]="team">
-                          <div *ngIf="!team.play_in_school_id">
-                            <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
-                          </div>
-                          <div *ngIf="team.play_in_school_id">
-                            <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
-                          </div>
+                          #{{ team.seed_number }} {{ team.school_name }}<span *ngIf="team.play_in_school_id"> / {{ team.play_in_school_name }}</span>
                         </option>
                       </select>
                     </p>
                     <p>
                       <select formControlName="team6" (change)="update()">
                         <option *ngFor="let team of bottomRightRegion.seeds" [ngValue]="team">
-                          <div *ngIf="!team.play_in_school_id">
-                            <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
-                          </div>
-                          <div *ngIf="team.play_in_school_id">
-                            <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
-                          </div>
+                          #{{ team.seed_number }} {{ team.school_name }}<span *ngIf="team.play_in_school_id"> / {{ team.play_in_school_name }}</span>
                         </option>
                       </select>
                     </p>
@@ -162,43 +166,44 @@
                 </sky-box>
               </sky-column>
             </sky-row>
+
+            <!-- Superfan Team Section -->
             <sky-row>
-              <sky-column style="max-width: 400px; margin-left: auto; margin-right: auto">
-                <sky-box>
+              <sky-column>
+                <sky-box class="possible-points">
                   <sky-box-header class="region-header">Superfan Team 50% Bonus</sky-box-header>
                   <sky-box-content>
-                    The team you select here will receive 50% more points than normal.
-                    <select class="possible-points" formControlName="bonusTeam" (change)="update()">
-                      <option *ngFor="let team of selectedTeams" [ngValue]="team">
-                        <div *ngIf="!team.play_in_school_id">
-                          <button type="button">#{{ team.seed_number }} {{ team.school_name }}</button>
-                        </div>
-                        <div *ngIf="team.play_in_school_id">
-                          <button type="button">#{{ team.seed_number }} {{ team.school_name }} / {{ team.play_in_school_name }}</button>
-                        </div>
-                      </option>
-                    </select>
+                    <p>The team you select here will receive 50% more points than normal.</p>
+                    <p>
+                      <select formControlName="bonusTeam" (change)="update()">
+                        <option *ngFor="let team of selectedTeams" [ngValue]="team">
+                          #{{ team.seed_number }} {{ team.school_name }}<span *ngIf="team.play_in_school_id"> / {{ team.play_in_school_name }}</span>
+                        </option>
+                      </select>
+                    </p>
                   </sky-box-content>
                 </sky-box>
               </sky-column>
             </sky-row>
+
+            <!-- Pick Summary Section -->
             <sky-row>
-              <sky-column class="possible-points">
-                <sky-box>
-                  <sky-box-header style="text-align: center" class="region-header">Pick summary</sky-box-header>
+              <sky-column>
+                <sky-box class="possible-points">
+                  <sky-box-header class="region-header">Pick Summary</sky-box-header>
                   <sky-box-content>
-                    <p style="text-align: center; padding-bottom: 20px">Total possible points: {{ totalPoints }}</p>
-                    <sky-input-box labelText="Entry Name" style="padding-left: 20px; padding-right: 20px">
+                    <p style="text-align: center; padding-bottom: 20px; font-size: 1.1rem; font-weight: 600;">Total possible points: <span style="color: #0066cc;">{{ totalPoints }}</span></p>
+                    <sky-input-box labelText="Entry Name">
                       <input formControlName="name" type="text" />
                     </sky-input-box>
-                    <sky-input-box labelText="Email" stacked="true" style="padding-left: 20px; padding-right: 20px">
+                    <sky-input-box labelText="Email" stacked="true">
                       <input formControlName="email" type="text" />
                     </sky-input-box>
                     <sky-alert *ngIf="hasErrors">{{ errorMessage }}</sky-alert>
-                    <div style="text-align: center">
-                      <button class="submit-button sky-btn sky-btn-primary sky-margin-inline-compact" [disabled]="submitDisabled" (click)="submit()">Submit</button>
+                    <div style="text-align: center; margin-top: 20px;">
+                      <button class="submit-button sky-btn sky-btn-primary sky-margin-inline-compact" [disabled]="submitDisabled" (click)="submit()">Submit Entry</button>
                     </div>
-                    <p>Details to confirm entry will be sent to the provided email.</p>
+                    <p style="text-align: center; font-size: 0.9rem; margin-top: 15px; color: #666;">Details to confirm entry will be sent to the provided email.</p>
                   </sky-box-content>
                 </sky-box>
               </sky-column>
@@ -212,44 +217,80 @@
     <sky-fluid-grid>
       <sky-row>
         <sky-column>
-          <sky-box style="max-width: 400px; margin-left: auto; margin-right: auto">
+          <sky-box class="possible-points">
+            <sky-box-header class="region-header">Picks Submitted Successfully!</sky-box-header>
             <sky-box-content>
-              <h1 style="text-align: center">Picks submitted</h1>
-              <p>Entry Name: {{ name }}</p>
-              <p>E-mail: {{ email }}</p>
-              <p>
-                {{ team1?.region_name }} - #{{ team1?.seed_number }} {{ team1?.school_name }} <span *ngIf="team1?.play_in_school_name"> / {{ team1?.play_in_school_name }}</span> -
-                {{ team1?.possible_points }} points
+              <div style="margin-bottom: 20px; padding: 15px; background-color: #e8f0ff; border-left: 4px solid #0066cc; border-radius: 0 4px 4px 0;">
+                <p><strong>Entry Name:</strong> {{ name }}</p>
+                <p><strong>Email:</strong> {{ email }}</p>
+              </div>
+              
+              <h3 style="color: #006EB8; margin-top: 20px; margin-bottom: 15px;">Your Selections:</h3>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div style="padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
+                  <p style="font-weight: 600; color: #006EB8;">Pick 1</p>
+                  <p>
+                    {{ team1?.region_name }} - #{{ team1?.seed_number }} {{ team1?.school_name }} <span *ngIf="team1?.play_in_school_name"> / {{ team1?.play_in_school_name }}</span>
+                  </p>
+                  <p style="color: #0066cc; font-weight: 600;">{{ team1?.possible_points }} points</p>
+                </div>
+                <div style="padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
+                  <p style="font-weight: 600; color: #006EB8;">Pick 2</p>
+                  <p>
+                    {{ team2?.region_name }} - #{{ team2?.seed_number }} {{ team2?.school_name }} <span *ngIf="team2?.play_in_school_name"> / {{ team2?.play_in_school_name }}</span>
+                  </p>
+                  <p style="color: #0066cc; font-weight: 600;">{{ team2?.possible_points }} points</p>
+                </div>
+                <div style="padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
+                  <p style="font-weight: 600; color: #006EB8;">Pick 3</p>
+                  <p>
+                    {{ team3?.region_name }} - #{{ team3?.seed_number }} {{ team3?.school_name }} <span *ngIf="team3?.play_in_school_name"> / {{ team3?.play_in_school_name }}</span>
+                  </p>
+                  <p style="color: #0066cc; font-weight: 600;">{{ team3?.possible_points }} points</p>
+                </div>
+                <div style="padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
+                  <p style="font-weight: 600; color: #006EB8;">Pick 4</p>
+                  <p>
+                    {{ team4?.region_name }} - #{{ team4?.seed_number }} {{ team4?.school_name }} <span *ngIf="team4?.play_in_school_name"> / {{ team4?.play_in_school_name }}</span>
+                  </p>
+                  <p style="color: #0066cc; font-weight: 600;">{{ team4?.possible_points }} points</p>
+                </div>
+                <div style="padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
+                  <p style="font-weight: 600; color: #006EB8;">Pick 5</p>
+                  <p>
+                    {{ team5?.region_name }} - #{{ team5?.seed_number }} {{ team5?.school_name }} <span *ngIf="team5?.play_in_school_name"> / {{ team5?.play_in_school_name }}</span>
+                  </p>
+                  <p style="color: #0066cc; font-weight: 600;">{{ team5?.possible_points }} points</p>
+                </div>
+                <div style="padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
+                  <p style="font-weight: 600; color: #006EB8;">Pick 6</p>
+                  <p>
+                    {{ team6?.region_name }} - #{{ team6?.seed_number }} {{ team6?.school_name }} <span *ngIf="team6?.play_in_school_name"> / {{ team6?.play_in_school_name }}</span>
+                  </p>
+                  <p style="color: #0066cc; font-weight: 600;">{{ team6?.possible_points }} points</p>
+                </div>
+                <div style="padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
+                  <p style="font-weight: 600; color: #006EB8;">Pick 7</p>
+                  <p>
+                    {{ team7?.region_name }} - #{{ team7?.seed_number }} {{ team7?.school_name }} <span *ngIf="team7?.play_in_school_name"> / {{ team7?.play_in_school_name }}</span>
+                  </p>
+                  <p style="color: #0066cc; font-weight: 600;">{{ team7?.possible_points }} points</p>
+                </div>
+                <div style="padding: 10px; background-color: #f8f9fa; border-radius: 4px;">
+                  <p style="font-weight: 600; color: #006EB8;">Pick 8</p>
+                  <p>
+                    {{ team8?.region_name }} - #{{ team8?.seed_number }} {{ team8?.school_name }} <span *ngIf="team8?.play_in_school_name"> / {{ team8?.play_in_school_name }}</span>
+                  </p>
+                  <p style="color: #0066cc; font-weight: 600;">{{ team8?.possible_points }} points</p>
+                </div>
+              </div>
+              
+              <p style="text-align: center; margin-top: 25px; font-size: 1.1rem; font-weight: 600; color: #006EB8;">
+                Total Points: <span style="color: #0066cc; font-size: 1.3rem;">{{ totalPoints }}</span>
               </p>
-              <p>
-                {{ team2?.region_name }} - #{{ team2?.seed_number }} {{ team2?.school_name }} <span *ngIf="team2?.play_in_school_name"> / {{ team2?.play_in_school_name }}</span> -
-                {{ team2?.possible_points }} points
+              <p style="text-align: center; margin-top: 15px; color: #666; font-size: 0.95rem;">
+                A confirmation email has been sent to {{ email }}. Please check your inbox for details and further instructions.
               </p>
-              <p>
-                {{ team3?.region_name }} - #{{ team3?.seed_number }} {{ team3?.school_name }} <span *ngIf="team3?.play_in_school_name"> / {{ team3?.play_in_school_name }}</span> -
-                {{ team3?.possible_points }} points
-              </p>
-              <p>
-                {{ team4?.region_name }} - #{{ team4?.seed_number }} {{ team4?.school_name }} <span *ngIf="team4?.play_in_school_name"> / {{ team4?.play_in_school_name }}</span> -
-                {{ team4?.possible_points }} points
-              </p>
-              <p>
-                {{ team5?.region_name }} - #{{ team5?.seed_number }} {{ team5?.school_name }} <span *ngIf="team5?.play_in_school_name"> / {{ team5?.play_in_school_name }}</span> -
-                {{ team5?.possible_points }} points
-              </p>
-              <p>
-                {{ team6?.region_name }} - #{{ team6?.seed_number }} {{ team6?.school_name }} <span *ngIf="team6?.play_in_school_name"> / {{ team6?.play_in_school_name }}</span> -
-                {{ team6?.possible_points }} points
-              </p>
-              <p>
-                {{ team7?.region_name }} - #{{ team7?.seed_number }} {{ team7?.school_name }} <span *ngIf="team7?.play_in_school_name"> / {{ team7?.play_in_school_name }}</span> -
-                {{ team7?.possible_points }} points
-              </p>
-              <p>
-                {{ team8?.region_name }} - #{{ team8?.seed_number }} {{ team8?.school_name }} <span *ngIf="team8?.play_in_school_name"> / {{ team8?.play_in_school_name }}</span> -
-                {{ team8?.possible_points }} points
-              </p>
-              <p>Total points from all seeds: {{ totalPoints }}</p>
             </sky-box-content>
           </sky-box>
         </sky-column>

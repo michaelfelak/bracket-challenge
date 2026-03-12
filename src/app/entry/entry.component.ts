@@ -14,7 +14,6 @@ import { SkyAlertModule, SkyKeyInfoModule } from '@skyux/indicators';
 import { Region, RegionModel } from '../shared/models/region.model';
 import { Bracket } from '../shared/models/bracket';
 import { FooterComponent } from '../shared/footer/footer.component';
-import { RecapComponent } from '../recap/recap.component';
 
 @Component({
   standalone: true,
@@ -114,6 +113,9 @@ export class EntryComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Load test data
+    this.loadTestData();
+
     this.service.getSettings().subscribe((settings) => {
       this.bracketFinalized = settings.entry_enabled;
     });
@@ -176,6 +178,112 @@ export class EntryComponent implements OnInit {
           });
         }
       });
+  }
+
+  private loadTestData() {
+    // Enable the bracket for display
+    this.bracketFinalized = true;
+
+    // Test regions
+    const testRegions = [
+      { id: 1, name: 'South' },
+      { id: 2, name: 'East' },
+      { id: 3, name: 'West' },
+      { id: 4, name: 'Midwest' }
+    ];
+
+    // Test seeds for each region
+    const testSeeds: Seed[] = [
+      // South Region (region_id: 1)
+      { id: 1, school_id: 1, school_name: 'Duke', seed_number: 1, region_id: 1, bracket_id: 4, possible_points: 16 },
+      { id: 2, school_id: 2, school_name: 'Gonzaga', seed_number: 2, region_id: 1, bracket_id: 4, possible_points: 32 },
+      { id: 3, school_id: 3, school_name: 'Texas Tech', seed_number: 3, region_id: 1, bracket_id: 4, possible_points: 48 },
+      { id: 4, school_id: 4, school_name: 'Ohio State', seed_number: 4, region_id: 1, bracket_id: 4, possible_points: 64 },
+      { id: 5, school_id: 5, school_name: 'Kentucky', seed_number: 5, region_id: 1, bracket_id: 4, possible_points: 80 },
+      { id: 6, school_id: 6, school_name: 'Princeton', seed_number: 6, region_id: 1, bracket_id: 4, possible_points: 96 },
+      { id: 7, school_id: 7, school_name: 'Auburn', seed_number: 7, region_id: 1, bracket_id: 4, possible_points: 112 },
+      { id: 8, school_id: 8, school_name: 'Columbia', seed_number: 8, region_id: 1, bracket_id: 4, possible_points: 128 },
+      // East Region (region_id: 2)
+      { id: 9, school_id: 9, school_name: 'Kansas', seed_number: 1, region_id: 2, bracket_id: 4, possible_points: 16 },
+      { id: 10, school_id: 10, school_name: 'New Mexico', seed_number: 2, region_id: 2, bracket_id: 4, possible_points: 32 },
+      { id: 11, school_id: 11, school_name: 'Houston', seed_number: 3, region_id: 2, bracket_id: 4, possible_points: 48 },
+      { id: 12, school_id: 12, school_name: 'Alabama', seed_number: 4, region_id: 2, bracket_id: 4, possible_points: 64 },
+      { id: 13, school_id: 13, school_name: 'Florida', seed_number: 5, region_id: 2, bracket_id: 4, possible_points: 80 },
+      { id: 14, school_id: 14, school_name: 'BYU', seed_number: 6, region_id: 2, bracket_id: 4, possible_points: 96 },
+      { id: 15, school_id: 15, school_name: 'Marquette', seed_number: 7, region_id: 2, bracket_id: 4, possible_points: 112 },
+      { id: 16, school_id: 16, school_name: 'Vermont', seed_number: 8, region_id: 2, bracket_id: 4, possible_points: 128 },
+      // West Region (region_id: 3)
+      { id: 17, school_id: 17, school_name: 'North Carolina', seed_number: 1, region_id: 3, bracket_id: 4, possible_points: 16 },
+      { id: 18, school_id: 18, school_name: 'Tennessee', seed_number: 2, region_id: 3, bracket_id: 4, possible_points: 32 },
+      { id: 19, school_id: 19, school_name: 'Utah State', seed_number: 3, region_id: 3, bracket_id: 4, possible_points: 48 },
+      { id: 20, school_id: 20, school_name: 'Creighton', seed_number: 4, region_id: 3, bracket_id: 4, possible_points: 64 },
+      { id: 21, school_id: 21, school_name: 'Purdue', seed_number: 5, region_id: 3, bracket_id: 4, possible_points: 80 },
+      { id: 22, school_id: 22, school_name: 'Wisconsin', seed_number: 6, region_id: 3, bracket_id: 4, possible_points: 96 },
+      { id: 23, school_id: 23, school_name: 'Dayton', seed_number: 7, region_id: 3, bracket_id: 4, possible_points: 112 },
+      { id: 24, school_id: 24, school_name: 'UNC Asheville', seed_number: 8, region_id: 3, bracket_id: 4, possible_points: 128 },
+      // Midwest Region (region_id: 4)
+      { id: 25, school_id: 25, school_name: 'Iowa State', seed_number: 1, region_id: 4, bracket_id: 4, possible_points: 16 },
+      { id: 26, school_id: 26, school_name: 'Auburn', seed_number: 2, region_id: 4, bracket_id: 4, possible_points: 32 },
+      { id: 27, school_id: 27, school_name: 'Michigan State', seed_number: 3, region_id: 4, bracket_id: 4, possible_points: 48 },
+      { id: 28, school_id: 28, school_name: 'Rutgers', seed_number: 4, region_id: 4, bracket_id: 4, possible_points: 64 },
+      { id: 29, school_id: 29, school_name: 'Virginia Tech', seed_number: 5, region_id: 4, bracket_id: 4, possible_points: 80 },
+      { id: 30, school_id: 30, school_name: 'Wichita State', seed_number: 6, region_id: 4, bracket_id: 4, possible_points: 96 },
+      { id: 31, school_id: 31, school_name: 'Texas State', seed_number: 7, region_id: 4, bracket_id: 4, possible_points: 112 },
+      { id: 32, school_id: 32, school_name: 'LIU', seed_number: 8, region_id: 4, bracket_id: 4, possible_points: 128 }
+    ];
+
+    // Set up bracket
+    this.bracket = {
+      id: 4,
+      year: 2025,
+      region_1_id: 1,
+      region_2_id: 2,
+      region_3_id: 3,
+      region_4_id: 4
+    };
+
+    // Set up regions with seeds
+    this.topLeftRegion = {
+      region_id: 1,
+      region_name: 'South',
+      seeds: testSeeds.filter((seed) => seed.region_id === 1)
+    };
+
+    this.topRightRegion = {
+      region_id: 2,
+      region_name: 'East',
+      seeds: testSeeds.filter((seed) => seed.region_id === 2)
+    };
+
+    this.bottomRightRegion = {
+      region_id: 3,
+      region_name: 'West',
+      seeds: testSeeds.filter((seed) => seed.region_id === 3)
+    };
+
+    this.bottomLeftRegion = {
+      region_id: 4,
+      region_name: 'Midwest',
+      seeds: testSeeds.filter((seed) => seed.region_id === 4)
+    };
+
+    // Set some test form values
+    this.entryForm.patchValue({
+      name: 'Test Entry',
+      email: 'test@example.com',
+      team1: testSeeds[0], // Duke
+      team2: testSeeds[1], // Gonzaga
+      team3: testSeeds[9], // New Mexico
+      team4: testSeeds[10], // Houston
+      team5: testSeeds[17], // Tennessee
+      team6: testSeeds[18], // Utah State
+      team7: testSeeds[25], // Auburn
+      team8: testSeeds[26], // Michigan State
+      bonusTeam: testSeeds[0] // Duke as bonus team
+    });
+
+    // Run the update method to calculate total points
+    this.update();
   }
 
   public update() {

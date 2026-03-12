@@ -18,7 +18,7 @@ import { StaticBracketService } from '../shared/services/static-bracket.service'
   styleUrls: ['./winners.component.scss'],
 })
 export class WinnersComponent implements OnInit {
-  public useStatic = true;
+  public useStatic = false;
   public bracketId = 4;
   public winners: Winner[] = [];
 

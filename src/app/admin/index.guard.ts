@@ -1,15 +1,16 @@
-import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { AuthService } from '../shared/services/auth.service';
 
 @Injectable()
 export class AdminRouteGuard implements CanActivate {
-  public canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
-    const id = route.queryParams['id'];
+  constructor(private authService: AuthService, private router: Router) {}
 
-    if (id === '89310bc3-d828-ae83-11bb-7bc89ea3ab21') {
-      return of(true);
+  public canActivate(route: ActivatedRouteSnapshot): boolean {
+    if (this.authService.isAdmin()) {
+      return true;
     }
-    return of(false);
+    this.router.navigate(['/']);
+    return false;
   }
 }

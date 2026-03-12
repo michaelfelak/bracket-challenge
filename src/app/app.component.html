@@ -1,91 +1,77 @@
-<head>
-  <!-- <script src="https://accounts.google.com/gsi/client" async defer></script> -->
-</head>
-<style>
-  :host {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    font-size: 14px;
-    color: #333;
-    box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin: 8px 0;
-  }
-
-  p {
-    margin: 0;
-  }
-
-  .spacer {
-    flex: 1;
-  }
-
-  .toolbar {
-    /* position: absolute;
-    top: 0;
-    left: 0;
-    right: 0; */
-    height: 60px;
-    display: flex;
-    align-items: center;
-    background-color: #ce5200;
-    color: white;
-    font-weight: 600;
-  }
-
-  .toolbar img {
-    margin: 0 16px;
-  }
-
-  .content {
-    display: flex;
-    margin: 32px auto 32px;
-    padding: 0 16px;
-    max-width: 960px;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  a,
-  a:visited {
-    color: #ebebeb;
-    padding: 10px;
-    text-decoration: none;
-  }
-
-  a:hover {
-    color: #eeff00;
-    padding: 10px;
-    text-decoration: none;
-  }
-
-  p {
-    padding: 10px;
-    text-decoration: none;
-  }
-</style>
-
 <!-- Toolbar -->
-<div style="text-align: center">
-  <div class="toolbar" role="banner" style="align-items: center">
-    <!-- <img width="100" src="https://upload.wikimedia.org/wikipedia/commons/2/28/March_Madness_logo.svg" /> -->
-    <a routerLink="" queryParamsHandling="merge">Home</a>
-    <a *ngIf="entriesLocked" routerLink="picks" queryParamsHandling="merge">Submit Entry</a>
-    <a routerLink="standings" queryParamsHandling="merge">Standings</a>
-    <a *ngIf="!entriesLocked" routerLink="winners" queryParamsHandling="merge">Points</a>
-    <a routerLink="timeline" queryParamsHandling="merge">Timeline</a>
-    <a routerLink="scores" queryParamsHandling="merge">Bracket</a>
-    <!-- <a routerLink="scenario-generator">Scenario Generator</a> -->
-    <a routerLink="about" queryParamsHandling="merge">About</a>
-    <a *ngIf="showAdmin" routerLink="admin" queryParamsHandling="merge">Admin</a>
+<div class="toolbar" role="banner">
+  <!-- Platform App Switcher -->
+  <app-platform-switcher></app-platform-switcher>
+
+  <p>Bracket Challenge <span *ngIf="isAdmin" class="admin-badge">Admin</span></p>
+
+  <!-- Hamburger Menu -->
+  <button
+    class="hamburger"
+    [class.open]="menuOpen"
+    (click)="toggleMenu()"
+    aria-label="Toggle menu"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- Desktop Navigation -->
+  <nav class="nav-menu">
+    <a routerLink="" (click)="closeMenu()">Home</a>
+    <a *ngIf="(entriesLocked && isAuthenticated) || isAdmin" routerLink="picks" (click)="closeMenu()">Submit Entry</a>
+    <a routerLink="standings" (click)="closeMenu()">Standings</a>
+    <a *ngIf="!entriesLocked || isAdmin" routerLink="winners" (click)="closeMenu()">Points</a>
+    <a routerLink="timeline" (click)="closeMenu()">Timeline</a>
+    <a routerLink="scores" (click)="closeMenu()">Bracket</a>
+    <a routerLink="about" (click)="closeMenu()">About</a>
+    <a *ngIf="isAdmin" routerLink="admin" (click)="closeMenu()">Admin</a>
+  </nav>
+
+  <!-- Mobile Navigation -->
+  <nav class="mobile-menu" [class.open]="menuOpen">
+    <a routerLink="" (click)="closeMenu()">Home</a>
+    <a *ngIf="(entriesLocked && isAuthenticated) || isAdmin" routerLink="picks" (click)="closeMenu()">Submit Entry</a>
+    <a routerLink="standings" (click)="closeMenu()">Standings</a>
+    <a *ngIf="!entriesLocked || isAdmin" routerLink="winners" (click)="closeMenu()">Points</a>
+    <a routerLink="timeline" (click)="closeMenu()">Timeline</a>
+    <a routerLink="scores" (click)="closeMenu()">Bracket</a>
+    <a routerLink="about" (click)="closeMenu()">About</a>
+    <a *ngIf="isAdmin" routerLink="admin" (click)="closeMenu()">Admin</a>
+  </nav>
+
+  <!-- Auth Section -->
+  <div class="spacer"></div>
+  <div class="auth-section">
+    <ng-container *ngIf="isAuthenticated; else notLoggedIn">
+      <!-- User Avatar Dropdown -->
+      <div class="user-avatar-container">
+        <button
+          class="user-avatar"
+          (click)="toggleUserDropdown()"
+          [title]="'User menu for ' + (currentUser$ | async)"
+          aria-label="User menu"
+        >
+          {{ (currentUser$ | async)?.[0]?.toUpperCase() }}
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div class="user-dropdown" *ngIf="showUserDropdown">
+          <div class="dropdown-username">
+            {{ currentUser$ | async }}
+            <span *ngIf="isAdmin" class="admin-badge">Admin</span>
+          </div>
+          <button class="dropdown-item logout-item" (click)="logout()">
+            Logout
+          </button>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #notLoggedIn>
+      <button (click)="login()">Login</button>
+    </ng-template>
   </div>
 </div>
+
 <router-outlet></router-outlet>

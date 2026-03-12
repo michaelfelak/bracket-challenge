@@ -9,8 +9,14 @@ import { EntryComponent } from './entry/entry.component';
 import { AdminRouteGuard } from './admin/index.guard';
 import { WinnersComponent } from './winners/winners.component';
 import { TimelineComponent } from './timeline/timeline.component';
+import { LoginComponent } from './auth/login.component';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 const routes: Routes = [
+  {
+    path: 'login',
+    component: LoginComponent
+  },
   {
     path: '',
     component: HomeComponent,
@@ -22,6 +28,7 @@ const routes: Routes = [
   {
     path: 'picks',
     component: EntryComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'timeline',
@@ -49,6 +56,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule],
-  providers: [AdminRouteGuard],
+  providers: [AdminRouteGuard, AuthGuard],
 })
 export class AppRoutingModule {}
