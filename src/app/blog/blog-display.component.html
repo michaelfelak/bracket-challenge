@@ -1,0 +1,25 @@
+<div class="blog-container">
+  <div *ngIf="isLoading" class="loading-message">Loading blog entries...</div>
+
+  <div *ngIf="!isLoading && blogs.length === 0" class="no-blogs-message">
+    <p>No blog entries available for this year.</p>
+  </div>
+
+  <sky-repeater *ngIf="!isLoading && blogs.length > 0">
+    <sky-repeater-item *ngFor="let blog of blogs">
+      <sky-repeater-item-title>
+        <div class="blog-title-container">
+          <span class="blog-date">{{ blog.created_date_formatted }}</span>
+          <span *ngIf="blog.title" class="blog-title">{{ blog.title }}</span>
+        </div>
+      </sky-repeater-item-title>
+      <sky-repeater-item-content>
+        <div class="blog-content" [innerHTML]="blog.safe_body"></div>
+        <div class="blog-footer">
+          <span class="posted-by">— {{ blog.posted_by }}</span>
+          <button *ngIf="isAdmin" (click)="deleteBlogPost(blog.id)" class="delete-blog-btn" title="Delete this blog post">Delete</button>
+        </div>
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+  </sky-repeater>
+</div>

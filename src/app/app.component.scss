@@ -1,0 +1,409 @@
+:host {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  font-size: 14px;
+  color: #333;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 8px 0;
+}
+
+p {
+  margin: 0;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.toolbar {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  background-color: #006EB8;
+  color: white;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  p {
+    margin: 0;
+    padding: 10px 16px;
+    font-size: 18px;
+    flex: 0 0 auto;
+  }
+
+  img {
+    margin: 0 16px;
+  }
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex: 1;
+
+  a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 16px;
+    display: block;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+      color: #eeff00;
+    }
+  }
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  gap: 5px;
+  color: white;
+
+  span {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    transition: all 0.3s;
+  }
+
+  &.open span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+  }
+
+  &.open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  &.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(8px, -8px);
+  }
+}
+
+.mobile-menu {
+  display: none;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  background-color: #002166;
+  flex-direction: column;
+  z-index: 999;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+  a {
+    color: white;
+    text-decoration: none;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.2);
+      color: #eeff00;
+    }
+  }
+
+  &.open {
+    display: flex;
+  }
+}
+
+.content {
+  display: flex;
+  margin: 32px auto 32px;
+  padding: 0 16px;
+  max-width: 960px;
+  flex-direction: column;
+  align-items: center;
+}
+
+a,
+a:visited {
+  color: #ebebeb;
+  padding: 10px;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #eeff00;
+  padding: 10px;
+  text-decoration: none;
+}
+
+.auth-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-right: 16px;
+}
+
+.username {
+  color: white;
+  font-weight: 500;
+}
+
+.user-avatar-container {
+  position: relative;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #0066cc;
+  color: white;
+  border: 2px solid white;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+
+  &:hover {
+    background-color: #0052a3;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+  margin-top: 8px;
+  z-index: 1001;
+  overflow: hidden;
+}
+
+.dropdown-username {
+  padding: 12px 16px;
+  color: #333;
+  font-weight: 600;
+  border-bottom: 1px solid #eee;
+  font-size: 13px;
+  word-break: break-word;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-badge {
+  display: inline-block;
+  background-color: #0066cc;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  color: #333;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 14px;
+  font-weight: 500;
+
+  &:hover {
+    background-color: #f5f5f5;
+    color: #0066cc;
+  }
+
+  &.logout-item {
+    border-top: 1px solid #eee;
+    color: #d32f2f;
+
+    &:hover {
+      background-color: #ffebee;
+      color: #b71c1c;
+    }
+  }
+}
+
+button {
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #0052a3;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// Mobile styles
+@media (max-width: 768px) {
+  .toolbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 8px 0;
+
+    p {
+      flex: 0 0 auto;
+      padding: 8px 12px;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-menu {
+    display: none;
+  }
+
+  .mobile-menu {
+    top: auto;
+    position: static;
+    display: flex;
+    flex-direction: column;
+    background-color: #005a99;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+    a {
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+  }
+
+  .content {
+    margin: 16px auto;
+    padding: 0 12px;
+    max-width: 100%;
+  }
+
+  .auth-section {
+    margin-right: 8px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .username {
+    display: none;
+  }
+
+  .user-dropdown {
+    right: -8px;
+    min-width: 160px;
+  }
+
+  button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .toolbar {
+    height: auto;
+
+    p {
+      padding: 8px 8px;
+      font-size: 13px;
+    }
+
+    img {
+      margin: 0 8px;
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  .hamburger {
+    padding: 8px 12px;
+
+    span {
+      width: 20px;
+      height: 2px;
+    }
+  }
+
+  .auth-section {
+    gap: 5px;
+    margin-right: 4px;
+  }
+
+  .user-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .user-dropdown {
+    right: 0;
+    min-width: 140px;
+    font-size: 12px;
+  }
+
+  .dropdown-username,
+  .dropdown-item {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  button {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .content {
+    margin: 12px auto;
+    padding: 0 8px;
+  }
+
+  .mobile-menu a {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+}

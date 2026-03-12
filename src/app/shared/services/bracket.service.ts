@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable} from 'rxjs';
 import { Seed } from '../models/seed';
 import { Bracket } from '../models/bracket';
@@ -12,27 +12,39 @@ import { CompletedEntry, StandingsRecord } from '../models/standings.model';
 import { Region } from '../models/region.model';
 import { Settings } from '../models/settings.model';
 import { AddWinnerRequest, Winner, WinnerByRound } from '../models/winner.model';
+import { BlogEntry } from '../models/blog.model';
+import { AuthService } from './auth.service';
+import { API_CONSTANTS } from '../constants/api.constants';
 
 @Injectable()
 export class BracketService {
-  private local = false;
   private baseUrlPrefix: string;
   private baseUrl: string;
+  private readonly CONTEST_TYPE = 2; // 2 = Bracket Challenge
 
-  constructor(private http: HttpClient) {
-    if (this.local) {
-      this.baseUrlPrefix = 'http://localhost:8081/api/v1/';
-    } else {
-      this.baseUrlPrefix = 'https://bowl-pickem-service-5a26054c7915.herokuapp.com/api/v1/';
-    }
+  constructor(private http: HttpClient, private authService: AuthService) {
+    this.baseUrlPrefix = API_CONSTANTS.BRACKET_API_URL;
     this.baseUrl = this.baseUrlPrefix + 'bracket/';
+  }
+
+  /**
+   * Get HTTP headers with Authorization token
+   */
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
   }
 
   public addBracket(request: Bracket) {
     return this.http.post(this.baseUrl + 'bracket', request);
   }
   public addEntry(request: Entry): Observable<string> {
-    return this.http.post<string>(this.baseUrl + 'entry', request);
+    return this.http.post<string>(this.baseUrl + 'entry', request, { 
+      headers: this.getAuthHeaders() 
+    });
   }
   public addSeed(request: Seed) {
     return this.http.post(this.baseUrl + 'seed', request);
@@ -70,6 +82,12 @@ export class BracketService {
     return this.http.get<Entry[]>(this.baseUrl + bracketId + '/entrylist');
   }
 
+  public getUserEntries(): Observable<Entry[]> {
+    return this.http.get<Entry[]>(this.baseUrl + 'user/entries', {
+      headers: this.getAuthHeaders()
+    });
+  }
+
   public getBracket(id: number): Observable<Bracket> {
     return this.http.get<Bracket>(this.baseUrl + 'bracket/' + id);
   }
@@ -87,11 +105,15 @@ export class BracketService {
   }
 
   public getStandings(year: number): Observable<StandingsRecord[]> {
-    return this.http.get<StandingsRecord[]>(this.baseUrl + year + '/standings');
+    const url = this.baseUrl + year + '/standings';
+    console.log(`[BracketService] Fetching standings from URL: ${url}`);
+    return this.http.get<StandingsRecord[]>(url);
   }
 
   public getStandingsEntry(id: string | undefined): Observable<CompletedEntry> {
-    return this.http.get<CompletedEntry>(this.baseUrl + 'completedentry/' + id);
+    return this.http.get<CompletedEntry>(this.baseUrl + 'completedentry/' + id, {
+      headers: this.getAuthHeaders()
+    });
   }
   public getRegions(): Observable<Region[]> {
     return this.http.get<Region[]>(this.baseUrl + 'regionlist');
@@ -101,7 +123,9 @@ export class BracketService {
     return this.http.get(this.baseUrl + 'entry/paid/' + id);
   }
   public deleteEntry(id: string): Observable<any> {
-    return this.http.delete<any>(this.baseUrl + 'entry/delete/' + id);
+    return this.http.delete<any>(this.baseUrl + 'entry/delete/' + id, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   public updateFlyoutEnabled() {
@@ -113,7 +137,9 @@ export class BracketService {
   }
 
   public getSettings(): Observable<Settings> {
-    return this.http.get<Settings>(this.baseUrl + 'settings');
+    const url = this.baseUrl + 'settings';
+    console.log(`[BracketService] Fetching settings from URL: ${url}`);
+    return this.http.get<Settings>(url);
   }
 
   public getWinners(id: number): Observable<Winner[]> {
@@ -129,5 +155,25 @@ export class BracketService {
 
   public getPicksBySchool(seedId: string):Observable<SeedPicks[]> {
     return this.http.get<SeedPicks[]>(this.baseUrl + 'schoolpicks/' + seedId);
+  }
+
+  // ============================================
+  // Blog endpoints
+  // ============================================
+
+  public addBlogEntry(entry: BlogEntry, year: number): Observable<BlogEntry> {
+    return this.http.post<BlogEntry>(this.baseUrlPrefix + `blogentry/create/${year}`, { 
+      ...entry, 
+      year,
+      contest_type: this.CONTEST_TYPE 
+    });
+  }
+
+  public getBlogEntries(year: number): Observable<BlogEntry[]> {
+    return this.http.get<BlogEntry[]>(this.baseUrlPrefix + `blogentry/list/${year}/${this.CONTEST_TYPE}`);
+  }
+
+  public deleteBlogEntry(id: string): Observable<any> {
+    return this.http.delete<any>(this.baseUrlPrefix + `blogentry/${id}`);
   }
 }

@@ -1,0 +1,110 @@
+:host {
+  display: block;
+}
+
+.blog-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-top: 20px;
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+  }
+}
+
+.loading-message,
+.no-blogs-message {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.blog-title-container {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.blog-date {
+  font-weight: 500;
+  color: #999;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.blog-title {
+  font-weight: 600;
+  color: #333;
+  font-size: 16px;
+}
+
+.blog-content {
+  margin-bottom: 16px;
+  line-height: 1.6;
+  color: #333;
+  font-size: 14px;
+
+  p {
+    margin: 10px 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  br {
+    content: '';
+  }
+}
+
+.blog-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+.posted-by {
+  font-style: italic;
+  color: #666;
+  font-size: 13px;
+}
+
+.delete-blog-btn {
+  padding: 6px 12px;
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #b71c1c;
+  }
+
+  &:active {
+    background-color: #a01616;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.2);
+  }
+}

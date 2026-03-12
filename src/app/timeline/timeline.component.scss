@@ -1,7 +1,34 @@
 table {
   width: 85%;
 }
+
 table.center {
   margin-left: auto;
   margin-right: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  table {
+    width: 95%;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  table {
+    width: 100%;
+    font-size: 11px;
+    margin: 8px auto;
+  }
+
+  table.center {
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 6px 4px;
+    font-size: 10px;
+  }
 }

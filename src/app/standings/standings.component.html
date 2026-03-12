@@ -1,45 +1,88 @@
 <main>
-  <div>
-    <h1 style="text-align: center">Bracket Challenge 2025 Standings</h1>
-  </div>
-  <h2 *ngIf="standings.length === 0" style="text-align: center;">No entries!</h2>
-  <div *ngIf="standings.length > 0">
-    <table class="center">
-      <tr>
-        <th class="team-check">Rank</th>
-        <th class="team-name">Entry Name</th>
-        <th class="team-check" (click)="sortByCurrentPoints()">
-          <div *ngIf="sortCurrentPoints && currentPointsDesc" style="float: left">&darr;</div>
-          <div *ngIf="sortCurrentPoints && !currentPointsDesc" style="float: left">&uarr;</div>
-          <a>Current Points</a>
-        </th>
-        <th class="team-check" (click)="sortByCorrectPicks()">
-          <div *ngIf="sortCorrectPicks && correctPicksDesc" style="float: left">&darr;</div>
-          <div *ngIf="sortCorrectPicks && !correctPicksDesc" style="float: left">&uarr;</div>
-          <a>Total Wins</a>
-        </th>
-        <th class="team-check" (click)="sortByRemainingPoints()">
-          <div *ngIf="sortRemainingPoints && remainingPointsDesc" style="float: left">&darr;</div>
-          <div *ngIf="sortRemainingPoints && !remainingPointsDesc" style="float: left">&uarr;</div>
-          <a>Remaining Teams</a>
-        </th>
-      </tr>
-      <tr *ngFor="let pick of standings">
-        <td class="team-check">{{ pick.rank }}</td>
-        <td *ngIf="showStandingsLink" class="team-name">
-          <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(pick.entry_id)">
-            {{ pick.entry_name }}
-          </button>
-        </td>
-        <td *ngIf="!showStandingsLink" class="team-name">
-          {{ pick.entry_name }}
-        </td>
-        <td class="team-check">{{ pick.current_points }}</td>
-        <td class="team-check">{{ pick.win_total ?? 0 }}</td>
-        <td class="team-check">{{ pick.teams_remaining ?? 0 }}</td>
-      </tr>
-    </table>
+  <h1 class="header">Standings</h1>
+
+  <div class="header-info">
+    <p class="info-text">
+      Click an entry name to see the entry's selections. Bracket challenge scoring is based on correct picks throughout the tournament.
+    </p>
+
+    <div class="year-selector">
+      <label for="year-dropdown">Year:</label>
+      <select id="year-dropdown" [(ngModel)]="currentYear" (change)="updateYear(currentYear)">
+        <option *ngFor="let year of years" [value]="year">
+          {{ year }}
+        </option>
+      </select>
+    </div>
   </div>
 
-  <app-footer></app-footer>
+  <div class="standings-container">
+    <!-- Empty State -->
+    <div
+      *ngIf="standings === null || standings.length === 0"
+      class="empty-state"
+    >
+      <p>No entries submitted</p>
+    </div>
+
+    <!-- Standings Table -->
+    <div *ngIf="standings && standings.length > 0" class="table-wrapper">
+      <table class="standings-table" #standingsTable>
+        <thead>
+          <tr>
+            <th class="rank-col">Rank</th>
+            <th class="name-col">Entry Name</th>
+            <th class="points-col sortable" (click)="sortByCurrentPoints()">
+              Current<br />Points
+              <span class="sort-indicator" *ngIf="sortCurrentPoints">
+                {{ currentPointsDesc ? "▼" : "▲" }}
+              </span>
+            </th>
+            <th class="points-col sortable" (click)="sortByCorrectPicks()">
+              Total<br />Wins
+              <span class="sort-indicator" *ngIf="sortCorrectPicks">
+                {{ correctPicksDesc ? "▼" : "▲" }}
+              </span>
+            </th>
+            <th class="points-col sortable" (click)="sortByRemainingPoints()">
+              Remaining<br />Teams
+              <span class="sort-indicator" *ngIf="sortRemainingPoints">
+                {{ remainingPointsDesc ? "▼" : "▲" }}
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let pick of standings; let i = index"
+            [class.alt-row]="i % 2 === 1"
+          >
+            <td class="rank-col" data-label="Rank">{{ pick.rank }}</td>
+            <td class="name-col" data-label="Entry Name">
+              <button
+                *ngIf="showStandingsLink"
+                class="sky-btn sky-btn-link-inline entry-link"
+                type="button"
+                (click)="onNameClick(pick.entry_id)"
+              >
+                {{ pick.entry_name }}
+              </button>
+              <span *ngIf="!showStandingsLink">{{ pick.entry_name }}</span>
+            </td>
+            <td class="points-col" data-label="Current Points">
+              {{ pick.current_points }}
+            </td>
+            <td class="points-col" data-label="Total Wins">
+              {{ pick.win_total ?? 0 }}
+            </td>
+            <td class="points-col" data-label="Remaining Teams">
+              {{ pick.teams_remaining ?? 0 }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </main>
+
+<app-footer></app-footer>
