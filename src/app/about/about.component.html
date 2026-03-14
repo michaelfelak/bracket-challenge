@@ -1,54 +1,76 @@
 <main>
-  <table>
-    <tr>
-      <td>
-        <tr>
-          <h3>Rules</h3>
-        </tr>
-        <tr>
-          <ul>
-            <li>Select 2 different seeds from each region in the bracket.</li>
-            <li>Select one of the 8 seeds that you picked as your "superfan" school. This school will receive a 50% point bonus.</li>
-          </ul>
-        </tr>
-        <tr>
-          <h3>Scoring</h3>
-        </tr>
-        <ul>
-          <li>Every game that your selected seeds win earns you points.</li>
+  <div class="rules-container">
+    <h2 class="rules-title collapsible-header" (click)="toggleRules()">
+      <span class="collapse-arrow" [class.collapsed]="!showRules">
+        ▼
+      </span>
+      How to Play
+    </h2>
+    
+    <div class="rules-content" [class.collapsed]="!showRules">
+      <div class="rules-section">
+        <h3>Basic Rules</h3>
+        <ul class="rules-list">
           <li>
-            Points earned = Seed Number multiplied by Round Number. Example: #4 North Carolina wins in rounds 1, 2, and 3. They receive 4 x 1, 4 x 2, and 4 x 3 points for a total
-            of 4 + 8 + 12 = 24 points.
+            <strong>Select Your Teams:</strong> Choose 2 different teams from each of the 4 regions (8 teams total). 
+            You cannot select the same team twice.
           </li>
           <li>
-            The superfan school will collect 50% more points for each win. Example: Superfan pick #4 Boston College wins in rounds 1, 2, and 3. They receive 4 x 1 x 1.5, 4 x 2 x
-            1.5, and 4 x 3 x 1.5 points for a total of 6 + 12 + 18 = 36 points.
+            <strong>Earn Points from Wins:</strong> Each time one of your selected teams wins in the tournament, 
+            you earn points based on that win's value.
           </li>
-          <li>When a team loses, no more points will be scored for that selection</li>
-          <li>If entries are tied, the highest sum of overall seed numbers selected will win. If there is still a tie, all winnings are split</li>
+          <li>
+            <strong>Point Calculation:</strong> Points for each win = <span class="sky-emphasized">Seed Number × Round Number</span>
+            <br/>
+            <span style="margin-left: 15px; display: inline-block;">Example: A #5 seed winning in Round 2 = 5 × 2 = 10 points</span>
+          </li>
+          <li>
+            <strong>Superfan Bonus (Optional):</strong> You may designate ONE of your 8 teams as your "superfan" team. 
+            This team earns a 50% bonus on all wins (points × 1.5).
+            <br/>
+            <span style="margin-left: 15px; display: inline-block;">Example: Your superfan #5 seed winning in Round 2 = 5 × 2 × 1.5 = 15 points</span>
+          </li>
         </ul>
-      </td>
-    </tr>
+      </div>
 
-    <tr>
-      <td>
-        <tr>
-          <h3>Site Updates</h3>
-        </tr>
-        <tr>
-          <ul>
-            <li>3/16/2024: Updated site for 2025 tournament.</li>
-            --
-            <li>3/27/2024: Added sort options to standings and points page.</li>
-            <li>3/21/2024: Added teams remaining, Fixed points earned page, sorted flyout by points desc, if a team is eliminated</li>
-            <li>3/21/2024: Points earned page added, flyout fixed</li>
-            <li>3/17/2024: Site updated for 2024 bracket contest.</li>
-            <li>3/12/2024: Site created.</li>
-          </ul>
-        </tr>
-      </td>
-    </tr>
-  </table>
+      <div class="rules-section">
+        <h3>Important Notes</h3>
+        <ul class="rules-list">
+          <li>
+            <span class="sky-emphasized">Play-in Games:</span> If you select a play-in game team, you receive points 
+            when that team advances to the main bracket (Field of 64). You do NOT receive points for winning the play-in game itself.
+          </li>
+          <li>
+            <span class="sky-emphasized">Total Possible Points:</span> The "Total Possible Points" shown is a theoretical maximum 
+            if ALL your teams won every game. However, this is mathematically impossible since only one team from each region can advance 
+            to the next round. This number is meant as a reference point, not your likely maximum score.
+          </li>
+          <li>
+            <span class="sky-emphasized">Review Before Submitting:</span> Carefully validate all of your picks and verify the points 
+            calculation before clicking <span class="sky-emphasized">Submit</span>.
+          </li>
+        </ul>
+      </div>
+
+      <div class="rules-section deadline-section">
+        <p><span class="sky-emphasized">📅 Submission Deadline: Thursday, March 19th, 2026 at 12:00 PM ET</span></p>
+      </div>
+    </div>
+  </div>
+
+  <hr style="margin: 40px 0;" />
+
+  <div class="site-updates-section">
+    <h2>Site Updates</h2>
+    <ul>
+      <li>3/16/2024: Updated site for 2025 tournament.</li>
+      <li>3/27/2024: Added sort options to standings and points page.</li>
+      <li>3/21/2024: Added teams remaining, Fixed points earned page, sorted flyout by points desc, if a team is eliminated</li>
+      <li>3/21/2024: Points earned page added, flyout fixed</li>
+      <li>3/17/2024: Site updated for 2024 bracket contest.</li>
+      <li>3/12/2024: Site created.</li>
+    </ul>
+  </div>
 </main>
 
 <app-footer></app-footer>

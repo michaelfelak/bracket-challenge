@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { SkyIconModule } from '@skyux/indicators';
 import { BracketService } from '../shared/services/bracket.service';
+import { SettingsService } from '../shared/services/settings.service';
 import { Winner } from '../shared/models/winner.model';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { WinnersFlyoutContext } from './winners-flyout/winners-flyout.context';
@@ -19,8 +20,11 @@ import { StaticBracketService } from '../shared/services/static-bracket.service'
 })
 export class WinnersComponent implements OnInit {
   public useStatic = false;
-  public bracketId = 4;
   public winners: Winner[] = [];
+
+  public get bracketId() {
+    return this.settingsService.CURRENT_BRACKET_ID;
+  }
 
   public flyout: SkyFlyoutInstance<any> | undefined;
 
@@ -46,7 +50,8 @@ export class WinnersComponent implements OnInit {
     private titleService: Title,
     private service: BracketService,
     private flyoutService: SkyFlyoutService,
-    private staticService: StaticBracketService
+    private staticService: StaticBracketService,
+    private settingsService: SettingsService
   ) {
     this.titleService.setTitle('Bracket Challenge - Winners');
   }

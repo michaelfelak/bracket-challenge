@@ -16,6 +16,7 @@ export class AppComponent {
   public currentUser$: Observable<string | null>;
   public menuOpen = false;
   public showUserDropdown = false;
+  public appSwitcherOpen = false;
 
   constructor(
     private service: BracketService,
@@ -57,12 +58,25 @@ export class AppComponent {
     this.router.navigate(['/login']);
   }
 
+  navigateToMyProfile(): void {
+    this.showUserDropdown = false;
+    this.router.navigate(['/my-profile']);
+  }
+
   toggleMenu(): void {
     this.menuOpen = !this.menuOpen;
   }
 
   closeMenu(): void {
     this.menuOpen = false;
+  }
+
+  toggleAppSwitcher(): void {
+    this.appSwitcherOpen = !this.appSwitcherOpen;
+  }
+
+  closeAppSwitcher(): void {
+    this.appSwitcherOpen = false;
   }
 
   toggleUserDropdown(): void {

@@ -5,10 +5,12 @@ import { SkyBoxModule, SkyFluidGridModule } from '@skyux/layout';
 import { SkyPageModule } from '@skyux/pages';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BracketService } from '../shared/services/bracket.service';
+import { StatisticsService } from '../shared/services/statistics.service';
+import { SettingsService } from '../shared/services/settings.service';
 import { mergeMap } from 'rxjs/operators';
 import { Seed } from '../shared/models/seed';
 import { Entry } from '../shared/models/entry.model';
-import { PickRequest } from '../shared/models/pick.model';
+import { PickRequest, PickModel } from '../shared/models/pick.model';
 import { Subject } from 'rxjs';
 import { SkyAlertModule, SkyKeyInfoModule } from '@skyux/indicators';
 import { Region, RegionModel } from '../shared/models/region.model';
@@ -32,16 +34,27 @@ import { FooterComponent } from '../shared/footer/footer.component';
     SkyAlertModule,
     FooterComponent
   ],
-  providers: [BracketService],
+  providers: [BracketService, StatisticsService],
 })
 export class EntryComponent implements OnInit {
   // assign teams
   public selectedTeams: Seed[] = [];
   public totalPoints = 0;
+  public calculatedPossiblePoints = 0;
+  public pickResults: any[] = [];
+  public bestOutcomeByRegion: any[] = [];
+  public bracketMatchups: any[] = [];
+  public finalsFourBracket: any = {
+    finalFour: [],
+    championship: [{ team1: null, team2: null, winner: null, roundNum: 6 }]
+  };
   public name = '';
   public email = '';
-  public bracketId = 4;
   public bracket: Bracket = {};
+
+  public get bracketId() {
+    return this.settingsService.CURRENT_BRACKET_ID;
+  }
 
   public bracketFinalized = false;
 
@@ -96,7 +109,7 @@ export class EntryComponent implements OnInit {
   }>;
 
   ngUnsubscribe = new Subject<void>();
-  constructor(private service: BracketService) {
+  constructor(private service: BracketService, private statisticsService: StatisticsService, private settingsService: SettingsService) {
     this.entryForm = new FormGroup({
       name: new FormControl(''),
       email: new FormControl(''),
@@ -113,9 +126,6 @@ export class EntryComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Load test data
-    this.loadTestData();
-
     this.service.getSettings().subscribe((settings) => {
       this.bracketFinalized = settings.entry_enabled;
     });
@@ -124,10 +134,12 @@ export class EntryComponent implements OnInit {
       .getBracket(this.bracketId)
       .pipe(
         mergeMap((result: Bracket) => {
+          console.log('Bracket received:', result);
           this.bracket = result;
           return this.service.getRegions();
         }),
         mergeMap((result: Region[]) => {
+          console.log('Regions received:', result);
           const regions = result;
 
           this.topLeftRegion = {
@@ -135,24 +147,28 @@ export class EntryComponent implements OnInit {
             region_name: regions.find((result) => {
               return result.id === this.bracket.region_1_id;
             })?.name,
+            seeds: []
           };
           this.topRightRegion = {
             region_id: this.bracket.region_2_id,
             region_name: regions.find((result) => {
               return result.id === this.bracket.region_2_id;
             })?.name,
+            seeds: []
           };
           this.bottomRightRegion = {
             region_id: this.bracket.region_3_id,
             region_name: regions.find((result) => {
               return result.id === this.bracket.region_3_id;
             })?.name,
+            seeds: []
           };
           this.bottomLeftRegion = {
             region_id: this.bracket.region_4_id,
             region_name: regions.find((result) => {
               return result.id === this.bracket.region_4_id;
             })?.name,
+            seeds: []
           };
 
           return this.service.getSeedList(this.bracketId);
@@ -160,6 +176,10 @@ export class EntryComponent implements OnInit {
       )
       .subscribe((result) => {
         if (result) {
+          console.log('Seeds received from endpoint:', result);
+          console.log('Total seeds:', result.length);
+          console.log('Unique region IDs in seeds:', [...new Set(result.map(s => s.region_id))]);
+          
           result.forEach((r) => {
             const n = r.seed_number!;
             r.possible_points = 16 * n;
@@ -167,126 +187,222 @@ export class EntryComponent implements OnInit {
           this.topLeftRegion.seeds = result.filter((seed) => {
             return seed.region_id === this.topLeftRegion.region_id;
           });
+          console.log('Top Left Region ID:', this.topLeftRegion.region_id, 'Seeds found:', this.topLeftRegion.seeds.length);
           this.topRightRegion.seeds = result.filter((seed) => {
             return seed.region_id === this.topRightRegion.region_id;
           });
+          console.log('Top Right Region ID:', this.topRightRegion.region_id, 'Seeds found:', this.topRightRegion.seeds.length);
           this.bottomLeftRegion.seeds = result.filter((seed) => {
             return seed.region_id === this.bottomLeftRegion.region_id;
           });
+          console.log('Bottom Left Region ID:', this.bottomLeftRegion.region_id, 'Seeds found:', this.bottomLeftRegion.seeds.length);
           this.bottomRightRegion.seeds = result.filter((seed) => {
             return seed.region_id === this.bottomRightRegion.region_id;
           });
+          console.log('Bottom Right Region ID:', this.bottomRightRegion.region_id, 'Seeds found:', this.bottomRightRegion.seeds.length);
         }
+        this.generateBracketMatchups();
       });
   }
 
-  private loadTestData() {
-    // Enable the bracket for display
-    this.bracketFinalized = true;
-
-    // Test regions
-    const testRegions = [
-      { id: 1, name: 'South' },
-      { id: 2, name: 'East' },
-      { id: 3, name: 'West' },
-      { id: 4, name: 'Midwest' }
+  private generateBracketMatchups() {
+    this.bracketMatchups = [];
+    
+    const regions = [
+      { name: this.topLeftRegion.region_name, seeds: this.topLeftRegion.seeds || [] },
+      { name: this.topRightRegion.region_name, seeds: this.topRightRegion.seeds || [] },
+      { name: this.bottomRightRegion.region_name, seeds: this.bottomRightRegion.seeds || [] },
+      { name: this.bottomLeftRegion.region_name, seeds: this.bottomLeftRegion.seeds || [] }
     ];
 
-    // Test seeds for each region
-    const testSeeds: Seed[] = [
-      // South Region (region_id: 1)
-      { id: 1, school_id: 1, school_name: 'Duke', seed_number: 1, region_id: 1, bracket_id: 4, possible_points: 16 },
-      { id: 2, school_id: 2, school_name: 'Gonzaga', seed_number: 2, region_id: 1, bracket_id: 4, possible_points: 32 },
-      { id: 3, school_id: 3, school_name: 'Texas Tech', seed_number: 3, region_id: 1, bracket_id: 4, possible_points: 48 },
-      { id: 4, school_id: 4, school_name: 'Ohio State', seed_number: 4, region_id: 1, bracket_id: 4, possible_points: 64 },
-      { id: 5, school_id: 5, school_name: 'Kentucky', seed_number: 5, region_id: 1, bracket_id: 4, possible_points: 80 },
-      { id: 6, school_id: 6, school_name: 'Princeton', seed_number: 6, region_id: 1, bracket_id: 4, possible_points: 96 },
-      { id: 7, school_id: 7, school_name: 'Auburn', seed_number: 7, region_id: 1, bracket_id: 4, possible_points: 112 },
-      { id: 8, school_id: 8, school_name: 'Columbia', seed_number: 8, region_id: 1, bracket_id: 4, possible_points: 128 },
-      // East Region (region_id: 2)
-      { id: 9, school_id: 9, school_name: 'Kansas', seed_number: 1, region_id: 2, bracket_id: 4, possible_points: 16 },
-      { id: 10, school_id: 10, school_name: 'New Mexico', seed_number: 2, region_id: 2, bracket_id: 4, possible_points: 32 },
-      { id: 11, school_id: 11, school_name: 'Houston', seed_number: 3, region_id: 2, bracket_id: 4, possible_points: 48 },
-      { id: 12, school_id: 12, school_name: 'Alabama', seed_number: 4, region_id: 2, bracket_id: 4, possible_points: 64 },
-      { id: 13, school_id: 13, school_name: 'Florida', seed_number: 5, region_id: 2, bracket_id: 4, possible_points: 80 },
-      { id: 14, school_id: 14, school_name: 'BYU', seed_number: 6, region_id: 2, bracket_id: 4, possible_points: 96 },
-      { id: 15, school_id: 15, school_name: 'Marquette', seed_number: 7, region_id: 2, bracket_id: 4, possible_points: 112 },
-      { id: 16, school_id: 16, school_name: 'Vermont', seed_number: 8, region_id: 2, bracket_id: 4, possible_points: 128 },
-      // West Region (region_id: 3)
-      { id: 17, school_id: 17, school_name: 'North Carolina', seed_number: 1, region_id: 3, bracket_id: 4, possible_points: 16 },
-      { id: 18, school_id: 18, school_name: 'Tennessee', seed_number: 2, region_id: 3, bracket_id: 4, possible_points: 32 },
-      { id: 19, school_id: 19, school_name: 'Utah State', seed_number: 3, region_id: 3, bracket_id: 4, possible_points: 48 },
-      { id: 20, school_id: 20, school_name: 'Creighton', seed_number: 4, region_id: 3, bracket_id: 4, possible_points: 64 },
-      { id: 21, school_id: 21, school_name: 'Purdue', seed_number: 5, region_id: 3, bracket_id: 4, possible_points: 80 },
-      { id: 22, school_id: 22, school_name: 'Wisconsin', seed_number: 6, region_id: 3, bracket_id: 4, possible_points: 96 },
-      { id: 23, school_id: 23, school_name: 'Dayton', seed_number: 7, region_id: 3, bracket_id: 4, possible_points: 112 },
-      { id: 24, school_id: 24, school_name: 'UNC Asheville', seed_number: 8, region_id: 3, bracket_id: 4, possible_points: 128 },
-      // Midwest Region (region_id: 4)
-      { id: 25, school_id: 25, school_name: 'Iowa State', seed_number: 1, region_id: 4, bracket_id: 4, possible_points: 16 },
-      { id: 26, school_id: 26, school_name: 'Auburn', seed_number: 2, region_id: 4, bracket_id: 4, possible_points: 32 },
-      { id: 27, school_id: 27, school_name: 'Michigan State', seed_number: 3, region_id: 4, bracket_id: 4, possible_points: 48 },
-      { id: 28, school_id: 28, school_name: 'Rutgers', seed_number: 4, region_id: 4, bracket_id: 4, possible_points: 64 },
-      { id: 29, school_id: 29, school_name: 'Virginia Tech', seed_number: 5, region_id: 4, bracket_id: 4, possible_points: 80 },
-      { id: 30, school_id: 30, school_name: 'Wichita State', seed_number: 6, region_id: 4, bracket_id: 4, possible_points: 96 },
-      { id: 31, school_id: 31, school_name: 'Texas State', seed_number: 7, region_id: 4, bracket_id: 4, possible_points: 112 },
-      { id: 32, school_id: 32, school_name: 'LIU', seed_number: 8, region_id: 4, bracket_id: 4, possible_points: 128 }
+    const eliteEightWinners: any[] = [];
+
+    for (const region of regions) {
+      const { rounds, eliteEightWinner } = this.generateRegionBracket(region.seeds);
+      this.bracketMatchups.push({
+        regionName: region.name,
+        rounds: rounds
+      });
+      eliteEightWinners.push(eliteEightWinner);
+    }
+
+    // Generate Finals bracket from Elite 8 winners
+    this.generateFinalsFourBracket(eliteEightWinners);
+  }
+
+  private generateFinalsFourBracket(eliteEightWinners: any[]) {
+    // Create Finals bracket with Elite 8 winners
+    const finalFourMatchups = [
+      {
+        team1: eliteEightWinners[0], // Region 1 (Top Left)
+        team2: eliteEightWinners[1], // Region 2 (Top Right)
+        winner: this.determineWinner(eliteEightWinners[0], eliteEightWinners[1]),
+        roundNum: 5
+      },
+      {
+        team1: eliteEightWinners[2], // Region 3 (Bottom Right)
+        team2: eliteEightWinners[3], // Region 4 (Bottom Left)
+        winner: this.determineWinner(eliteEightWinners[2], eliteEightWinners[3]),
+        roundNum: 5
+      }
     ];
 
-    // Set up bracket
-    this.bracket = {
-      id: 4,
-      year: 2025,
-      region_1_id: 1,
-      region_2_id: 2,
-      region_3_id: 3,
-      region_4_id: 4
+    const champMatchup = {
+      team1: finalFourMatchups[0].winner,
+      team2: finalFourMatchups[1].winner,
+      winner: this.determineWinner(finalFourMatchups[0].winner, finalFourMatchups[1].winner),
+      roundNum: 6
     };
 
-    // Set up regions with seeds
-    this.topLeftRegion = {
-      region_id: 1,
-      region_name: 'South',
-      seeds: testSeeds.filter((seed) => seed.region_id === 1)
+    this.finalsFourBracket = {
+      finalFour: finalFourMatchups,
+      championship: [champMatchup]
     };
+  }
 
-    this.topRightRegion = {
-      region_id: 2,
-      region_name: 'East',
-      seeds: testSeeds.filter((seed) => seed.region_id === 2)
-    };
+  private getStrongerTeam(team1: Seed | null | undefined, team2: Seed | null | undefined, bonusTeamId: number | undefined): Seed | null | undefined {
+    // If only one team exists, return it
+    if (!team1) return team2;
+    if (!team2) return team1;
+    
+    // Calculate strength (lower seed is better, bonus multiplier decreases effective seed)
+    const team1Strength = team1.seed_number! / (team1.id === bonusTeamId ? 1.5 : 1.0);
+    const team2Strength = team2.seed_number! / (team2.id === bonusTeamId ? 1.5 : 1.0);
+    
+    // Return the stronger team
+    return team1Strength < team2Strength ? team1 : team2;
+  }
 
-    this.bottomRightRegion = {
-      region_id: 3,
-      region_name: 'West',
-      seeds: testSeeds.filter((seed) => seed.region_id === 3)
-    };
+  private generateRegionBracket(seeds: Seed[]): any {
+    // Create Round 1 matchups (standard NCAA pairings ordered for correct advancement)
+    // These are the actual matchups in the bracket
+    const round1Pairings = [
+      { seeds: [1, 16], matchupId: 0 },  // Will advance to matchup 0 in round 2
+      { seeds: [8, 9], matchupId: 0 },   // Will advance to matchup 0 in round 2
+      { seeds: [5, 12], matchupId: 1 },  // Will advance to matchup 1 in round 2
+      { seeds: [4, 13], matchupId: 1 },  // Will advance to matchup 1 in round 2
+      { seeds: [6, 11], matchupId: 2 },  // Will advance to matchup 2 in round 2
+      { seeds: [3, 14], matchupId: 2 },  // Will advance to matchup 2 in round 2
+      { seeds: [7, 10], matchupId: 3 },  // Will advance to matchup 3 in round 2
+      { seeds: [2, 15], matchupId: 3 }   // Will advance to matchup 3 in round 2
+    ];
 
-    this.bottomLeftRegion = {
-      region_id: 4,
-      region_name: 'Midwest',
-      seeds: testSeeds.filter((seed) => seed.region_id === 4)
-    };
-
-    // Set some test form values
-    this.entryForm.patchValue({
-      name: 'Test Entry',
-      email: 'test@example.com',
-      team1: testSeeds[0], // Duke
-      team2: testSeeds[1], // Gonzaga
-      team3: testSeeds[9], // New Mexico
-      team4: testSeeds[10], // Houston
-      team5: testSeeds[17], // Tennessee
-      team6: testSeeds[18], // Utah State
-      team7: testSeeds[25], // Auburn
-      team8: testSeeds[26], // Michigan State
-      bonusTeam: testSeeds[0] // Duke as bonus team
+    const rounds: any[] = [];
+    const bonusTeamId = this.entryForm.value.bonusTeam?.id;
+    
+    // Round 1: Create matchups from seeds, simulate winners
+    const round1Matchups = round1Pairings.map((pairing, idx) => {
+      const team1 = seeds.find(s => s.seed_number === pairing.seeds[0]);
+      const team2 = seeds.find(s => s.seed_number === pairing.seeds[1]);
+      
+      const team1Full = team1 ? { ...team1, selected: this.isTeamSelected(team1), isBonus: team1.id === bonusTeamId } : null;
+      const team2Full = team2 ? { ...team2, selected: this.isTeamSelected(team2), isBonus: team2.id === bonusTeamId } : null;
+      
+      // Determine winner
+      const winner = this.determineWinner(team1Full, team2Full);
+      
+      return {
+        team1: team1Full,
+        team2: team2Full,
+        winner: winner,
+        roundNum: 1,
+        round1Index: idx
+      };
     });
+    rounds.push({ roundNum: 1, roundName: 'Round 1', matchups: round1Matchups });
 
-    // Run the update method to calculate total points
-    this.update();
+    // Round 2 and beyond
+    // Structure: 4 matchups in round 2, 2 in round 3, 1 in rounds 4, 5, 6
+    const round2Matchups = [];
+    for (let i = 0; i < 4; i++) {
+      // Matchup i in round 2 combines winners from matchups 2*i and 2*i+1 from round 1
+      const matchup1Index = i * 2;
+      const matchup2Index = i * 2 + 1;
+      
+      const team1 = round1Matchups[matchup1Index].winner;
+      const team2 = round1Matchups[matchup2Index].winner;
+      
+      const winner = this.determineWinner(team1, team2);
+      
+      round2Matchups.push({
+        team1: team1,
+        team2: team2,
+        winner: winner,
+        roundNum: 2,
+        parentMatchups: [matchup1Index, matchup2Index]
+      });
+    }
+    rounds.push({ roundNum: 2, roundName: 'Round 2', matchups: round2Matchups });
+
+    // Round 3 (Sweet Sixteen): 2 matchups
+    const round3Matchups = [];
+    for (let i = 0; i < 2; i++) {
+      const team1 = round2Matchups[i * 2].winner;
+      const team2 = round2Matchups[i * 2 + 1].winner;
+      
+      const winner = this.determineWinner(team1, team2);
+      
+      round3Matchups.push({
+        team1: team1,
+        team2: team2,
+        winner: winner,
+        roundNum: 3,
+        parentMatchups: [i * 2, i * 2 + 1]
+      });
+    }
+    rounds.push({ roundNum: 3, roundName: 'Sweet Sixteen', matchups: round3Matchups });
+
+    // Round 4 (Elite Eight): 1 matchup
+    const round4Team1 = round3Matchups[0].winner;
+    const round4Team2 = round3Matchups[1].winner;
+    const round4Winner = this.determineWinner(round4Team1, round4Team2);
+    
+    const round4Matchups = [{
+      team1: round4Team1,
+      team2: round4Team2,
+      winner: round4Winner,
+      roundNum: 4,
+      parentMatchups: [0, 1]
+    }];
+    rounds.push({ roundNum: 4, roundName: 'Elite Eight', matchups: round4Matchups });
+
+    return { rounds, eliteEightWinner: round4Winner };
+  }
+
+  private determineWinner(team1: any, team2: any): any {
+    // If only one team exists, they win
+    if (!team1) return team2;
+    if (!team2) return team1;
+    
+    // Calculate adjusted seed strength (lower is better, so compare directly)
+    // Strength = seedNumber / bonus multiplier (so bonus teams get lower effective seed)
+    const team1Strength = team1.seed_number / (team1.isBonus ? 1.5 : 1.0);
+    const team2Strength = team2.seed_number / (team2.isBonus ? 1.5 : 1.0);
+    
+    // Lower seed number (higher strength) wins
+    return team1Strength < team2Strength ? team1 : team2;
+  }
+
+  public getMatchupSpacing(roundNum: number, matchupIndex: number, matchupCount: number): number {
+    // No bottom spacing - matchups use flexbox gap instead
+    return 0;
+  }
+
+  public getMatchupTopSpacing(roundNum: number, matchupIndex: number): number {
+    // Apply consistent 38px offset to center all matchups between their parent pairs
+    // This keeps the natural flex gap spacing (76px) while centering vertically
+    if (roundNum > 1) {
+      return 38;
+    }
+    return 0;
+  }
+
+  private isTeamSelected(team: Seed): boolean {
+    return this.selectedTeams.some(t => t.id === team.id);
   }
 
   public update() {
+    console.log('update() called - recalculating form state...');
     this.entryForm.markAllAsTouched();
     // reset selected teams
     this.selectedTeams = [];
@@ -327,6 +443,383 @@ export class EntryComponent implements OnInit {
       teams6points * teams6bonus +
       teams7points * teams7bonus +
       teams8points * teams8bonus;
+
+    // Calculate possible points using StatisticsService
+    this.calculatePossiblePointsWithStats();
+
+    // Update submit button enabled/disabled state based on form validity
+    this.updateSubmitButtonState();
+  }
+
+  private updateSubmitButtonState() {
+    // Enable submit button if all conditions are met:
+    // 1. All 8 teams selected
+    // 2. Superfan team selected
+    // 3. Valid name entered
+    // 4. Valid email entered
+    // 5. No duplicate schools
+
+    const hasAllTeams = this.selectedTeams.length === 8;
+    const hasBonus = this.entryForm.controls.bonusTeam.value !== null;
+    const hasValidName = 
+      this.entryForm.value.name !== null && 
+      this.entryForm.value.name !== '' &&
+      this.entryForm.value.name !== undefined;
+    const hasValidEmail = 
+      this.entryForm.value.email !== null && 
+      this.entryForm.value.email !== undefined &&
+      this.entryForm.value.email !== '' &&
+      this.entryForm.value.email.indexOf('@') > 0;
+
+    // Check for duplicate schools
+    let hasDuplicates = false;
+    this.selectedTeams.forEach((team) => {
+      const matches = this.selectedTeams.filter((a) => team.school_id === a.school_id);
+      if (matches.length > 1) {
+        hasDuplicates = true;
+      }
+    });
+
+    // Enable button only if all conditions are met
+    const newSubmitDisabledState = !(hasAllTeams && hasBonus && hasValidName && hasValidEmail && !hasDuplicates);
+    
+    // Log validation state
+    console.log('=== Submit Button State Update ===');
+    console.log(`Teams selected: ${this.selectedTeams.length}/8 (${hasAllTeams ? 'âœ“' : 'âœ—'})`);
+    console.log(`Bonus team: ${hasBonus ? 'âœ“' : 'âœ—'}`);
+    console.log(`Valid name: ${hasValidName ? 'âœ“' : 'âœ—'} (${this.entryForm.value.name || 'empty'})`);
+    console.log(`Valid email: ${hasValidEmail ? 'âœ“' : 'âœ—'} (${this.entryForm.value.email || 'empty'})`);
+    console.log(`No duplicates: ${!hasDuplicates ? 'âœ“' : 'âœ—'}`);
+    console.log(`Submit Disabled: ${newSubmitDisabledState}`);
+    console.log('==================================');
+    
+    this.submitDisabled = newSubmitDisabledState;
+  }
+
+  private calculatePossiblePointsWithStats() {
+    // Build picks array from selected teams
+    const picks: PickModel[] = [];
+    const bonusTeamId = this.entryForm.value.bonusTeam?.id;
+
+    if (this.team1) {
+      picks.push({
+        seed_id: this.team1.id,
+        is_bonus: this.team1.id === bonusTeamId,
+        school_name: this.team1.school_name,
+        seed_number: this.team1.seed_number
+      } as PickModel);
+    }
+    if (this.team2) {
+      picks.push({
+        seed_id: this.team2.id,
+        is_bonus: this.team2.id === bonusTeamId,
+        school_name: this.team2.school_name,
+        seed_number: this.team2.seed_number
+      } as PickModel);
+    }
+    if (this.team3) {
+      picks.push({
+        seed_id: this.team3.id,
+        is_bonus: this.team3.id === bonusTeamId,
+        school_name: this.team3.school_name,
+        seed_number: this.team3.seed_number
+      } as PickModel);
+    }
+    if (this.team4) {
+      picks.push({
+        seed_id: this.team4.id,
+        is_bonus: this.team4.id === bonusTeamId,
+        school_name: this.team4.school_name,
+        seed_number: this.team4.seed_number
+      } as PickModel);
+    }
+    if (this.team5) {
+      picks.push({
+        seed_id: this.team5.id,
+        is_bonus: this.team5.id === bonusTeamId,
+        school_name: this.team5.school_name,
+        seed_number: this.team5.seed_number
+      } as PickModel);
+    }
+    if (this.team6) {
+      picks.push({
+        seed_id: this.team6.id,
+        is_bonus: this.team6.id === bonusTeamId,
+        school_name: this.team6.school_name,
+        seed_number: this.team6.seed_number
+      } as PickModel);
+    }
+    if (this.team7) {
+      picks.push({
+        seed_id: this.team7.id,
+        is_bonus: this.team7.id === bonusTeamId,
+        school_name: this.team7.school_name,
+        seed_number: this.team7.seed_number
+      } as PickModel);
+    }
+    if (this.team8) {
+      picks.push({
+        seed_id: this.team8.id,
+        is_bonus: this.team8.id === bonusTeamId,
+        school_name: this.team8.school_name,
+        seed_number: this.team8.seed_number
+      } as PickModel);
+    }
+
+    // Build seeds array for the statistics service
+    const seeds: Seed[] = [
+      this.team1, this.team2, this.team3, this.team4,
+      this.team5, this.team6, this.team7, this.team8
+    ].filter(s => s !== undefined && s !== null) as Seed[];
+
+    // Calculate using StatisticsService
+    if (picks.length > 0 && seeds.length > 0) {
+      const result = this.statisticsService.calculateEntryPossiblePoints(picks, seeds);
+      this.calculatedPossiblePoints = result.totalPossiblePoints;
+      this.pickResults = result.pickResults;
+      this.calculateBestOutcome();
+      this.generateBracketMatchups();
+    } else {
+      this.calculatedPossiblePoints = 0;
+      this.pickResults = [];
+      this.bestOutcomeByRegion = [];
+      this.bracketMatchups = [];
+    }
+  }
+
+  private calculateBestOutcome() {
+    this.bestOutcomeByRegion = [];
+
+    // Define regions with their teams
+    const regions = [
+      { regionName: this.topLeftRegion.region_name, team1: this.team1, team2: this.team2 },
+      { regionName: this.topRightRegion.region_name, team1: this.team3, team2: this.team4 },
+      { regionName: this.bottomLeftRegion.region_name, team1: this.team7, team2: this.team8 },
+      { regionName: this.bottomRightRegion.region_name, team1: this.team5, team2: this.team6 }
+    ];
+
+    for (const region of regions) {
+      const teamResults: any[] = [];
+
+      // Find results for both teams
+      let team1Result: any = null;
+      let team2Result: any = null;
+
+      if (region.team1) {
+        team1Result = this.pickResults.find(
+          p => p.seedNumber === region.team1!.seed_number && 
+               p.schoolName === region.team1!.school_name
+        );
+      }
+
+      if (region.team2) {
+        team2Result = this.pickResults.find(
+          p => p.seedNumber === region.team2!.seed_number && 
+               p.schoolName === region.team2!.school_name
+        );
+      }
+
+      // Handle regional conflict: only one team from a region can advance past the conflict point
+      if (team1Result && team2Result) {
+        // Both teams exist - check if there's a conflict
+        if (team1Result.conflictRound && team2Result.conflictRound) {
+          // Both teams show a conflict with each other
+          // Only show the team that advances further (wins the conflict)
+          if (team1Result.maxFeasibleRound >= team2Result.maxFeasibleRound) {
+            // Team1 advances further - only show team1
+            const finalRound = this.getRoundName(team1Result.maxFeasibleRound);
+            teamResults.push({
+              seedNumber: team1Result.seedNumber,
+              schoolName: team1Result.schoolName,
+              isBonus: team1Result.isBonus,
+              finalRound: finalRound,
+              maxRound: team1Result.maxFeasibleRound,
+              possiblePoints: team1Result.possiblePoints
+            });
+          } else {
+            // Team2 advances further - only show team2
+            const finalRound = this.getRoundName(team2Result.maxFeasibleRound);
+            teamResults.push({
+              seedNumber: team2Result.seedNumber,
+              schoolName: team2Result.schoolName,
+              isBonus: team2Result.isBonus,
+              finalRound: finalRound,
+              maxRound: team2Result.maxFeasibleRound,
+              possiblePoints: team2Result.possiblePoints
+            });
+          }
+        } else if (team1Result.conflictRound && !team2Result.conflictRound) {
+          // Only team1 has a conflict - show only team2 (the winner)
+          const finalRound = this.getRoundName(team2Result.maxFeasibleRound);
+          teamResults.push({
+            seedNumber: team2Result.seedNumber,
+            schoolName: team2Result.schoolName,
+            isBonus: team2Result.isBonus,
+            finalRound: finalRound,
+            maxRound: team2Result.maxFeasibleRound,
+            possiblePoints: team2Result.possiblePoints
+          });
+        } else if (!team1Result.conflictRound && team2Result.conflictRound) {
+          // Only team2 has a conflict - show only team1 (the winner)
+          const finalRound = this.getRoundName(team1Result.maxFeasibleRound);
+          teamResults.push({
+            seedNumber: team1Result.seedNumber,
+            schoolName: team1Result.schoolName,
+            isBonus: team1Result.isBonus,
+            finalRound: finalRound,
+            maxRound: team1Result.maxFeasibleRound,
+            possiblePoints: team1Result.possiblePoints
+          });
+        } else {
+          // Neither team shows a conflict yet, but they're both from the same region
+          // CRITICAL: Only one team from a region can reach the championship (round 6)
+          // If both teams can reach the championship, only show the stronger team
+          if (team1Result.maxFeasibleRound >= 6 && team2Result.maxFeasibleRound >= 6) {
+            // Both trying to reach championship - only show stronger team
+            // Determine stronger: 1) better seed, 2) if same seed, bonus team wins
+            const team1Strength = team1Result.seedNumber + (team1Result.isBonus ? -0.5 : 0);
+            const team2Strength = team2Result.seedNumber + (team2Result.isBonus ? -0.5 : 0);
+            
+            if (team1Strength <= team2Strength) {
+              // Team1 is stronger or equal
+              const finalRound = this.getRoundName(team1Result.maxFeasibleRound);
+              teamResults.push({
+                seedNumber: team1Result.seedNumber,
+                schoolName: team1Result.schoolName,
+                isBonus: team1Result.isBonus,
+                finalRound: finalRound,
+                maxRound: team1Result.maxFeasibleRound,
+                possiblePoints: team1Result.possiblePoints
+              });
+            } else {
+              // Team2 is stronger
+              const finalRound = this.getRoundName(team2Result.maxFeasibleRound);
+              teamResults.push({
+                seedNumber: team2Result.seedNumber,
+                schoolName: team2Result.schoolName,
+                isBonus: team2Result.isBonus,
+                finalRound: finalRound,
+                maxRound: team2Result.maxFeasibleRound,
+                possiblePoints: team2Result.possiblePoints
+              });
+            }
+          } else {
+            // At least one team isn't reaching the championship, show both
+            const finalRound1 = this.getRoundName(team1Result.maxFeasibleRound);
+            teamResults.push({
+              seedNumber: team1Result.seedNumber,
+              schoolName: team1Result.schoolName,
+              isBonus: team1Result.isBonus,
+              finalRound: finalRound1,
+              maxRound: team1Result.maxFeasibleRound,
+              possiblePoints: team1Result.possiblePoints
+            });
+            const finalRound2 = this.getRoundName(team2Result.maxFeasibleRound);
+            teamResults.push({
+              seedNumber: team2Result.seedNumber,
+              schoolName: team2Result.schoolName,
+              isBonus: team2Result.isBonus,
+              finalRound: finalRound2,
+              maxRound: team2Result.maxFeasibleRound,
+              possiblePoints: team2Result.possiblePoints
+            });
+          }
+        }
+      } else if (team1Result) {
+        // Only team1 exists
+        const finalRound = this.getRoundName(team1Result.maxFeasibleRound);
+        teamResults.push({
+          seedNumber: team1Result.seedNumber,
+          schoolName: team1Result.schoolName,
+          isBonus: team1Result.isBonus,
+          finalRound: finalRound,
+          maxRound: team1Result.maxFeasibleRound,
+          possiblePoints: team1Result.possiblePoints
+        });
+      } else if (team2Result) {
+        // Only team2 exists
+        const finalRound = this.getRoundName(team2Result.maxFeasibleRound);
+        teamResults.push({
+          seedNumber: team2Result.seedNumber,
+          schoolName: team2Result.schoolName,
+          isBonus: team2Result.isBonus,
+          finalRound: finalRound,
+          maxRound: team2Result.maxFeasibleRound,
+          possiblePoints: team2Result.possiblePoints
+        });
+      }
+
+      if (teamResults.length > 0) {
+        this.bestOutcomeByRegion.push({
+          regionName: region.regionName,
+          teams: teamResults
+        });
+      }
+    }
+  }
+
+  private getRoundName(round: number): string {
+    switch (round) {
+      case 6: return 'Championship';
+      case 5: return 'Final Four';
+      case 4: return 'Elite Eight';
+      case 3: return 'Sweet Sixteen';
+      case 2: return 'Round 2';
+      case 1: return 'Round 1';
+      default: return 'Unknown';
+    }
+  }
+
+  public selectRandomTeams() {
+    const allSeeds = [
+      this.topLeftRegion.seeds || [],
+      this.topRightRegion.seeds || [],
+      this.bottomLeftRegion.seeds || [],
+      this.bottomRightRegion.seeds || []
+    ];
+
+    const selectedSeeds = new Set<number>();
+    const picks: (Seed | null)[] = [null, null, null, null, null, null, null, null];
+
+    // Select random teams for each slot, ensuring no duplicates
+    for (let i = 0; i < 8; i++) {
+      const regionIndex = i < 2 ? 0 : i < 4 ? 1 : i < 6 ? 2 : 3;
+      const regionSeeds = allSeeds[regionIndex];
+      
+      let randomSeed: Seed;
+      let attempts = 0;
+      do {
+        randomSeed = regionSeeds[Math.floor(Math.random() * regionSeeds.length)];
+        attempts++;
+      } while (selectedSeeds.has(randomSeed.id!) && attempts < 100);
+
+      if (!selectedSeeds.has(randomSeed.id!)) {
+        selectedSeeds.add(randomSeed.id!);
+        picks[i] = randomSeed;
+      }
+    }
+
+    // Update form with random picks
+    this.entryForm.patchValue({
+      team1: picks[0],
+      team2: picks[1],
+      team3: picks[2],
+      team4: picks[3],
+      team7: picks[4],
+      team8: picks[5],
+      team5: picks[6],
+      team6: picks[7]
+    });
+
+    // Select random superfan team from the 8 picked teams
+    const validPicks = picks.filter(p => p !== null) as Seed[];
+    if (validPicks.length > 0) {
+      const randomBonus = validPicks[Math.floor(Math.random() * validPicks.length)];
+      this.entryForm.patchValue({ bonusTeam: randomBonus });
+    }
+
+    // Trigger update to recalculate points
+    this.update();
   }
 
   private validate() {

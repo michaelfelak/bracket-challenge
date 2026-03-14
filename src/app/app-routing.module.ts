@@ -11,6 +11,7 @@ import { WinnersComponent } from './winners/winners.component';
 import { TimelineComponent } from './timeline/timeline.component';
 import { LoginComponent } from './auth/login.component';
 import { AuthGuard } from './shared/guards/auth.guard';
+import { MyProfileComponent } from './my-profile/my-profile.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,11 @@ const routes: Routes = [
   {
     path: 'about',
     component: AboutComponent,
+  },
+  {
+    path: 'my-profile',
+    component: MyProfileComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'picks',

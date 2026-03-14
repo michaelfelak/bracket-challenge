@@ -6,7 +6,9 @@ main {
   margin-left: 5%;
   margin-right: 5%;
   height: 100%;
-  font-family: 'Titillium Web', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
 }
 
 .header {
@@ -44,14 +46,15 @@ main {
     }
 
     select {
-      padding: 8px 12px;
+      padding: 6px 10px;
       font-size: 14px;
       border: 1px solid #ccc;
       border-radius: 4px;
       background-color: white;
       color: #333;
       cursor: pointer;
-      font-family: 'Titillium Web', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif;
       transition: border-color 0.2s ease;
 
       &:hover {
@@ -69,6 +72,28 @@ main {
 
 .standings-container {
   margin: 20px 0;
+}
+
+.user-entries-section {
+  margin: 30px 0;
+  padding: 20px;
+  background-color: #e8f4fd;
+  border-radius: 8px;
+  border-left: 4px solid #006EB8;
+
+  .section-header {
+    margin: 0 0 20px 0;
+    color: #006EB8;
+    font-size: 20px;
+    font-weight: 600;
+  }
+}
+
+.section-header {
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 25px 0 15px 0;
 }
 
 .empty-state {
@@ -108,7 +133,7 @@ main {
       transition: background-color 0.2s ease;
 
       &.sortable:hover {
-        background-color: #004a99;
+        background-color: #00527a;
       }
 
       .sort-indicator {
@@ -153,7 +178,7 @@ main {
 .rank-col {
   width: 10%;
   font-weight: 600;
-  color: #006EB8;
+  color: #333;
 }
 
 .name-col {
@@ -172,46 +197,29 @@ main {
 
   &:hover {
     text-decoration: underline;
+    color: #00527a;
   }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   main {
-    margin-left: 2%;
-    margin-right: 2%;
+    margin-left: 4%;
+    margin-right: 4%;
   }
 
   .header {
-    font-size: 22px;
+    font-size: 24px;
     margin: 20px 0 15px 0;
-  }
-
-  .standings-table {
-    thead {
-      th {
-        padding: 10px;
-        font-size: 11px;
-      }
-    }
-
-    tbody {
-      tr {
-        td {
-          padding: 10px;
-          font-size: 13px;
-        }
-      }
-    }
   }
 
   .header-info {
     padding: 12px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 
     .info-text {
       margin-bottom: 10px;
-      font-size: 12px;
+      font-size: 13px;
     }
 
     .year-selector {
@@ -220,12 +228,30 @@ main {
       gap: 8px;
     }
   }
+
+  .standings-table {
+    thead {
+      th {
+        padding: 10px 8px;
+        font-size: 11px;
+      }
+    }
+
+    tbody {
+      tr {
+        td {
+          padding: 10px 8px;
+          font-size: 13px;
+        }
+      }
+    }
+  }
 }
 
 @media (max-width: 480px) {
   main {
-    margin-left: 2%;
-    margin-right: 2%;
+    margin-left: 3%;
+    margin-right: 3%;
   }
 
   .header {
@@ -235,7 +261,7 @@ main {
 
   .header-info {
     padding: 10px;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
 
     .info-text {
       margin-bottom: 8px;
@@ -258,7 +284,7 @@ main {
 
     thead {
       th {
-        padding: 8px;
+        padding: 8px 6px;
         font-size: 10px;
       }
     }
@@ -266,8 +292,7 @@ main {
     tbody {
       tr {
         td {
-          padding: 8px;
-          font-size: 12px;
+          padding: 8px 6px;
         }
       }
     }
