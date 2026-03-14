@@ -16,6 +16,55 @@
     </div>
   </div>
 
+  <!-- User's Entries Section -->
+  <div *ngIf="isLoggedIn" class="user-entries-section">
+    <h2 class="section-header">Your Entries</h2>
+    <div *ngIf="userEntries && userEntries.length > 0" class="table-wrapper">
+      <table class="standings-table" #userEntriesTable>
+        <thead>
+          <tr>
+            <th class="rank-col">Rank</th>
+            <th class="name-col">Entry Name</th>
+            <th class="points-col">Current<br />Points</th>
+            <th class="points-col">Total<br />Wins</th>
+            <th class="points-col">Remaining<br />Teams</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let pick of userEntries; let i = index"
+            [class.alt-row]="i % 2 === 1"
+          >
+            <td class="rank-col" data-label="Rank">{{ pick.rank }}</td>
+            <td class="name-col" data-label="Entry Name">
+              <button
+                *ngIf="showStandingsLink"
+                class="sky-btn sky-btn-link-inline entry-link"
+                type="button"
+                (click)="onNameClick(pick.entry_id, pick.user_id)"
+              >
+                {{ pick.entry_name }}
+              </button>
+              <span *ngIf="!showStandingsLink">{{ pick.entry_name }}</span>
+            </td>
+            <td class="points-col" data-label="Current Points">
+              {{ pick.current_points }}
+            </td>
+            <td class="points-col" data-label="Total Wins">
+              {{ pick.win_total ?? 0 }}
+            </td>
+            <td class="points-col" data-label="Remaining Teams">
+              {{ pick.teams_remaining ?? 0 }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngIf="!userEntries || userEntries.length === 0" class="empty-state">
+      <p>No entries submitted</p>
+    </div>
+  </div>
+
   <div class="standings-container">
     <!-- Empty State -->
     <div
@@ -27,6 +76,7 @@
 
     <!-- Standings Table -->
     <div *ngIf="standings && standings.length > 0" class="table-wrapper">
+      <h2 *ngIf="isLoggedIn && userEntries && userEntries.length > 0" class="section-header">All Standings</h2>
       <table class="standings-table" #standingsTable>
         <thead>
           <tr>
@@ -63,7 +113,7 @@
                 *ngIf="showStandingsLink"
                 class="sky-btn sky-btn-link-inline entry-link"
                 type="button"
-                (click)="onNameClick(pick.entry_id)"
+                (click)="onNameClick(pick.entry_id, pick.user_id)"
               >
                 {{ pick.entry_name }}
               </button>

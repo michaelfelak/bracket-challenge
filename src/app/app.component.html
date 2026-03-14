@@ -1,11 +1,50 @@
 <!-- Toolbar -->
 <div class="toolbar" role="banner">
-  <!-- Platform App Switcher -->
-  <app-platform-switcher></app-platform-switcher>
+  <!-- Platform App Switcher (Desktop Only) -->
+  <app-platform-switcher class="desktop-platform-switcher"></app-platform-switcher>
 
-  <p>Bracket Challenge <span *ngIf="isAdmin" class="admin-badge">Admin</span></p>
+  <!-- Platform App Switcher (Mobile) -->
+  <div class="mobile-app-switcher">
+    <button
+      class="app-switcher-btn"
+      [class.open]="appSwitcherOpen"
+      (click)="toggleAppSwitcher()"
+      aria-label="Switch application"
+    >
+      <span class="dropdown-arrow-mobile-hidden">▼</span>
+      <span class="app-icon">🏀</span>
+      <span class="app-name-mobile-hidden">Bracket Challenge</span>
+    </button>
 
-  <!-- Hamburger Menu -->
+    <div class="app-menu" [class.open]="appSwitcherOpen" *ngIf="appSwitcherOpen">
+      <a href="/bowl-pickem" class="app-option" (click)="closeAppSwitcher()">
+        <span class="app-icon">🏈</span>
+        <span class="app-name">Bowl Pick'em</span>
+      </a>
+      <div class="divider"></div>
+      <a href="/bracket-challenge" class="app-option active" (click)="closeAppSwitcher()">
+        <span class="app-icon">🏀</span>
+        <span class="app-name">Bracket Challenge</span>
+      </a>
+    </div>
+    
+    <div class="menu-backdrop" *ngIf="appSwitcherOpen" (click)="closeAppSwitcher()"></div>
+  </div>
+
+  <!-- Desktop Navigation -->
+  <nav class="nav-menu">
+    <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">Home</a>
+    <a *ngIf="isAuthenticated" routerLink="my-profile" routerLinkActive="active" (click)="closeMenu()">My Profile</a>
+    <a *ngIf="(entriesLocked && isAuthenticated) || isAdmin" routerLink="picks" routerLinkActive="active" (click)="closeMenu()">Submit Entry</a>
+    <a routerLink="standings" routerLinkActive="active" (click)="closeMenu()">Standings</a>
+    <a *ngIf="!entriesLocked || isAdmin" routerLink="winners" routerLinkActive="active" (click)="closeMenu()">Points</a>
+    <a routerLink="timeline" routerLinkActive="active" (click)="closeMenu()">Timeline</a>
+    <a routerLink="scores" routerLinkActive="active" (click)="closeMenu()">Bracket</a>
+    <a routerLink="about" routerLinkActive="active" (click)="closeMenu()">About</a>
+    <a *ngIf="isAdmin" routerLink="admin" routerLinkActive="active" (click)="closeMenu()">Admin</a>
+  </nav>
+
+  <!-- Mobile Navigation (Right Menu) -->
   <button
     class="hamburger"
     [class.open]="menuOpen"
@@ -17,28 +56,16 @@
     <span></span>
   </button>
 
-  <!-- Desktop Navigation -->
-  <nav class="nav-menu">
-    <a routerLink="" (click)="closeMenu()">Home</a>
-    <a *ngIf="(entriesLocked && isAuthenticated) || isAdmin" routerLink="picks" (click)="closeMenu()">Submit Entry</a>
-    <a routerLink="standings" (click)="closeMenu()">Standings</a>
-    <a *ngIf="!entriesLocked || isAdmin" routerLink="winners" (click)="closeMenu()">Points</a>
-    <a routerLink="timeline" (click)="closeMenu()">Timeline</a>
-    <a routerLink="scores" (click)="closeMenu()">Bracket</a>
-    <a routerLink="about" (click)="closeMenu()">About</a>
-    <a *ngIf="isAdmin" routerLink="admin" (click)="closeMenu()">Admin</a>
-  </nav>
-
-  <!-- Mobile Navigation -->
   <nav class="mobile-menu" [class.open]="menuOpen">
-    <a routerLink="" (click)="closeMenu()">Home</a>
-    <a *ngIf="(entriesLocked && isAuthenticated) || isAdmin" routerLink="picks" (click)="closeMenu()">Submit Entry</a>
-    <a routerLink="standings" (click)="closeMenu()">Standings</a>
-    <a *ngIf="!entriesLocked || isAdmin" routerLink="winners" (click)="closeMenu()">Points</a>
-    <a routerLink="timeline" (click)="closeMenu()">Timeline</a>
-    <a routerLink="scores" (click)="closeMenu()">Bracket</a>
-    <a routerLink="about" (click)="closeMenu()">About</a>
-    <a *ngIf="isAdmin" routerLink="admin" (click)="closeMenu()">Admin</a>
+    <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">Home</a>
+    <a *ngIf="isAuthenticated" routerLink="my-profile" routerLinkActive="active" (click)="closeMenu()">My Profile</a>
+    <a *ngIf="(entriesLocked && isAuthenticated) || isAdmin" routerLink="picks" routerLinkActive="active" (click)="closeMenu()">Submit Entry</a>
+    <a routerLink="standings" routerLinkActive="active" (click)="closeMenu()">Standings</a>
+    <a *ngIf="!entriesLocked || isAdmin" routerLink="winners" routerLinkActive="active" (click)="closeMenu()">Points</a>
+    <a routerLink="timeline" routerLinkActive="active" (click)="closeMenu()">Timeline</a>
+    <a routerLink="scores" routerLinkActive="active" (click)="closeMenu()">Bracket</a>
+    <a routerLink="about" routerLinkActive="active" (click)="closeMenu()">About</a>
+    <a *ngIf="isAdmin" routerLink="admin" routerLinkActive="active" (click)="closeMenu()">Admin</a>
   </nav>
 
   <!-- Auth Section -->
@@ -62,6 +89,9 @@
             {{ currentUser$ | async }}
             <span *ngIf="isAdmin" class="admin-badge">Admin</span>
           </div>
+          <button class="dropdown-item" (click)="navigateToMyProfile()">
+            My Profile
+          </button>
           <button class="dropdown-item logout-item" (click)="logout()">
             Logout
           </button>

@@ -7,6 +7,7 @@ export class StandingsRecord {
   rank?: number;
   win_total?: number;
   teams_remaining?: number;
+  user_id?: number;
 }
 
 export class CompletedEntry {

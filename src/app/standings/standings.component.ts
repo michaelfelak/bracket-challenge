@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { StaticBracketService } from '../shared/services/static-bracket.service';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   standalone: true,
@@ -21,10 +22,13 @@ export class StandingsComponent implements OnInit {
   private useStatic = false;
 
   public standings: StandingsRecord[] = [];
+  public userEntries: StandingsRecord[] = [];
   public flyout: SkyFlyoutInstance<any> | undefined;
   public showStandingsLink = false;
   public currentYear: number = 2026;
   public years: number[] = [2026, 2025, 2024];
+  public currentUserId: string | null = null;
+  public isLoggedIn = false;
 
   public sortCurrentPoints = false;
   public sortRemainingPoints = false;
@@ -40,25 +44,28 @@ export class StandingsComponent implements OnInit {
     private titleService: Title,
     private service: BracketService,
     private flyoutService: SkyFlyoutService,
-    private staticService: StaticBracketService
-  ) {}
+    private staticService: StaticBracketService,
+    private authService: AuthService
+  ) {
+    // Check if user is logged in and get current user ID
+    const userId = this.authService.getCurrentUserId();
+    if (userId) {
+      this.currentUserId = userId;
+      this.isLoggedIn = true;
+    }
+  }
 
   public ngOnInit() {
     this.titleService.setTitle('Bracket Challenge - Standings');
-    console.log(`[Standings] Component initialized, available years:`, this.years);
 
     if (this.useStatic) {
-      console.log(`[Standings] Using static data`);
       this.currentYear = this.years[0]; // Initialize to first year for static data
       this.loadStandings();
     } else {
-      console.log(`[Standings] Fetching settings from service`);
       this.service.getSettings().subscribe({
         next: (settings) => {
-          console.log(`[Standings] Settings retrieved:`, settings);
           this.showStandingsLink = settings.flyout_enabled && !this.useStatic;
           this.currentYear = settings.current_year;
-          console.log(`[Standings] Set current year from bc_settings to: ${this.currentYear}`);
           this.retrieveLiveStandings(this.currentYear);
         },
         error: (error) => {
@@ -72,21 +79,25 @@ export class StandingsComponent implements OnInit {
   }
 
   private loadStandings() {
-    console.log(`[Standings] Loading static standings`);
     this.standings = this.staticService.getStandings();
-    console.log(`[Standings] Static standings loaded, count: ${this.standings ? this.standings.length : 'null'}`);
     this.assignRank();
   }
 
   private retrieveLiveStandings(year: number) {
     // this.waitSvc.beginNonBlockingPageWait();
-    console.log(`[Standings] Fetching standings for year: ${year}`);
 
     this.service.getStandings(year).subscribe({
       next: (result: StandingsRecord[]) => {
-        console.log(`[Standings] Successfully retrieved standings for ${year}:`, result);
-        console.log(`[Standings] Number of records: ${result ? result.length : 'null'}`);
         this.standings = result;
+        
+        // Filter user entries if logged in
+        if (this.isLoggedIn && this.currentUserId) {
+          const userIdNum = parseInt(this.currentUserId, 10);
+          this.userEntries = result.filter(
+            (entry) => entry.user_id === userIdNum
+          );
+        }
+        
         this.assignRank();
       },
       error: (error) => {
@@ -97,7 +108,6 @@ export class StandingsComponent implements OnInit {
   }
 
   public assignRank() {
-    console.log(`[Standings] Assigning ranks, standings count: ${this.standings ? this.standings.length : 'null'}`);
     if (this.standings) {
       this.standings = this.standings.sort((a: StandingsRecord, b: StandingsRecord) => {
         if (a.current_points! > b.current_points!) {
@@ -125,13 +135,10 @@ export class StandingsComponent implements OnInit {
         }
         lastPoints = entry.current_points!;
       });
-      console.log(`[Standings] Ranking complete, top entry:`, this.standings[0]);
-    } else {
-      console.warn(`[Standings] No standings to rank`);
     }
   }
 
-  public onNameClick(id: string | undefined) {
+  public onNameClick(id: string | undefined, userId?: number | undefined) {
     const record: StandingsFlyoutContext = {
       entryId: id!.toString(),
     };
@@ -153,7 +160,6 @@ export class StandingsComponent implements OnInit {
   }
 
   public updateYear(year: number) {
-    console.log(`[Standings] Year changed from ${this.currentYear} to ${year}`);
     this.currentYear = year;
     // Reset sorting when changing years
     this.sortCurrentPoints = false;
@@ -162,10 +168,8 @@ export class StandingsComponent implements OnInit {
     this.sortPossiblePoints = false;
     
     if (this.useStatic) {
-      console.log(`[Standings] Loading static standings for ${year}`);
       this.loadStandings();
     } else {
-      console.log(`[Standings] Loading live standings for ${year}`);
       this.retrieveLiveStandings(year);
     }
   }

@@ -1,4 +1,60 @@
-<main style="text-align: center; font-size: xx-large">
-  <p>View the most up-to-date bracket here:</p>
-  <p><a href="https://www.ncaa.com/march-madness-live/bracket" target="_blank">https://www.ncaa.com/march-madness-live/bracket</a>.</p>
-</main>
+<div class="bracket-container">
+  <div *ngIf="isLoading" class="loading">
+    <p>Loading bracket...</p>
+  </div>
+
+  <div *ngIf="!isLoading && errorMessage" class="error-message">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage" class="bracket-wrapper">
+    <h1>{{ bracket.year }} March Madness Bracket</h1>
+
+    <!-- Bracket Grid -->
+    <div class="bracket-grid">
+      <!-- Top Left Region -->
+      <div class="region-column">
+        <h2 class="region-name">{{ topLeftRegion.region_name }}</h2>
+        <div class="seeds-list">
+          <div *ngFor="let seed of topLeftRegion.seeds" class="seed-card">
+            <div class="seed-number">{{ seed.seed_number }}</div>
+            <div class="school-name">{{ seed.school_name }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Right Region -->
+      <div class="region-column">
+        <h2 class="region-name">{{ topRightRegion.region_name }}</h2>
+        <div class="seeds-list">
+          <div *ngFor="let seed of topRightRegion.seeds" class="seed-card">
+            <div class="seed-number">{{ seed.seed_number }}</div>
+            <div class="school-name">{{ seed.school_name }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Right Region -->
+      <div class="region-column">
+        <h2 class="region-name">{{ bottomRightRegion.region_name }}</h2>
+        <div class="seeds-list">
+          <div *ngFor="let seed of bottomRightRegion.seeds" class="seed-card">
+            <div class="seed-number">{{ seed.seed_number }}</div>
+            <div class="school-name">{{ seed.school_name }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Left Region -->
+      <div class="region-column">
+        <h2 class="region-name">{{ bottomLeftRegion.region_name }}</h2>
+        <div class="seeds-list">
+          <div *ngFor="let seed of bottomLeftRegion.seeds" class="seed-card">
+            <div class="seed-number">{{ seed.seed_number }}</div>
+            <div class="school-name">{{ seed.school_name }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
