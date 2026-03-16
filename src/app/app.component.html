@@ -35,7 +35,7 @@
   <nav class="nav-menu">
     <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">Home</a>
     <a *ngIf="isAuthenticated" routerLink="my-profile" routerLinkActive="active" (click)="closeMenu()">My Profile</a>
-    <a *ngIf="(entriesLocked && isAuthenticated) || isAdmin" routerLink="picks" routerLinkActive="active" (click)="closeMenu()">Submit Entry</a>
+    <a *ngIf="entriesLocked" routerLink="picks" routerLinkActive="active" (click)="closeMenu()">Submit Entry</a>
     <a routerLink="standings" routerLinkActive="active" (click)="closeMenu()">Standings</a>
     <a routerLink="scores" routerLinkActive="active" (click)="closeMenu()">Bracket</a>
     <a routerLink="about" routerLinkActive="active" (click)="closeMenu()">About</a>
@@ -57,7 +57,7 @@
   <nav class="mobile-menu" [class.open]="menuOpen">
     <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">Home</a>
     <a *ngIf="isAuthenticated" routerLink="my-profile" routerLinkActive="active" (click)="closeMenu()">My Profile</a>
-    <a *ngIf="(entriesLocked && isAuthenticated) || isAdmin" routerLink="picks" routerLinkActive="active" (click)="closeMenu()">Submit Entry</a>
+    <a *ngIf="entriesLocked" routerLink="picks" routerLinkActive="active" (click)="closeMenu()">Submit Entry</a>
     <a routerLink="standings" routerLinkActive="active" (click)="closeMenu()">Standings</a>
     <a routerLink="scores" routerLinkActive="active" (click)="closeMenu()">Bracket</a>
     <a routerLink="about" routerLinkActive="active" (click)="closeMenu()">About</a>

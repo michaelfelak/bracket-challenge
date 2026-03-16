@@ -8,7 +8,7 @@ import { BracketComponent } from './bracket/bracket.component';
 import { EntryComponent } from './entry/entry.component';
 import { AdminRouteGuard } from './admin/index.guard';
 import { WinnersComponent } from './winners/winners.component';
-import { TimelineComponent } from './timeline/timeline.component';
+// import { TimelineComponent } from './timeline/timeline.component';
 import { LoginComponent } from './auth/login.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { MyProfileComponent } from './my-profile/my-profile.component';
@@ -36,10 +36,10 @@ const routes: Routes = [
     component: EntryComponent,
     canActivate: [AuthGuard]
   },
-  {
-    path: 'timeline',
-    component: TimelineComponent,
-  },
+  // {
+  //   path: 'timeline',
+  //   component: TimelineComponent,
+  // },
   {
     path: 'winners',
     component: WinnersComponent,
