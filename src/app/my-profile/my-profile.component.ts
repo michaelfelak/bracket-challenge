@@ -57,7 +57,7 @@ export class MyProfileComponent implements OnInit {
       },
       error: (error) => {
         this.handleError('Failed to load entries');
-        console.error('Error loading entries:', error);
+        
         this.isLoading = false;
       }
     });

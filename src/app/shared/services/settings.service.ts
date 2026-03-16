@@ -9,7 +9,7 @@ import { shareReplay } from 'rxjs/operators';
 })
 export class SettingsService {
   // Current bracket ID - consolidate all references to this constant
-  public readonly CURRENT_BRACKET_ID = 4;
+  public readonly CURRENT_BRACKET_ID = 5;
 
   public settings$: Observable<Settings>;
 

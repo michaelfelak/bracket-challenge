@@ -76,7 +76,7 @@ export class AddBlogComponent implements OnInit {
       error: (error) => {
         this.isSubmitting = false;
         this.errorMessage = 'Failed to post blog entry. Please try again.';
-        console.error('Error posting blog:', error);
+        
       },
     });
   }

@@ -34,47 +34,42 @@
           <label>Flyout Enabled</label>
           <div class="setting-value">
             <span class="status" [class.enabled]="settings?.flyout_enabled">
-              {{ settings?.flyout_enabled ? 'Yes' : 'No' }}
+              {{ settings?.flyout_enabled ? 'YES' : 'NO' }}
             </span>
-            <button class="sky-btn sky-btn-primary" (click)="toggleFlyoutVisible()">
-              {{ settings?.flyout_enabled ? 'Disable' : 'Enable' }}
-            </button>
           </div>
         </div>
         <div class="setting-item">
           <label>Entry Registration Enabled</label>
           <div class="setting-value">
             <span class="status" [class.enabled]="settings?.entry_enabled">
-              {{ settings?.entry_enabled ? 'Yes' : 'No' }}
+              {{ settings?.entry_enabled ? 'YES' : 'NO' }}
             </span>
-            <button class="sky-btn sky-btn-primary" (click)="toggleEntryVisible()">
-              {{ settings?.entry_enabled ? 'Disable' : 'Enable' }}
-            </button>
           </div>
+        </div>
+      </div>
+      <div class="settings-grid">
+        <div class="setting-item">
+          <h3>Add Bracket</h3>
+          <app-add-record></app-add-record>
         </div>
       </div>
     </div>
 
     <!-- Entry Management Tab -->
     <div *ngIf="activeTab === 'entries'" class="tab-pane active">
-      <h2>Entry Management</h2>
-      <div *ngIf="settings?.entry_enabled" class="entry-section">
+      <h2>Setup Bracket</h2>
+      <div class="entry-section">
         <div class="entry-subsection">
-          <h3>Add New Entry</h3>
-          <app-add-record></app-add-record>
-        </div>
-        <div class="entry-subsection">
-          <h3>Add Bracket Seeds</h3>
-          <app-add-seed [bracketId]="selectedBracketId"></app-add-seed>
-        </div>
-        <div class="entry-subsection">
-          <h3>Update Paid Status</h3>
-          <app-paid-status [bracketId]="selectedBracketId"></app-paid-status>
+          <h3>Add Teams to Bracket</h3>
+          <app-bracket-grid [bracketId]="selectedBracketId"></app-bracket-grid>
         </div>
       </div>
-      <div *ngIf="!settings?.entry_enabled" class="disabled-message">
-        <p>Entry registration is currently disabled. Enable it in the Settings tab to manage entries.</p>
-      </div>
+    </div>
+
+    <!-- Paid Status Tab -->
+    <div *ngIf="activeTab === 'paid-status'" class="tab-pane active">
+      <h2>Update Paid Status</h2>
+      <app-paid-status [bracketId]="selectedBracketId"></app-paid-status>
     </div>
 
     <!-- Select Winners Tab -->

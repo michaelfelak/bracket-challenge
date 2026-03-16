@@ -151,108 +151,6 @@
                 <sky-box class="possible-points" style="width: 100%; max-width: 100%;">
                   <sky-box-header class="region-header">Pick Summary</sky-box-header>
                   <sky-box-content>
-                    <p style="text-align: center; padding-bottom: 10px; font-size: 0.95rem; font-weight: 600;">Total possible points (old formula): <span style="color: #0066cc;">{{ totalPoints }}</span></p>
-                    <p style="text-align: center; padding-bottom: 15px; font-size: 0.95rem; font-weight: 600;">Realistic possible points (conflicts): <span style="color: #0066cc;">{{ calculatedPossiblePoints }}</span></p>
-                    
-                    <div style="background-color: #f0f8ff; border-left: 4px solid #0066cc; padding: 12px; margin-bottom: 15px; border-radius: 0 4px 4px 0; font-size: 0.85rem;">
-                      <p style="margin: 0 0 8px 0; font-weight: 600; color: #006EB8;">How "Realistic Possible Points" is Calculated:</p>
-                      <p style="margin: 0 0 6px 0;"><strong>Formula:</strong> For each team: <span style="color: #0066cc;">Seed × (1 + 2 + ... + max_round)</span> × Bonus Multiplier</p>
-                      <p style="margin: 0 0 6px 0;"><strong>Max Round Determination:</strong></p>
-                      <ul style="margin: 4px 0 6px 20px; padding: 0;">
-                        <li>If a team has <strong>NO conflict</strong> with another pick from the same region → max_round = <span style="color: #0066cc;">6</span> (can reach Championship)</li>
-                        <li>If a team <strong>MEETS in Round 1</strong> (e.g., #8 vs #9) → max_round = <span style="color: #0066cc;">1</span> (only one team advances)</li>
-                        <li>If a team <strong>MEETS in Round 2</strong> (e.g., #1 vs #8) → max_round = <span style="color: #0066cc;">2</span> (only one team advances)</li>
-                        <li>If a team <strong>MEETS in Round 3</strong> (e.g., #1 vs #4) → max_round = <span style="color: #0066cc;">3</span> (only one team advances)</li>
-                        <li><strong>Stronger Team Wins:</strong> When determining realistic points, the team with better seed/bonus wins conflicts and advances further</li>
-                      </ul>
-                    </div>
-
-                    <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin-bottom: 15px; border-radius: 0 4px 4px 0; font-size: 0.85rem;">
-                      <p style="margin: 0 0 12px 0; font-weight: 600; color: #856404;">Best Possible Outcome:</p>
-                      <p style="margin: 0 0 12px 0; color: #856404; font-size: 0.8rem;">All 8 teams showing their maximum possible advancement. Only one team per region can advance past their regional conflicts.</p>
-                      
-                      <!-- Top Left Region -->
-                      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
-                        <div style="grid-column: 1;">
-                          <p style="margin: 0 0 10px 0; font-weight: 600; color: #856404; font-size: 0.9rem;">{{ topLeftRegion.region_name }} Region</p>
-                          <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <div *ngFor="let outcome of bestOutcomeByRegion[0]?.teams" style="padding: 10px; background-color: #ffffff; border: 1px solid #ffc107; border-radius: 4px; font-size: 0.8rem;">
-                              <p style="margin: 0 0 4px 0; font-weight: 600; color: #006EB8;">
-                                #{{ outcome.seedNumber }} {{ outcome.schoolName }}
-                                <span *ngIf="outcome.isBonus" style="margin-left: 4px; background-color: #ffd700; padding: 2px 6px; border-radius: 3px; font-size: 0.75rem;">BONUS</span>
-                              </p>
-                              <p style="margin: 0 0 3px 0; color: #666; font-size: 0.75rem;">
-                                Final Round: <span style="color: #0066cc; font-weight: 600;">{{ outcome.finalRound }}</span>
-                              </p>
-                              <p style="margin: 0; color: #0066cc; font-weight: 600; font-size: 0.8rem;">
-                                {{ outcome.possiblePoints }} points
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- Top Right Region -->
-                        <div style="grid-column: 2;">
-                          <p style="margin: 0 0 10px 0; font-weight: 600; color: #856404; font-size: 0.9rem;">{{ topRightRegion.region_name }} Region</p>
-                          <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <div *ngFor="let outcome of bestOutcomeByRegion[1]?.teams" style="padding: 10px; background-color: #ffffff; border: 1px solid #ffc107; border-radius: 4px; font-size: 0.8rem;">
-                              <p style="margin: 0 0 4px 0; font-weight: 600; color: #006EB8;">
-                                #{{ outcome.seedNumber }} {{ outcome.schoolName }}
-                                <span *ngIf="outcome.isBonus" style="margin-left: 4px; background-color: #ffd700; padding: 2px 6px; border-radius: 3px; font-size: 0.75rem;">BONUS</span>
-                              </p>
-                              <p style="margin: 0 0 3px 0; color: #666; font-size: 0.75rem;">
-                                Final Round: <span style="color: #0066cc; font-weight: 600;">{{ outcome.finalRound }}</span>
-                              </p>
-                              <p style="margin: 0; color: #0066cc; font-weight: 600; font-size: 0.8rem;">
-                                {{ outcome.possiblePoints }} points
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Bottom Row -->
-                      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                        <!-- Bottom Left Region -->
-                        <div style="grid-column: 1;">
-                          <p style="margin: 0 0 10px 0; font-weight: 600; color: #856404; font-size: 0.9rem;">{{ bottomLeftRegion.region_name }} Region</p>
-                          <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <div *ngFor="let outcome of bestOutcomeByRegion[2]?.teams" style="padding: 10px; background-color: #ffffff; border: 1px solid #ffc107; border-radius: 4px; font-size: 0.8rem;">
-                              <p style="margin: 0 0 4px 0; font-weight: 600; color: #006EB8;">
-                                #{{ outcome.seedNumber }} {{ outcome.schoolName }}
-                                <span *ngIf="outcome.isBonus" style="margin-left: 4px; background-color: #ffd700; padding: 2px 6px; border-radius: 3px; font-size: 0.75rem;">BONUS</span>
-                              </p>
-                              <p style="margin: 0 0 3px 0; color: #666; font-size: 0.75rem;">
-                                Final Round: <span style="color: #0066cc; font-weight: 600;">{{ outcome.finalRound }}</span>
-                              </p>
-                              <p style="margin: 0; color: #0066cc; font-weight: 600; font-size: 0.8rem;">
-                                {{ outcome.possiblePoints }} points
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-
-                        <!-- Bottom Right Region -->
-                        <div style="grid-column: 2;">
-                          <p style="margin: 0 0 10px 0; font-weight: 600; color: #856404; font-size: 0.9rem;">{{ bottomRightRegion.region_name }} Region</p>
-                          <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <div *ngFor="let outcome of bestOutcomeByRegion[3]?.teams" style="padding: 10px; background-color: #ffffff; border: 1px solid #ffc107; border-radius: 4px; font-size: 0.8rem;">
-                              <p style="margin: 0 0 4px 0; font-weight: 600; color: #006EB8;">
-                                #{{ outcome.seedNumber }} {{ outcome.schoolName }}
-                                <span *ngIf="outcome.isBonus" style="margin-left: 4px; background-color: #ffd700; padding: 2px 6px; border-radius: 3px; font-size: 0.75rem;">BONUS</span>
-                              </p>
-                              <p style="margin: 0 0 3px 0; color: #666; font-size: 0.75rem;">
-                                Final Round: <span style="color: #0066cc; font-weight: 600;">{{ outcome.finalRound }}</span>
-                              </p>
-                              <p style="margin: 0; color: #0066cc; font-weight: 600; font-size: 0.8rem;">
-                                {{ outcome.possiblePoints }} points
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
                     <div style="background-color: #f9f9f9; border: 1px solid #ddd; padding: 12px; margin-bottom: 15px; border-radius: 4px;">
                       <p style="margin: 0 0 12px 0; font-weight: 600; color: #006EB8; font-size: 0.9rem;">Your Picks - Detailed Breakdown:</p>
                       <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px;">
@@ -263,7 +161,7 @@
                           </p>
                           <p style="margin: 0 0 3px 0; color: #333;">
                             <span *ngIf="!pick.conflictRound">Max Round: <span style="color: #0066cc; font-weight: 600;">{{ pick.maxFeasibleRound }}</span> (Championship)</span>
-                            <span *ngIf="pick.conflictRound">Max Round: <span style="color: #0066cc; font-weight: 600;">{{ pick.maxFeasibleRound }}</span> (vs #{{ pick.conflictingPickSeedNumber }} in R{{ pick.conflictRound }})</span>
+                            <span *ngIf="pick.conflictRound">Matches #{{ pick.conflictingPickSeedNumber }} in <span style="color: #d32f2f; font-weight: 600;">Round {{ pick.conflictRound }}</span></span>
                           </p>
                           <p style="margin: 0 0 3px 0; color: #666; font-size: 0.75rem;">
                             <span *ngIf="pick.maxFeasibleRound === 1">{{ pick.seedNumber }} × 1</span>

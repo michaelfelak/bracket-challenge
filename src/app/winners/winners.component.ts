@@ -4,23 +4,21 @@ import { Title } from '@angular/platform-browser';
 import { SkyIconModule } from '@skyux/indicators';
 import { BracketService } from '../shared/services/bracket.service';
 import { SettingsService } from '../shared/services/settings.service';
-import { Winner } from '../shared/models/winner.model';
-import { FooterComponent } from '../shared/footer/footer.component';
+import { WinnerByRound } from '../shared/models/winner.model';
 import { WinnersFlyoutContext } from './winners-flyout/winners-flyout.context';
 import { SkyFlyoutService, SkyFlyoutConfig, SkyFlyoutInstance } from '@skyux/flyout';
 import { WinnersFlyoutComponent } from './winners-flyout/winners-flyout.component';
-import { StaticBracketService } from '../shared/services/static-bracket.service';
 
 @Component({
   selector: 'app-winners',
   standalone: true,
-  imports: [CommonModule, FooterComponent, SkyIconModule],
+  imports: [CommonModule, SkyIconModule],
   templateUrl: './winners.component.html',
   styleUrls: ['./winners.component.scss'],
 })
 export class WinnersComponent implements OnInit {
-  public useStatic = false;
-  public winners: Winner[] = [];
+  public winnersByRound: Map<number, WinnerByRound[]> = new Map();
+  public roundNumbers: number[] = [];
 
   public get bracketId() {
     return this.settingsService.CURRENT_BRACKET_ID;
@@ -28,49 +26,57 @@ export class WinnersComponent implements OnInit {
 
   public flyout: SkyFlyoutInstance<any> | undefined;
 
-  public sortRegion = false;
-  public sortSeedNumber = false;
-  public sortSchool = false;
-  public sortPoints = false;
-  public sortWins = false;
-  public sortEntriesSelected = false;
-  public sortBonusSelected = false;
-  public sortLost = false;
-
-  public regionDesc = false;
-  public seedNumberDesc = false;
-  public schoolDesc = false;
-  public pointsDesc = false;
-  public winsDesc = false;
-  public entriesSelectedDesc = false;
-  public bonusSelectedDesc = false;
-  public lostDesc = false;
-
   constructor(
     private titleService: Title,
     private service: BracketService,
     private flyoutService: SkyFlyoutService,
-    private staticService: StaticBracketService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
   ) {
-    this.titleService.setTitle('Bracket Challenge - Winners');
+    this.titleService.setTitle('Bracket Challenge - Select Winners');
   }
 
   ngOnInit() {
-    console.log(this.useStatic);
-    if (this.useStatic) {
-      this.winners = this.staticService.getPoints();
-    } else {
-      this.service.getWinners(this.bracketId).subscribe((result) => {
-        this.winners = result;
-      });
-    }
+    this.service.getWinnersByRound(this.bracketId).subscribe((result) => {
+      this.organizeWinnersByRound(result);
+    });
   }
 
-  public onNameClick(id: string, schoolName: string) {
+  private organizeWinnersByRound(winners: WinnerByRound[]): void {
+    this.winnersByRound.clear();
+
+    // First, check if there are any actual winners selected (teams with won_in_previous_round = true for round > 1)
+    const hasWinners = winners.some(w => w.round && w.round > 1 && w.won_in_previous_round);
+    
+    // Group winners by round and filter appropriately
+    for (const winner of winners) {
+      const round = winner.round || 1;
+
+      // Always show Round 1
+      if (round === 1) {
+        if (!this.winnersByRound.has(round)) {
+          this.winnersByRound.set(round, []);
+        }
+        this.winnersByRound.get(round)!.push(winner);
+      } else if (hasWinners && winner.won_in_previous_round) {
+        // Only show future rounds if winners have been selected AND this team won
+        if (!this.winnersByRound.has(round)) {
+          this.winnersByRound.set(round, []);
+        }
+        this.winnersByRound.get(round)!.push(winner);
+      }
+    }
+
+    // Get sorted round numbers
+    this.roundNumbers = Array.from(this.winnersByRound.keys()).sort((a, b) => a - b);
+  }
+
+  public onNameClick(id: string | undefined, schoolName: string | undefined, round: number) {
+    if (!id || !schoolName) return;
+
     const record: WinnersFlyoutContext = {
-      seedId: id!.toString(),
+      seedId: id.toString(),
       schoolName: schoolName,
+      round: round,
     };
 
     const flyoutConfig: SkyFlyoutConfig = {
@@ -83,168 +89,5 @@ export class WinnersComponent implements OnInit {
       defaultWidth: 500,
     };
     this.flyout = this.flyoutService.open(WinnersFlyoutComponent, flyoutConfig);
-
-    // this.flyout.closed.subscribe(() => {
-    //   this.flyout = undefined;
-    // });
-  }
-
-  private resetSort() {
-    this.sortPoints =
-      this.sortBonusSelected =
-      this.sortEntriesSelected =
-      this.sortLost =
-      this.sortRegion =
-      this.sortSchool =
-      this.sortSeedNumber =
-      this.sortWins =
-        false;
-  }
-
-  public sortBySeedNumber() {
-    this.resetSort();
-    this.sortSeedNumber = true;
-
-    this.seedNumberDesc = !this.seedNumberDesc;
-
-    if (this.winners) {
-      if (this.seedNumberDesc) {
-        this.winners.sort((a: Winner, b: Winner) => {
-          return a.seed_number! > b.seed_number! ? -1 : 1;
-        });
-      } else {
-        this.winners.sort((a: Winner, b: Winner) => {
-          return a.seed_number! < b.seed_number! ? -1 : 1;
-        });
-      }
-    }
-  }
-
-  public sortBySchool() {
-    this.resetSort();
-    this.sortSchool = true;
-
-    this.schoolDesc = !this.schoolDesc;
-
-    if (this.winners) {
-      if (this.schoolDesc) {
-        this.winners.sort((a: Winner, b: Winner) => {
-          return a.school_name! > b.school_name! ? -1 : 1;
-        });
-      } else {
-        this.winners.sort((a: Winner, b: Winner) => {
-          return a.school_name! < b.school_name! ? -1 : 1;
-        });
-      }
-    }
-  }
-  public sortByPoints() {
-    this.resetSort();
-    this.sortPoints = true;
-
-    this.pointsDesc = !this.pointsDesc;
-
-    if (this.winners) {
-      if (this.pointsDesc) {
-        this.winners.sort((a: Winner, b: Winner) => {
-          return a.points! > b.points! ? -1 : 1;
-        });
-      } else {
-        this.winners.sort((a: Winner, b: Winner) => {
-          return a.points! < b.points! ? -1 : 1;
-        });
-      }
-    }
-  }
-  public sortByWins() {
-    this.resetSort();
-    this.sortWins = true;
-
-    this.winsDesc = !this.winsDesc;
-
-    if (this.winners) {
-      if (this.winsDesc) {
-        this.winners.sort((a: Winner, b: Winner) => {
-          return a.wins! > b.wins! ? -1 : 1;
-        });
-      } else {
-        this.winners.sort((a: Winner, b: Winner) => {
-          return a.wins! < b.wins! ? -1 : 1;
-        });
-      }
-    }
-  }
-  public sortByEntriesSelected() {
-    this.resetSort();
-    this.sortEntriesSelected = true;
-
-    this.entriesSelectedDesc = !this.entriesSelectedDesc;
-
-    if (this.winners) {
-      if (this.entriesSelectedDesc) {
-        this.winners.sort((a: Winner, b: Winner) => {
-          return a.entries_selected! > b.entries_selected! ? -1 : 1;
-        });
-      } else {
-        this.winners.sort((a: Winner, b: Winner) => {
-          return a.entries_selected! < b.entries_selected! ? -1 : 1;
-        });
-      }
-    }
-  }
-  public sortByBonusSelected() {
-    this.resetSort();
-    this.sortBonusSelected = true;
-
-    this.bonusSelectedDesc = !this.bonusSelectedDesc;
-
-    if (this.winners) {
-      if (this.bonusSelectedDesc) {
-        this.winners.sort((a: Winner, b: Winner) => {
-          return a.bonus_selected! > b.bonus_selected! ? -1 : 1;
-        });
-      } else {
-        this.winners.sort((a: Winner, b: Winner) => {
-          return a.bonus_selected! < b.bonus_selected! ? -1 : 1;
-        });
-      }
-    }
-  }
-  public sortByLost() {
-    this.resetSort();
-    this.sortLost = true;
-
-    this.lostDesc = !this.lostDesc;
-
-    if (this.winners) {
-      if (this.lostDesc) {
-        this.winners.sort((a: Winner, b: Winner) => {
-          return a.eliminated! > b.eliminated! ? -1 : 1;
-        });
-      } else {
-        this.winners.sort((a: Winner, b: Winner) => {
-          return a.eliminated! < b.eliminated! ? -1 : 1;
-        });
-      }
-    }
-  }
-
-  public sortByRegion() {
-    this.resetSort();
-    this.sortRegion = true;
-
-    this.regionDesc = !this.regionDesc;
-
-    if (this.winners) {
-      if (this.regionDesc) {
-        this.winners.sort((a: Winner, b: Winner) => {
-          return a.region_name! > b.region_name! ? -1 : 1;
-        });
-      } else {
-        this.winners.sort((a: Winner, b: Winner) => {
-          return a.region_name! < b.region_name! ? -1 : 1;
-        });
-      }
-    }
   }
 }

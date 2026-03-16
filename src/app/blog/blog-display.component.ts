@@ -118,7 +118,7 @@ export class BlogDisplayComponent implements OnInit {
           this.blogs = this.blogs.filter((blog) => blog.id !== id);
         },
         error: (error) => {
-          console.error('Error deleting blog post:', error);
+          
           alert('Failed to delete blog post. Please try again.');
         },
       });

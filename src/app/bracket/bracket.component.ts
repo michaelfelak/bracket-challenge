@@ -50,12 +50,12 @@ export class BracketComponent implements OnInit, OnDestroy {
       .getBracket(this.bracketId)
       .pipe(
         mergeMap((result: Bracket) => {
-          console.log('Bracket received:', result);
+          
           this.bracket = result;
           return this.service.getRegions();
         }),
         mergeMap((result: Region[]) => {
-          console.log('Regions received:', result);
+          
           const regions = result;
 
           this.topLeftRegion = {
@@ -84,12 +84,12 @@ export class BracketComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (seeds: Seed[]) => {
-          console.log('Seeds received:', seeds);
+          
           this.organizeSeedsByRegion(seeds);
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('Error loading bracket:', error);
+          
           this.errorMessage = 'Failed to load bracket. Please try again.';
           this.isLoading = false;
         }

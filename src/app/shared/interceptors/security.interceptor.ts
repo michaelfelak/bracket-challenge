@@ -16,7 +16,6 @@ export class SecurityInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     // Ensure all requests use HTTPS
     if (request.url.startsWith('http://') && !request.url.startsWith('http://localhost')) {
-      console.warn(`⚠️ WARNING: Non-HTTPS request detected: ${request.url}`);
       // In production, you could throw an error here to prevent insecure requests
       // throw new Error('All requests must use HTTPS');
     }
@@ -41,13 +40,6 @@ export class SecurityInterceptor implements HttpInterceptor {
           const cspHeader = event.headers.get('Content-Security-Policy');
           const xframeHeader = event.headers.get('X-Frame-Options');
           const xxssHeader = event.headers.get('X-XSS-Protection');
-          
-          if (!cspHeader) {
-            console.warn('⚠️ WARNING: Content-Security-Policy header not set');
-          }
-          if (!xframeHeader) {
-            console.warn('⚠️ WARNING: X-Frame-Options header not set');
-          }
         }
       })
     );

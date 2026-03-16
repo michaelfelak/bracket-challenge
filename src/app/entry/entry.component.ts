@@ -134,12 +134,10 @@ export class EntryComponent implements OnInit {
       .getBracket(this.bracketId)
       .pipe(
         mergeMap((result: Bracket) => {
-          console.log('Bracket received:', result);
           this.bracket = result;
           return this.service.getRegions();
         }),
         mergeMap((result: Region[]) => {
-          console.log('Regions received:', result);
           const regions = result;
 
           this.topLeftRegion = {
@@ -176,10 +174,6 @@ export class EntryComponent implements OnInit {
       )
       .subscribe((result) => {
         if (result) {
-          console.log('Seeds received from endpoint:', result);
-          console.log('Total seeds:', result.length);
-          console.log('Unique region IDs in seeds:', [...new Set(result.map(s => s.region_id))]);
-          
           result.forEach((r) => {
             const n = r.seed_number!;
             r.possible_points = 16 * n;
@@ -187,19 +181,15 @@ export class EntryComponent implements OnInit {
           this.topLeftRegion.seeds = result.filter((seed) => {
             return seed.region_id === this.topLeftRegion.region_id;
           });
-          console.log('Top Left Region ID:', this.topLeftRegion.region_id, 'Seeds found:', this.topLeftRegion.seeds.length);
           this.topRightRegion.seeds = result.filter((seed) => {
             return seed.region_id === this.topRightRegion.region_id;
           });
-          console.log('Top Right Region ID:', this.topRightRegion.region_id, 'Seeds found:', this.topRightRegion.seeds.length);
           this.bottomLeftRegion.seeds = result.filter((seed) => {
             return seed.region_id === this.bottomLeftRegion.region_id;
           });
-          console.log('Bottom Left Region ID:', this.bottomLeftRegion.region_id, 'Seeds found:', this.bottomLeftRegion.seeds.length);
           this.bottomRightRegion.seeds = result.filter((seed) => {
             return seed.region_id === this.bottomRightRegion.region_id;
           });
-          console.log('Bottom Right Region ID:', this.bottomRightRegion.region_id, 'Seeds found:', this.bottomRightRegion.seeds.length);
         }
         this.generateBracketMatchups();
       });
@@ -402,7 +392,6 @@ export class EntryComponent implements OnInit {
   }
 
   public update() {
-    console.log('update() called - recalculating form state...');
     this.entryForm.markAllAsTouched();
     // reset selected teams
     this.selectedTeams = [];
@@ -483,16 +472,7 @@ export class EntryComponent implements OnInit {
     // Enable button only if all conditions are met
     const newSubmitDisabledState = !(hasAllTeams && hasBonus && hasValidName && hasValidEmail && !hasDuplicates);
     
-    // Log validation state
-    console.log('=== Submit Button State Update ===');
-    console.log(`Teams selected: ${this.selectedTeams.length}/8 (${hasAllTeams ? 'âœ“' : 'âœ—'})`);
-    console.log(`Bonus team: ${hasBonus ? 'âœ“' : 'âœ—'}`);
-    console.log(`Valid name: ${hasValidName ? 'âœ“' : 'âœ—'} (${this.entryForm.value.name || 'empty'})`);
-    console.log(`Valid email: ${hasValidEmail ? 'âœ“' : 'âœ—'} (${this.entryForm.value.email || 'empty'})`);
-    console.log(`No duplicates: ${!hasDuplicates ? 'âœ“' : 'âœ—'}`);
-    console.log(`Submit Disabled: ${newSubmitDisabledState}`);
-    console.log('==================================');
-    
+
     this.submitDisabled = newSubmitDisabledState;
   }
 

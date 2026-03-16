@@ -1,0 +1,91 @@
+<div class="bracket-grid-container">
+  <!-- Messages -->
+  <div *ngIf="successMessage" class="message success">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="errorMessage" class="message error">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading">
+    <p>Loading bracket...</p>
+  </div>
+
+  <!-- Bracket Grid -->
+  <div *ngIf="!isLoading && bracketPositions.length > 0" class="bracket">
+    <div class="positions-grid">
+      <div *ngFor="let position of bracketPositions" class="bracket-position">
+        <!-- Position Header with Region Selector -->
+        <div class="position-header">
+          <div class="position-label">Position {{ position.positionId }}</div>
+          <select 
+            [formControl]="position.regionControl"
+            (change)="onRegionChange(position)"
+            class="region-selector"
+          >
+            <option [value]="null">Select Region</option>
+            <option *ngFor="let region of regionList" [ngValue]="region.id">
+              {{ region.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Seeds List -->
+        <div class="seeds-list">
+          <div *ngIf="position.seeds.length === 0" class="no-seeds">
+            Select a region above
+          </div>
+
+          <div *ngFor="let seed of position.seeds" class="seed-item">
+            <div class="seed-number">#{{ seed.seedNumber }}</div>
+            <div class="seed-input">
+              <div class="autocomplete-wrapper">
+                <!-- Selected School Display -->
+                <div *ngIf="seed.selectedSchoolName" class="selected-school">
+                  {{ seed.selectedSchoolName }}
+                  <button 
+                    type="button"
+                    class="clear-btn"
+                    (click)="clearSelection(seed)"
+                    title="Clear selection"
+                  >
+                    ✕
+                  </button>
+                </div>
+                
+                <!-- Search Input (shown when no school selected or typing) -->
+                <input 
+                  *ngIf="!seed.selectedSchoolName"
+                  type="text"
+                  [formControl]="seed.searchControl"
+                  (focus)="onSearchFocus(seed)"
+                  (blur)="toggleDropdown(seed, false)"
+                  placeholder="Type to search..."
+                  class="autocomplete-input"
+                />
+                
+                <!-- Autocomplete Dropdown -->
+                <div class="autocomplete-dropdown" *ngIf="seed.showDropdown && seed.filteredSchools.length > 0">
+                  <div 
+                    *ngFor="let school of seed.filteredSchools"
+                    class="autocomplete-option"
+                    (mousedown)="selectSchool(position, seed, school)"
+                  >
+                    {{ school.name }}
+                  </div>
+                </div>
+              </div>
+              <span class="overall-seed">Overall: #{{ seed.overallSeedNumber }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Bracket Message -->
+  <div *ngIf="!isLoading && bracketPositions.length === 0" class="no-bracket">
+    <p>No bracket loaded. Please select a bracket from the dropdown above.</p>
+  </div>
+</div>
