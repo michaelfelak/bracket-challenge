@@ -3,7 +3,24 @@
     <p>Only administrators can select winners.</p>
   </div>
 
-  <div *ngIf="isAdmin" class="bracket-view">
+  <div *ngIf="isAdmin">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-state">
+      <p>Loading bracket data...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="!isLoading && errorMessage" class="error-state">
+      <p>{{ errorMessage }}</p>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && !errorMessage && roundsData.length === 0" class="empty-state">
+      <p>No bracket data available. Please check the bracket ID.</p>
+    </div>
+
+    <!-- Bracket View -->
+    <div *ngIf="!isLoading && !errorMessage && roundsData.length > 0" class="bracket-view">
     <!-- 6 Collapsible Round Sections -->
     <div *ngFor="let roundData of roundsData" class="round-section">
       <!-- Round Header with Toggle -->
@@ -24,7 +41,6 @@
                   <span class="seed">[{{ matchup.team1.seed_number }}]</span>
                   <span class="school">{{ matchup.team1.school_name }}</span>
                 </button>
-                <div class="vs">vs</div>
                 <button class="team-button" type="button" (click)="onTeamClick(matchup.team2, matchup.team1, roundData.round)">
                   <span class="seed">[{{ matchup.team2.seed_number }}]</span>
                   <span class="school">{{ matchup.team2.school_name }}</span>
@@ -42,7 +58,6 @@
                   <span class="seed">[{{ matchup.team1.seed_number }}]</span>
                   <span class="school">{{ matchup.team1.school_name }}</span>
                 </button>
-                <div class="vs">vs</div>
                 <button class="team-button" type="button" (click)="onTeamClick(matchup.team2, matchup.team1, roundData.round)">
                   <span class="seed">[{{ matchup.team2.seed_number }}]</span>
                   <span class="school">{{ matchup.team2.school_name }}</span>
@@ -60,7 +75,6 @@
                   <span class="seed">[{{ matchup.team1.seed_number }}]</span>
                   <span class="school">{{ matchup.team1.school_name }}</span>
                 </button>
-                <div class="vs">vs</div>
                 <button class="team-button" type="button" (click)="onTeamClick(matchup.team2, matchup.team1, roundData.round)">
                   <span class="seed">[{{ matchup.team2.seed_number }}]</span>
                   <span class="school">{{ matchup.team2.school_name }}</span>
@@ -78,7 +92,6 @@
                   <span class="seed">[{{ matchup.team1.seed_number }}]</span>
                   <span class="school">{{ matchup.team1.school_name }}</span>
                 </button>
-                <div class="vs">vs</div>
                 <button class="team-button" type="button" (click)="onTeamClick(matchup.team2, matchup.team1, roundData.round)">
                   <span class="seed">[{{ matchup.team2.seed_number }}]</span>
                   <span class="school">{{ matchup.team2.school_name }}</span>
@@ -89,4 +102,4 @@
         </div>
       </div>
     </div>
-  </div>
+    </div>
