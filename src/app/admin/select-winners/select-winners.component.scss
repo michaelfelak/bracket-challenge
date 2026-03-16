@@ -18,12 +18,55 @@
   }
 }
 
+.loading-state {
+  padding: 40px 20px;
+  text-align: center;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+
+  p {
+    margin: 0;
+    font-size: 16px;
+    color: #666;
+  }
+}
+
+.error-state {
+  padding: 20px;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  color: #721c24;
+  margin-bottom: 20px;
+
+  p {
+    margin: 0;
+    font-weight: 500;
+  }
+}
+
+.empty-state {
+  padding: 40px 20px;
+  text-align: center;
+  background-color: #e8f4f8;
+  border: 1px dashed #b3d9e0;
+  border-radius: 4px;
+  color: #004085;
+
+  p {
+    margin: 0;
+    font-size: 16px;
+  }
+}
+
 .bracket-view {
   display: flex;
   flex-direction: column;
   gap: 20px;
   padding: 20px 0;
 }
+
 
 /* Round Section Styles */
 .round-section {

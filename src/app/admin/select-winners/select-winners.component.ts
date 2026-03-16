@@ -32,13 +32,19 @@ interface RoundData {
 })
 export class SelectWinnersComponent implements OnInit {
   @Input()
-  public bracketId = 0;
+  public bracketId = 5;
 
   public roundsData: RoundData[] = [];
   public allTeams: WinnerByRound[] = [];
   public isAdmin: boolean = false;
+  public isLoading = true;
+  public errorMessage = '';
 
   public flyout: SkyFlyoutInstance<any> | undefined;
+
+  public get effectiveBracketId(): number {
+    return this.bracketId || this.settingsService.CURRENT_BRACKET_ID;
+  }
 
   constructor(
     private service: BracketService,
@@ -57,9 +63,27 @@ export class SelectWinnersComponent implements OnInit {
   }
 
   private loadBracketData(): void {
-    this.service.getWinnersByRound(this.bracketId).subscribe((result) => {
-      this.allTeams = result;
-      this.organizeBracketByRoundAndRegion(result);
+    this.isLoading = true;
+    this.errorMessage = '';
+    console.log('Loading winners for bracket ID:', this.effectiveBracketId);
+    this.service.getWinnersByRound(this.effectiveBracketId).subscribe({
+      next: (result) => {
+        console.log('Winners data received:', result);
+        if (!result || !Array.isArray(result)) {
+          this.allTeams = [];
+          this.roundsData = [];
+          this.isLoading = false;
+          return;
+        }
+        this.allTeams = result;
+        this.organizeBracketByRoundAndRegion(result);
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading winners:', error);
+        this.errorMessage = 'Failed to load bracket data. Check the bracket ID.';
+        this.isLoading = false;
+      }
     });
   }
 
