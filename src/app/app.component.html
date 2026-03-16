@@ -37,8 +37,6 @@
     <a *ngIf="isAuthenticated" routerLink="my-profile" routerLinkActive="active" (click)="closeMenu()">My Profile</a>
     <a *ngIf="(entriesLocked && isAuthenticated) || isAdmin" routerLink="picks" routerLinkActive="active" (click)="closeMenu()">Submit Entry</a>
     <a routerLink="standings" routerLinkActive="active" (click)="closeMenu()">Standings</a>
-    <a *ngIf="!entriesLocked || isAdmin" routerLink="winners" routerLinkActive="active" (click)="closeMenu()">Points</a>
-    <a routerLink="timeline" routerLinkActive="active" (click)="closeMenu()">Timeline</a>
     <a routerLink="scores" routerLinkActive="active" (click)="closeMenu()">Bracket</a>
     <a routerLink="about" routerLinkActive="active" (click)="closeMenu()">About</a>
     <a *ngIf="isAdmin" routerLink="admin" routerLinkActive="active" (click)="closeMenu()">Admin</a>
@@ -61,8 +59,6 @@
     <a *ngIf="isAuthenticated" routerLink="my-profile" routerLinkActive="active" (click)="closeMenu()">My Profile</a>
     <a *ngIf="(entriesLocked && isAuthenticated) || isAdmin" routerLink="picks" routerLinkActive="active" (click)="closeMenu()">Submit Entry</a>
     <a routerLink="standings" routerLinkActive="active" (click)="closeMenu()">Standings</a>
-    <a *ngIf="!entriesLocked || isAdmin" routerLink="winners" routerLinkActive="active" (click)="closeMenu()">Points</a>
-    <a routerLink="timeline" routerLinkActive="active" (click)="closeMenu()">Timeline</a>
     <a routerLink="scores" routerLinkActive="active" (click)="closeMenu()">Bracket</a>
     <a routerLink="about" routerLinkActive="active" (click)="closeMenu()">About</a>
     <a *ngIf="isAdmin" routerLink="admin" routerLinkActive="active" (click)="closeMenu()">Admin</a>
