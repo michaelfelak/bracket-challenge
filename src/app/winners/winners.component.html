@@ -1,16 +1,97 @@
 <main>
   <div>
-    <h1 style="text-align: center">Select Winners</h1>
+    <h1 style="text-align: center">Bracket Progress</h1>
   </div>
   <div class="bracket-view">
-    <!-- Display rounds horizontally -->
-    <div class="rounds-container">
-      <div *ngFor="let round of roundNumbers" class="round-column">
-        <div class="round-header">
-          <h2>Round {{ round }}</h2>
+    <!-- 6 Collapsible Round Sections -->
+    <div *ngFor="let roundData of roundsData" class="round-section">
+      <!-- Round Header with Toggle -->
+      <div class="round-header" (click)="toggleRound(roundData)">
+        <sky-icon
+          icon="angle-right"
+          [attr.aria-label]="roundData.isCollapsed ? 'Expand' : 'Collapse'"
+          class="toggle-icon"
+          [ngClass]="{ collapsed: roundData.isCollapsed }"
+        ></sky-icon>
+        <h2>{{ roundData.roundName }}</h2>
+      </div>
+
+      <!-- Round Content (4 Regional Columns) -->
+      <div class="round-content" *ngIf="!roundData.isCollapsed">
+        <div class="regions-grid">
+          <!-- East Region -->
+          <div class="region-column">
+            <div class="region-header">East</div>
+            <div class="matchups-container">
+              <div *ngFor="let matchup of roundData.regionData.get('East')" class="matchup">
+                <div class="team-display">
+                  <span class="seed">[{{ matchup.team1.seed_number }}]</span>
+                  <span class="school">{{ matchup.team1.school_name }}</span>
+                </div>
+                <div class="vs">vs</div>
+                <div class="team-display">
+                  <span class="seed">[{{ matchup.team2.seed_number }}]</span>
+                  <span class="school">{{ matchup.team2.school_name }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- South Region -->
+          <div class="region-column">
+            <div class="region-header">South</div>
+            <div class="matchups-container">
+              <div *ngFor="let matchup of roundData.regionData.get('South')" class="matchup">
+                <div class="team-display">
+                  <span class="seed">[{{ matchup.team1.seed_number }}]</span>
+                  <span class="school">{{ matchup.team1.school_name }}</span>
+                </div>
+                <div class="vs">vs</div>
+                <div class="team-display">
+                  <span class="seed">[{{ matchup.team2.seed_number }}]</span>
+                  <span class="school">{{ matchup.team2.school_name }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Midwest Region -->
+          <div class="region-column">
+            <div class="region-header">Midwest</div>
+            <div class="matchups-container">
+              <div *ngFor="let matchup of roundData.regionData.get('Midwest')" class="matchup">
+                <div class="team-display">
+                  <span class="seed">[{{ matchup.team1.seed_number }}]</span>
+                  <span class="school">{{ matchup.team1.school_name }}</span>
+                </div>
+                <div class="vs">vs</div>
+                <div class="team-display">
+                  <span class="seed">[{{ matchup.team2.seed_number }}]</span>
+                  <span class="school">{{ matchup.team2.school_name }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- West Region -->
+          <div class="region-column">
+            <div class="region-header">West</div>
+            <div class="matchups-container">
+              <div *ngFor="let matchup of roundData.regionData.get('West')" class="matchup">
+                <div class="team-display">
+                  <span class="seed">[{{ matchup.team1.seed_number }}]</span>
+                  <span class="school">{{ matchup.team1.school_name }}</span>
+                </div>
+                <div class="vs">vs</div>
+                <div class="team-display">
+                  <span class="seed">[{{ matchup.team2.seed_number }}]</span>
+                  <span class="school">{{ matchup.team2.school_name }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="teams-container">
-          <div *ngFor="let winner of winnersByRound.get(round)" class="team-card">
-            <div class="seed-number">{{ winner.seed_number }}</div>
-            <div class="region-name">{{ winner.region_name }}</div>
-            <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(winner.seed_id?.toString(), winner.school_name, round)">
+      </div>
+    </div>
+  </div>
+</main>

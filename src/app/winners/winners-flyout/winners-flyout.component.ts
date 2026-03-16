@@ -27,12 +27,12 @@ export class WinnersFlyoutComponent implements OnInit {
   }
 
   constructor(
-    public context: WinnersFlyoutContext, 
+    public context: WinnersFlyoutContext,
     private service: BracketService,
     private settingsService: SettingsService,
-    private flyoutService: SkyFlyoutService
+    private flyoutService: SkyFlyoutService,
   ) {}
-      
+
   public ngOnInit() {
     this.currentRound = this.context.round || 1;
     this.service.getPicksBySchool(this.context.seedId).subscribe((result) => {
@@ -44,7 +44,7 @@ export class WinnersFlyoutComponent implements OnInit {
 
   public addWinner(): void {
     if (this.isLoading) return;
-    
+
     this.isLoading = true;
     const request: AddWinnerRequest = {
       bracket_id: this.bracketId,
@@ -54,27 +54,29 @@ export class WinnersFlyoutComponent implements OnInit {
 
     this.service.addWinner(request).subscribe({
       next: () => {
-        this.isLoading = false;
-        this.flyoutService.close();
+        // After winner is added, automatically mark the opponent as loser
+        if (this.context.opponentSeedId) {
+          this.markOpponentAsLoser();
+        } else {
+          this.isLoading = false;
+          this.flyoutService.close();
+        }
       },
       error: (error) => {
         this.isLoading = false;
         alert('Error adding winner: ' + error.message);
-      }
+      },
     });
   }
 
-  public addLoser(): void {
-    if (this.isLoading) return;
-    
-    this.isLoading = true;
-    const request: AddWinnerRequest = {
+  private markOpponentAsLoser(): void {
+    const loserRequest: AddWinnerRequest = {
       bracket_id: this.bracketId,
-      seed_id: parseInt(this.context.seedId),
+      seed_id: parseInt(this.context.opponentSeedId!),
       round: this.currentRound,
     };
 
-    this.service.addLoser(request).subscribe({
+    this.service.addLoser(loserRequest).subscribe({
       next: () => {
         this.isLoading = false;
         this.flyoutService.close();
@@ -82,8 +84,7 @@ export class WinnersFlyoutComponent implements OnInit {
       error: (error) => {
         this.isLoading = false;
         alert('Error marking loser: ' + error.message);
-      }
+      },
     });
   }
 }
-

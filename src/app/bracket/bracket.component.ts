@@ -8,6 +8,15 @@ import { Seed } from '../shared/models/seed';
 import { mergeMap } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
+interface Matchup {
+  team1: Seed;
+  team2: Seed;
+}
+
+interface RegionWithMatchups extends RegionModel {
+  matchups?: Matchup[];
+}
+
 @Component({
   selector: 'app-bracket',
   templateUrl: './bracket.component.html',
@@ -18,14 +27,26 @@ import { Subject } from 'rxjs';
 })
 export class BracketComponent implements OnInit, OnDestroy {
   public bracket: Bracket = {};
-  public topLeftRegion: RegionModel = {};
-  public topRightRegion: RegionModel = {};
-  public bottomRightRegion: RegionModel = {};
-  public bottomLeftRegion: RegionModel = {};
+  public topLeftRegion: RegionWithMatchups = {};
+  public topRightRegion: RegionWithMatchups = {};
+  public bottomRightRegion: RegionWithMatchups = {};
+  public bottomLeftRegion: RegionWithMatchups = {};
   public isLoading = true;
   public errorMessage = '';
 
   private ngUnsubscribe = new Subject<void>();
+
+  // Matchup order according to game logic
+  private readonly MATCHUP_SEED_PAIRS = [
+    [1, 16],
+    [8, 9],
+    [4, 13],
+    [5, 12],
+    [3, 14],
+    [6, 11],
+    [7, 10],
+    [2, 15]
+  ];
 
   public get bracketId() {
     return this.settingsService.CURRENT_BRACKET_ID;
@@ -61,22 +82,26 @@ export class BracketComponent implements OnInit, OnDestroy {
           this.topLeftRegion = {
             region_id: this.bracket.region_1_id,
             region_name: regions.find((r) => r.id === this.bracket.region_1_id)?.name,
-            seeds: []
+            seeds: [],
+            matchups: []
           };
           this.topRightRegion = {
             region_id: this.bracket.region_2_id,
             region_name: regions.find((r) => r.id === this.bracket.region_2_id)?.name,
-            seeds: []
+            seeds: [],
+            matchups: []
           };
           this.bottomRightRegion = {
             region_id: this.bracket.region_3_id,
             region_name: regions.find((r) => r.id === this.bracket.region_3_id)?.name,
-            seeds: []
+            seeds: [],
+            matchups: []
           };
           this.bottomLeftRegion = {
             region_id: this.bracket.region_4_id,
             region_name: regions.find((r) => r.id === this.bracket.region_4_id)?.name,
-            seeds: []
+            seeds: [],
+            matchups: []
           };
 
           return this.service.getSeedList(this.bracketId);
@@ -102,11 +127,34 @@ export class BracketComponent implements OnInit, OnDestroy {
     this.bottomLeftRegion.seeds = seeds.filter((seed) => seed.region_id === this.bottomLeftRegion.region_id);
     this.bottomRightRegion.seeds = seeds.filter((seed) => seed.region_id === this.bottomRightRegion.region_id);
 
-    // Sort seeds by seed number within each region
+    // Organize seeds into matchups for each region
     [this.topLeftRegion, this.topRightRegion, this.bottomLeftRegion, this.bottomRightRegion].forEach((region) => {
-      if (region.seeds) {
-        region.seeds.sort((a, b) => (a.seed_number || 0) - (b.seed_number || 0));
-      }
+      region.matchups = this.createMatchups(region.seeds || []);
     });
   }
+
+  private createMatchups(seeds: Seed[]): Matchup[] {
+    const matchups: Matchup[] = [];
+    
+    // Create a map of seed numbers to seeds for quick lookup
+    const seedMap = new Map<number, Seed>();
+    seeds.forEach(seed => {
+      if (seed.seed_number) {
+        seedMap.set(seed.seed_number, seed);
+      }
+    });
+
+    // Create matchups according to the seed pair order
+    for (const [seed1Num, seed2Num] of this.MATCHUP_SEED_PAIRS) {
+      const team1 = seedMap.get(seed1Num);
+      const team2 = seedMap.get(seed2Num);
+      
+      if (team1 && team2) {
+        matchups.push({ team1, team2 });
+      }
+    }
+
+    return matchups;
+  }
 }
+

@@ -15,10 +15,16 @@
       <!-- Top Left Region -->
       <div class="region-column">
         <h2 class="region-name">{{ topLeftRegion.region_name }}</h2>
-        <div class="seeds-list">
-          <div *ngFor="let seed of topLeftRegion.seeds" class="seed-card">
-            <div class="seed-number">{{ seed.seed_number }}</div>
-            <div class="school-name">{{ seed.school_name }}</div>
+        <div class="matchups-list">
+          <div *ngFor="let matchup of topLeftRegion.matchups" class="matchup">
+            <div class="team team1">
+              <span class="seed">{{ matchup.team1.seed_number }}</span>
+              <span class="name">{{ matchup.team1.school_name }}</span>
+            </div>
+            <div class="team team2">
+              <span class="seed">{{ matchup.team2.seed_number }}</span>
+              <span class="name">{{ matchup.team2.school_name }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -26,10 +32,16 @@
       <!-- Top Right Region -->
       <div class="region-column">
         <h2 class="region-name">{{ topRightRegion.region_name }}</h2>
-        <div class="seeds-list">
-          <div *ngFor="let seed of topRightRegion.seeds" class="seed-card">
-            <div class="seed-number">{{ seed.seed_number }}</div>
-            <div class="school-name">{{ seed.school_name }}</div>
+        <div class="matchups-list">
+          <div *ngFor="let matchup of topRightRegion.matchups" class="matchup">
+            <div class="team team1">
+              <span class="seed">{{ matchup.team1.seed_number }}</span>
+              <span class="name">{{ matchup.team1.school_name }}</span>
+            </div>
+            <div class="team team2">
+              <span class="seed">{{ matchup.team2.seed_number }}</span>
+              <span class="name">{{ matchup.team2.school_name }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -37,10 +49,16 @@
       <!-- Bottom Right Region -->
       <div class="region-column">
         <h2 class="region-name">{{ bottomRightRegion.region_name }}</h2>
-        <div class="seeds-list">
-          <div *ngFor="let seed of bottomRightRegion.seeds" class="seed-card">
-            <div class="seed-number">{{ seed.seed_number }}</div>
-            <div class="school-name">{{ seed.school_name }}</div>
+        <div class="matchups-list">
+          <div *ngFor="let matchup of bottomRightRegion.matchups" class="matchup">
+            <div class="team team1">
+              <span class="seed">{{ matchup.team1.seed_number }}</span>
+              <span class="name">{{ matchup.team1.school_name }}</span>
+            </div>
+            <div class="team team2">
+              <span class="seed">{{ matchup.team2.seed_number }}</span>
+              <span class="name">{{ matchup.team2.school_name }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -48,13 +66,13 @@
       <!-- Bottom Left Region -->
       <div class="region-column">
         <h2 class="region-name">{{ bottomLeftRegion.region_name }}</h2>
-        <div class="seeds-list">
-          <div *ngFor="let seed of bottomLeftRegion.seeds" class="seed-card">
-            <div class="seed-number">{{ seed.seed_number }}</div>
-            <div class="school-name">{{ seed.school_name }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+        <div class="matchups-list">
+          <div *ngFor="let matchup of bottomLeftRegion.matchups" class="matchup">
+            <div class="team team1">
+              <span class="seed">{{ matchup.team1.seed_number }}</span>
+              <span class="name">{{ matchup.team1.school_name }}</span>
+            </div>
+            <div class="team team2">
+              <span class="seed">{{ matchup.team2.seed_number }}</span>
+              <span class="name">{{ matchup.team2.school_name }}</span>
+            </div>

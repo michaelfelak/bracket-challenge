@@ -5,9 +5,20 @@ import { SkyIconModule } from '@skyux/indicators';
 import { BracketService } from '../shared/services/bracket.service';
 import { SettingsService } from '../shared/services/settings.service';
 import { WinnerByRound } from '../shared/models/winner.model';
-import { WinnersFlyoutContext } from './winners-flyout/winners-flyout.context';
-import { SkyFlyoutService, SkyFlyoutConfig, SkyFlyoutInstance } from '@skyux/flyout';
-import { WinnersFlyoutComponent } from './winners-flyout/winners-flyout.component';
+
+interface Matchup {
+  team1: WinnerByRound;
+  team2: WinnerByRound;
+  round: number;
+  region: string;
+}
+
+interface RoundData {
+  round: number;
+  roundName: string;
+  isCollapsed: boolean;
+  regionData: Map<string, Matchup[]>;
+}
 
 @Component({
   selector: 'app-winners',
@@ -17,77 +28,80 @@ import { WinnersFlyoutComponent } from './winners-flyout/winners-flyout.componen
   styleUrls: ['./winners.component.scss'],
 })
 export class WinnersComponent implements OnInit {
-  public winnersByRound: Map<number, WinnerByRound[]> = new Map();
-  public roundNumbers: number[] = [];
+  public roundsData: RoundData[] = [];
+  public allTeams: WinnerByRound[] = [];
 
   public get bracketId() {
     return this.settingsService.CURRENT_BRACKET_ID;
   }
 
-  public flyout: SkyFlyoutInstance<any> | undefined;
-
   constructor(
     private titleService: Title,
     private service: BracketService,
-    private flyoutService: SkyFlyoutService,
     private settingsService: SettingsService,
   ) {
-    this.titleService.setTitle('Bracket Challenge - Select Winners');
+    this.titleService.setTitle('Bracket Challenge - Current Bracket');
   }
 
   ngOnInit() {
+    this.loadBracketData();
+  }
+
+  private loadBracketData(): void {
     this.service.getWinnersByRound(this.bracketId).subscribe((result) => {
-      this.organizeWinnersByRound(result);
+      this.allTeams = result;
+      this.organizeBracketByRoundAndRegion(result);
     });
   }
 
-  private organizeWinnersByRound(winners: WinnerByRound[]): void {
-    this.winnersByRound.clear();
+  private organizeBracketByRoundAndRegion(allTeams: WinnerByRound[]): void {
+    this.roundsData = [];
+    const roundNames = ['Round 1 (Field of 64)', 'Round 2 (Round of 32)', 'Round 3 (Sweet 16)', 'Round 4 (Elite 8)', 'Round 5 (Final Four)', 'Round 6 (Championship)'];
+    const regions = ['East', 'South', 'Midwest', 'West'];
 
-    // First, check if there are any actual winners selected (teams with won_in_previous_round = true for round > 1)
-    const hasWinners = winners.some(w => w.round && w.round > 1 && w.won_in_previous_round);
-    
-    // Group winners by round and filter appropriately
-    for (const winner of winners) {
-      const round = winner.round || 1;
+    for (let round = 1; round <= 6; round++) {
+      const regionData = new Map<string, Matchup[]>();
+      regions.forEach(region => regionData.set(region, []));
 
-      // Always show Round 1
-      if (round === 1) {
-        if (!this.winnersByRound.has(round)) {
-          this.winnersByRound.set(round, []);
+      const teamsInRound = allTeams.filter(t => (t.round || 1) === round);
+      
+      const teamsByRegion = new Map<string, WinnerByRound[]>();
+      regions.forEach(region => teamsByRegion.set(region, []));
+      
+      teamsInRound.forEach(team => {
+        const region = team.region_name || 'East';
+        if (!teamsByRegion.has(region)) {
+          teamsByRegion.set(region, []);
         }
-        this.winnersByRound.get(round)!.push(winner);
-      } else if (hasWinners && winner.won_in_previous_round) {
-        // Only show future rounds if winners have been selected AND this team won
-        if (!this.winnersByRound.has(round)) {
-          this.winnersByRound.set(round, []);
+        teamsByRegion.get(region)!.push(team);
+      });
+
+      teamsByRegion.forEach((teams, region) => {
+        const matchups: Matchup[] = [];
+        for (let i = 0; i < teams.length; i += 2) {
+          if (i + 1 < teams.length) {
+            matchups.push({
+              team1: teams[i],
+              team2: teams[i + 1],
+              round: round,
+              region: region
+            });
+          }
         }
-        this.winnersByRound.get(round)!.push(winner);
-      }
+        regionData.set(region, matchups);
+      });
+
+      this.roundsData.push({
+        round: round,
+        roundName: roundNames[round - 1],
+        isCollapsed: round > 1,
+        regionData: regionData
+      });
     }
-
-    // Get sorted round numbers
-    this.roundNumbers = Array.from(this.winnersByRound.keys()).sort((a, b) => a - b);
   }
 
-  public onNameClick(id: string | undefined, schoolName: string | undefined, round: number) {
-    if (!id || !schoolName) return;
-
-    const record: WinnersFlyoutContext = {
-      seedId: id.toString(),
-      schoolName: schoolName,
-      round: round,
-    };
-
-    const flyoutConfig: SkyFlyoutConfig = {
-      providers: [
-        {
-          provide: WinnersFlyoutContext,
-          useValue: record,
-        },
-      ],
-      defaultWidth: 500,
-    };
-    this.flyout = this.flyoutService.open(WinnersFlyoutComponent, flyoutConfig);
+  public toggleRound(roundData: RoundData): void {
+    roundData.isCollapsed = !roundData.isCollapsed;
   }
 }
+

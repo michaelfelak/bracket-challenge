@@ -4,3 +4,281 @@
   width: 100%;
   font-family: "Titillium Web", sans-serif;
 }
+.admin-only-message {
+  padding: 20px;
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 4px;
+  color: #856404;
+  margin-bottom: 20px;
+
+  p {
+    margin: 0;
+    font-weight: 500;
+  }
+}
+
+.bracket-view {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+/* Round Section Styles */
+.round-section {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fafafa;
+  overflow: hidden;
+}
+
+.round-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 15px;
+  background-color: #333;
+  color: white;
+  font-weight: bold;
+  user-select: none;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #444;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+  }
+}
+
+.toggle-icon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  font-size: 18px;
+
+  &.collapsed {
+    transform: rotate(-90deg);
+  }
+}
+
+/* Round Content with Regional Grid */
+.round-content {
+  padding: 20px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 2000px;
+  }
+}
+
+.regions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Region Column */
+.region-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid #ddd;
+  padding: 15px;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.region-header {
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 3px;
+  font-size: 14px;
+  color: #333;
+  border-bottom: 2px solid #ccc;
+}
+
+/* Matchups Container */
+.matchups-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.matchup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  background-color: #f9f9f9;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+
+  &:hover {
+    background-color: #f0f0f0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Team Buttons */
+.team-button {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  font-family: inherit;
+
+  &:hover {
+    background-color: #e8f4f8;
+    border-color: #0066cc;
+    box-shadow: 0 1px 4px rgba(0, 102, 204, 0.3);
+  }
+
+  &:active {
+    background-color: #d4e8f0;
+  }
+
+  .seed {
+    font-weight: bold;
+    font-size: 12px;
+    color: #333;
+  }
+
+  .school {
+    font-size: 13px;
+    color: #000;
+    font-weight: 500;
+    word-break: break-word;
+  }
+}
+
+/* VS Separator */
+.vs {
+  text-align: center;
+  font-size: 11px;
+  color: #999;
+  font-weight: bold;
+  padding: 4px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .regions-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .round-content {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .regions-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .round-header {
+    padding: 12px;
+
+    h2 {
+      font-size: 16px;
+    }
+  }
+
+  .round-content {
+    padding: 15px;
+  }
+
+  .region-column {
+    padding: 12px;
+  }
+
+  .team-button {
+    font-size: 12px;
+
+    .seed {
+      font-size: 11px;
+    }
+
+    .school {
+      font-size: 12px;
+    }
+  }
+
+  .matchup {
+    padding: 10px;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bracket-view {
+    gap: 15px;
+    padding: 15px 0;
+  }
+
+  .round-header {
+    padding: 10px;
+    gap: 8px;
+
+    h2 {
+      font-size: 14px;
+    }
+  }
+
+  .round-content {
+    padding: 10px;
+  }
+
+  .region-column {
+    padding: 10px;
+  }
+
+  .region-header {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .matchup {
+    padding: 8px;
+    gap: 5px;
+  }
+
+  .team-button {
+    padding: 6px;
+
+    .seed {
+      font-size: 10px;
+    }
+
+    .school {
+      font-size: 11px;
+    }
+  }
+
+  .vs {
+    font-size: 10px;
+    padding: 2px 0;
+  }
+}
