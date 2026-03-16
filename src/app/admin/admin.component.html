@@ -83,5 +83,10 @@
       <h2>Blog Management</h2>
       <app-add-blog></app-add-blog>
     </div>
+
+    <!-- User Feedback Tab -->
+    <div *ngIf="activeTab === 'feedback'" class="tab-pane active">
+      <app-user-feedback></app-user-feedback>
+    </div>
   </div>
 </main>
