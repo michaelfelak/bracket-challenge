@@ -1,71 +1,16 @@
 <main>
   <div>
-    <h1 style="text-align: center">Points Earned Per Seed</h1>
+    <h1 style="text-align: center">Select Winners</h1>
   </div>
-  <div style="margin-left: 5%; margin-right: 10%">
-    <table class="center">
-      <tr>
-        <th class="team-check" (click)="sortByRegion()">
-          <div *ngIf="sortRegion && regionDesc" style="float: left">&darr;</div>
-          <div *ngIf="sortRegion && !regionDesc" style="float: left">&uarr;</div>
-          <a>Region</a>
-        </th>
-        <th class="team-check" (click)="sortBySeedNumber()">
-          <div *ngIf="sortSeedNumber && seedNumberDesc" style="float: left">&darr;</div>
-          <div *ngIf="sortSeedNumber && !seedNumberDesc" style="float: left">&uarr;</div>
-          <a>Seed Number</a>
-        </th>
-        <th class="team-check" (click)="sortBySchool()">
-          <div *ngIf="sortSchool && schoolDesc" style="float: left">&darr;</div>
-          <div *ngIf="sortSchool && !schoolDesc" style="float: left">&uarr;</div>
-          <a>School</a>
-        </th>
-        <th class="team-check" (click)="sortByPoints()">
-          <div *ngIf="sortPoints && pointsDesc" style="float: left">&darr;</div>
-          <div *ngIf="sortPoints && !pointsDesc" style="float: left">&uarr;</div>
-          <a>Points</a>
-        </th>
-        <th class="team-check" (click)="sortByWins()">
-          <div *ngIf="sortWins && winsDesc" style="float: left">&darr;</div>
-          <div *ngIf="sortWins && !winsDesc" style="float: left">&uarr;</div>
-          <a>Wins</a>
-        </th>
-        <th class="team-check" (click)="sortByEntriesSelected()">
-          <div *ngIf="sortEntriesSelected && entriesSelectedDesc" style="float: left">&darr;</div>
-          <div *ngIf="sortEntriesSelected && !entriesSelectedDesc" style="float: left">&uarr;</div>
-          <a>Entries Selected</a>
-        </th>
-        <th class="team-check" (click)="sortByBonusSelected()">
-          <div *ngIf="sortBonusSelected && bonusSelectedDesc" style="float: left">&darr;</div>
-          <div *ngIf="sortBonusSelected && !bonusSelectedDesc" style="float: left">&uarr;</div>
-          <a>Bonus Selected</a>
-        </th>
-        <th class="team-check" (click)="sortByLost()">
-          <div *ngIf="sortLost && lostDesc" style="float: left">&darr;</div>
-          <div *ngIf="sortLost && !lostDesc" style="float: left">&uarr;</div>
-          <a>Lost</a>
-        </th>
-      </tr>
-      <tr *ngFor="let winner of winners">
-        <td class="team-check">{{ winner.region_name }}</td>
-        <td class="team-check">{{ winner.seed_number }}</td>
-        <td class="team-check" *ngIf="!useStatic">
-          <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(winner.seed_id, winner.school_name)">
-            {{ winner.school_name }}
-          </button>
-        </td>
-        <td class="team-check" *ngIf="useStatic">
-          {{ winner.school_name }}
-        </td>
-        <td class="team-check">{{ winner.points }}</td>
-        <td class="team-check">{{ winner.wins }}</td>
-        <td class="team-check">{{ winner.entries_selected }}</td>
-        <td class="team-check">{{ winner.bonus_selected }}</td>
-        <td class="team-check">
-          <sky-icon style="color: red" *ngIf="winner.eliminated" icon="times"></sky-icon>
-        </td>
-      </tr>
-    </table>
-  </div>
-  <app-footer></app-footer>
-</main>
+  <div class="bracket-view">
+    <!-- Display rounds horizontally -->
+    <div class="rounds-container">
+      <div *ngFor="let round of roundNumbers" class="round-column">
+        <div class="round-header">
+          <h2>Round {{ round }}</h2>
+        </div>
+        <div class="teams-container">
+          <div *ngFor="let winner of winnersByRound.get(round)" class="team-card">
+            <div class="seed-number">{{ winner.seed_number }}</div>
+            <div class="region-name">{{ winner.region_name }}</div>
+            <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(winner.seed_id?.toString(), winner.school_name, round)">

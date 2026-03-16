@@ -7,7 +7,6 @@ import { StandingsFlyoutContext } from './standings-flyout/standings-flyout.cont
 import { StandingsRecord } from '../shared/models/standings.model';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../shared/footer/footer.component';
-import { StaticBracketService } from '../shared/services/static-bracket.service';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../shared/services/auth.service';
 
@@ -19,8 +18,6 @@ import { AuthService } from '../shared/services/auth.service';
   styleUrls: ['./standings.component.scss'],
 })
 export class StandingsComponent implements OnInit {
-  private useStatic = false;
-
   public standings: StandingsRecord[] = [];
   public userEntries: StandingsRecord[] = [];
   public flyout: SkyFlyoutInstance<any> | undefined;
@@ -44,7 +41,6 @@ export class StandingsComponent implements OnInit {
     private titleService: Title,
     private service: BracketService,
     private flyoutService: SkyFlyoutService,
-    private staticService: StaticBracketService,
     private authService: AuthService
   ) {
     // Check if user is logged in and get current user ID
@@ -58,29 +54,17 @@ export class StandingsComponent implements OnInit {
   public ngOnInit() {
     this.titleService.setTitle('Bracket Challenge - Standings');
 
-    if (this.useStatic) {
-      this.currentYear = this.years[0]; // Initialize to first year for static data
-      this.loadStandings();
-    } else {
-      this.service.getSettings().subscribe({
-        next: (settings) => {
-          this.showStandingsLink = settings.flyout_enabled && !this.useStatic;
-          this.currentYear = settings.current_year;
-          this.retrieveLiveStandings(this.currentYear);
-        },
-        error: (error) => {
-          console.error(`[Standings] Error fetching settings:`, error);
-          // Fallback to first year if settings fetch fails
-          this.currentYear = this.years[0];
-          this.retrieveLiveStandings(this.currentYear);
-        }
-      });
-    }
-  }
-
-  private loadStandings() {
-    this.standings = this.staticService.getStandings();
-    this.assignRank();
+    this.service.getSettings().subscribe({
+      next: (settings) => {
+        this.showStandingsLink = settings.flyout_enabled;
+        this.currentYear = settings.current_year;
+        this.retrieveLiveStandings(this.currentYear);
+      },
+      error: (_error) => {
+        this.currentYear = this.years[0];
+        this.retrieveLiveStandings(this.currentYear);
+      }
+    });
   }
 
   private retrieveLiveStandings(year: number) {
@@ -101,7 +85,7 @@ export class StandingsComponent implements OnInit {
         this.assignRank();
       },
       error: (error) => {
-        console.error(`[Standings] Error fetching standings for year ${year}:`, error);
+        
         this.standings = [];
       }
     });
@@ -161,17 +145,12 @@ export class StandingsComponent implements OnInit {
 
   public updateYear(year: number) {
     this.currentYear = year;
-    // Reset sorting when changing years
     this.sortCurrentPoints = false;
     this.sortCorrectPicks = false;
     this.sortRemainingPoints = false;
     this.sortPossiblePoints = false;
     
-    if (this.useStatic) {
-      this.loadStandings();
-    } else {
-      this.retrieveLiveStandings(year);
-    }
+    this.retrieveLiveStandings(year);
   }
 
   public sortByCurrentPoints() {

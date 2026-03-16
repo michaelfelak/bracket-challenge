@@ -31,14 +31,14 @@ export class AddRecordComponent {
       name: this.formGroup.value.schoolName!,
     };
     this.service.addSchool(request).subscribe(() => {
-      // console.log(result);
+      // 
     });
   }
   public addBracket() {
     this.service
       .addBracket({ year: this.formGroup.value.year!, region_1_id: 1, region_2_id: 2, region_3_id: 3, region_4_id: 4 })
       .subscribe((result) => {
-        console.log(result);
+        
       });
   }
 }

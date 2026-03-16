@@ -41,6 +41,11 @@ export class BracketService {
   public addBracket(request: Bracket) {
     return this.http.post(this.baseUrl + 'bracket', request);
   }
+
+  public updateBracket(request: any) {
+    return this.http.put(this.baseUrl + 'bracket', request);
+  }
+
   public addEntry(request: Entry): Observable<string> {
     return this.http.post<string>(this.baseUrl + 'entry', request, { 
       headers: this.getAuthHeaders() 
@@ -106,7 +111,7 @@ export class BracketService {
 
   public getStandings(year: number): Observable<StandingsRecord[]> {
     const url = this.baseUrl + year + '/standings';
-    console.log(`[BracketService] Fetching standings from URL: ${url}`);
+    
     return this.http.get<StandingsRecord[]>(url);
   }
 
@@ -138,7 +143,7 @@ export class BracketService {
 
   public getSettings(): Observable<Settings> {
     const url = this.baseUrl + 'settings';
-    console.log(`[BracketService] Fetching settings from URL: ${url}`);
+    
     return this.http.get<Settings>(url);
   }
 

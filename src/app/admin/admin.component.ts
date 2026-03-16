@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AddRecordComponent } from './add-record/add-record.component';
 import { BracketService } from '../shared/services/bracket.service';
 import { SettingsService } from '../shared/services/settings.service';
-import { AddSeedComponent } from './add-seed/add-seed.component';
+import { AuthService } from '../shared/services/auth.service';
+import { BracketGridComponent } from './bracket-grid/bracket-grid.component';
 import { Bracket } from '../shared/models/bracket';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SkyPageModule } from '@skyux/pages';
@@ -26,7 +27,7 @@ interface Tab {
     ReactiveFormsModule,
     FormsModule,
     AddRecordComponent,
-    AddSeedComponent,
+    BracketGridComponent,
     SkyPageModule,
     SelectWinnersComponent,
     SkyRepeaterModule,
@@ -41,22 +42,29 @@ export class AdminComponent implements OnInit {
   public settings: Settings | undefined;
   public brackets: Bracket[] = [];
   public existingSeeds: Seed[] = [];
-  public activeTab: string = 'settings';
+  public activeTab: string = 'entries';
   public selectedBracketIdLocal: number = 0;
+  public isAdmin: boolean = false;
 
   public tabs: Tab[] = [
-    { id: 'settings', label: 'Settings' },
     { id: 'entries', label: 'Entries' },
+    { id: 'paid-status', label: 'Paid Status' },
     { id: 'winners', label: 'Select Winners' },
     { id: 'blog', label: 'Blog' },
+    { id: 'settings', label: 'Settings' },
   ];
 
   public get selectedBracketId() {
     return this.selectedBracketIdLocal || this.settingsService.CURRENT_BRACKET_ID;
   }
 
-  constructor(private service: BracketService, private settingsService: SettingsService) {
+  constructor(
+    private service: BracketService,
+    private settingsService: SettingsService,
+    private authService: AuthService
+  ) {
     this.selectedBracketIdLocal = this.settingsService.CURRENT_BRACKET_ID;
+    this.isAdmin = this.authService.isAdmin();
   }
 
   ngOnInit() {
@@ -78,20 +86,28 @@ export class AdminComponent implements OnInit {
   }
 
   public toggleEntryVisible() {
-    this.service.updateEntryEnabled().subscribe(() => {
-      this.getSettings();
+    if (this.isAdmin) return; // Admins always have entry enabled
+    this.service.updateEntryEnabled().subscribe({
+      next: () => {
+        this.getSettings();
+      }
     });
   }
 
   public toggleFlyoutVisible() {
-    this.service.updateFlyoutEnabled().subscribe(() => {
-      this.getSettings();
+    if (this.isAdmin) return; // Admins always have flyout enabled
+    this.service.updateFlyoutEnabled().subscribe({
+      next: () => {
+        this.getSettings();
+      }
     });
   }
 
   private getSettings() {
-    this.service.getSettings().subscribe((settings) => {
-      this.settings = settings;
+    this.service.getSettings().subscribe({
+      next: (settings) => {
+        this.settings = settings;
+      }
     });
   }
 }

@@ -3,45 +3,86 @@
 main {
   margin-left: 5%;
   margin-right: 5%;
-  height: 100%;
+  min-height: 100%;
   font-family: "Titillium Web", sans-serif;
 }
 
-.team-check {
-  width: 20px;
+.bracket-view {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 0;
 }
 
-.team-name {
-  width: 20%;
-  vertical-align: middle;
+.rounds-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 10px 0;
 }
 
-table {
-  width: 700px;
+.round-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-width: 200px;
+  flex-shrink: 0;
 }
 
-table.center {
-  margin-left: auto;
-  margin-right: auto;
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-
-.header {
+.round-header {
   text-align: center;
+  padding: 10px;
+  background-color: rgb(50, 50, 50);
+  color: white;
+  border-radius: 4px;
+  font-weight: bold;
 }
 
-th,
-td {
-  vertical-align: middle;
-  border: none;
+.teams-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.team-card {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 12px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    background-color: #f0f0f0;
+  }
+}
+
+.seed-number {
+  font-weight: bold;
+  color: #333;
+  font-size: 12px;
+}
+
+.region-name {
+  font-size: 11px;
+  color: #666;
+}
+
+.sky-btn {
+  padding: 8px 6px;
   text-align: center;
-  border: 1px solid black;
-  border-collapse: collapse;
-}
+  font-size: 13px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  word-break: break-word;
 
-tr:nth-child(even) {
-  background-color: rgb(239, 196, 140);
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 /* Responsive Design */
@@ -51,22 +92,18 @@ tr:nth-child(even) {
     margin-right: 2%;
   }
 
-  table {
-    width: 100%;
-    font-size: 13px;
+  .round-column {
+    min-width: 180px;
   }
 
-  .team-check {
-    width: 30px;
+  .team-card {
+    padding: 10px;
   }
 
-  .team-name {
-    width: 40%;
-  }
-
-  th,
-  td {
-    padding: 8px 4px;
+  .seed-number,
+  .region-name,
+  .sky-btn {
+    font-size: 12px;
   }
 }
 
@@ -77,35 +114,28 @@ tr:nth-child(even) {
     padding: 8px;
   }
 
-  table {
-    width: 100%;
+  .rounds-container {
+    gap: 10px;
+  }
+
+  .round-column {
+    min-width: 150px;
+    gap: 10px;
+  }
+
+  .team-card {
+    padding: 8px;
+    gap: 3px;
+  }
+
+  .round-header {
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  .seed-number,
+  .region-name,
+  .sky-btn {
     font-size: 11px;
-  }
-
-  table.center {
-    border: 1px solid #999;
-  }
-
-  .team-check {
-    width: 25px;
-  }
-
-  .team-name {
-    width: 35%;
-  }
-
-  th,
-  td {
-    padding: 6px 3px;
-    font-size: 10px;
-  }
-
-  tr:nth-child(even) {
-    background-color: rgb(239, 196, 140);
-  }
-
-  .header {
-    font-size: 16px;
-    margin: 10px 0;
   }
 }

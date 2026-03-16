@@ -1,40 +1,258 @@
-@import url("https://fonts.googleapis.com/css?family=Titillium+Web&display=swap");
-main {
-  height: 100%;
-  font-family: "Titillium Web", sans-serif;
+@import url('https://fonts.googleapis.com/css?family=Titillium+Web&display=swap');
+
+.paid-status-container {
+  font-family: 'Titillium Web', sans-serif;
 }
 
-.team-check {
-  width: 20px;
-}
-.team-name {
-  width: 150px;
-  vertical-align: middle;
+.status-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+
+  .summary-item {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #014d0e;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #333;
+
+      &.paid {
+        color: #2e7d32;
+      }
+
+      &.unpaid {
+        color: #c62828;
+      }
+    }
+  }
 }
 
-table {
-  width: 400px;
-}
-table.center {
-  margin-left: auto;
-  margin-right: auto;
-  border: 1px solid black;
-  border-collapse: collapse;
+.entries-table-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-top: 20px;
+
+  .entries-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+
+    thead {
+      background-color: #f5f5f5;
+      border-bottom: 2px solid #e0e0e0;
+
+      th {
+        padding: 12px 16px;
+        text-align: left;
+        font-weight: 600;
+        color: #333;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+
+        &.col-id { width: 60px; text-align: center; }
+        &.col-name { flex: 1; min-width: 150px; }
+        &.col-email { flex: 1; min-width: 150px; }
+        &.col-date { width: 140px; }
+        &.col-status { width: 100px; text-align: center; }
+        &.col-action { width: 120px; text-align: center; }
+        &.col-delete { width: 100px; text-align: center; }
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid #e8e8e8;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: #f9f9f9;
+        }
+
+        &.paid {
+          background-color: #f1f8e9;
+        }
+
+        &.unpaid {
+          background-color: #fff3cd;
+        }
+
+        td {
+          padding: 12px 16px;
+          text-align: left;
+          color: #333;
+
+          &.col-id { text-align: center; font-weight: 600; }
+          &.col-date { font-size: 12px; color: #666; }
+          &.col-status { text-align: center; }
+          &.col-action { text-align: center; }
+          &.col-delete { text-align: center; }
+        }
+      }
+
+      tr:last-child {
+        border-bottom: none;
+      }
+    }
+  }
 }
 
-.header {
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: #ffebee;
+  color: #c62828;
+
+  &.is-paid {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+}
+
+.action-btn {
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: #e8e8e8;
+    border-color: #999;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &.mark-paid {
+    border-color: #4caf50;
+    color: #2e7d32;
+    background-color: #f1f8e9;
+
+    &:hover {
+      background-color: #e8f5e9;
+      border-color: #2e7d32;
+    }
+  }
+
+  &.mark-unpaid {
+    border-color: #ff9800;
+    color: #e65100;
+    background-color: #fff3e0;
+
+    &:hover {
+      background-color: #ffe0b2;
+      border-color: #e65100;
+    }
+  }
+}
+
+.delete-btn {
+  padding: 6px 12px;
+  border: 1px solid #ff6b6b;
+  border-radius: 4px;
+  background-color: #ffebee;
+  color: #c62828;
+  cursor: pointer;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #ff6b6b;
+    color: white;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.no-entries {
+  padding: 40px 20px;
   text-align: center;
+  color: #999;
+  background-color: white;
+  border-radius: 8px;
+  margin-top: 20px;
+
+  p {
+    margin: 0;
+    font-size: 16px;
+  }
 }
 
-th,
-td {
-  vertical-align: middle;
-  border: none;
-  text-align: center;
-  border: 1px solid black;
-  border-collapse: collapse;
+// Responsive design
+@media (max-width: 1024px) {
+  .entries-table-container .entries-table {
+    font-size: 12px;
+
+    thead th,
+    tbody td {
+      padding: 10px 12px;
+    }
+  }
 }
 
-tr:nth-child(even) {
-  background-color: rgb(239, 196, 140);
+@media (max-width: 768px) {
+  .status-summary {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .entries-table-container .entries-table {
+    font-size: 11px;
+
+    thead th,
+    tbody td {
+      padding: 8px 10px;
+    }
+
+    .col-email {
+      display: none;
+    }
+
+    .col-email ~ th,
+    .col-email ~ td {
+      display: none;
+    }
+  }
+
+  .action-btn,
+  .delete-btn {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
 }
+

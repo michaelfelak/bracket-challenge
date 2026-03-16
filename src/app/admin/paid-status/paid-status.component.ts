@@ -2,8 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BracketService } from 'src/app/shared/services/bracket.service';
 import { Entry } from 'src/app/shared/models/entry.model';
-import { SkyRepeaterModule } from '@skyux/lists';
-import { SkyIconModule } from '@skyux/indicators';
 import { mergeMap } from 'rxjs';
 import {
   SkyConfirmInstance,
@@ -15,7 +13,7 @@ import {
 @Component({
   selector: 'app-paid-status',
   standalone: true,
-  imports: [CommonModule, SkyRepeaterModule, SkyIconModule, SkyModalModule],
+  imports: [CommonModule, SkyModalModule],
   templateUrl: './paid-status.component.html',
   styleUrls: ['./paid-status.component.scss'],
 })
@@ -43,7 +41,7 @@ export class PaidStatusComponent implements OnInit {
         this.calculatePaidTotal();
       },
       (err: Error) => {
-        console.log('error reaching the web service: ', err);
+        
       }
     );
   }

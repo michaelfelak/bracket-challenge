@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BracketService } from './shared/services/bracket.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { StaticBracketService } from './shared/services/static-bracket.service';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { SecurityInterceptor } from './shared/interceptors/security.interceptor';
 import { PlatformSwitcherComponent } from './shared/components/platform-switcher.component';
@@ -16,7 +15,6 @@ import { PlatformSwitcherComponent } from './shared/components/platform-switcher
   imports: [BrowserModule, BrowserAnimationsModule, AppRoutingModule, HttpClientModule, PlatformSwitcherComponent],
   providers: [
     BracketService,
-    StaticBracketService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: SecurityInterceptor,

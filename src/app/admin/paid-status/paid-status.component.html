@@ -1,63 +1,74 @@
-<sky-repeater expandMode="single">
-    <sky-repeater-item [isExpanded]="false">
-      <sky-repeater-item-title>
-        <div class="pull-left">
-          <span class="label"> Update Paid Status </span>
-        </div>
-        <div class="pull-right">
-          <span class="label">
-            {{ this.numUnpaidEntries }} Unpaid - {{ this.numPaidEntries }} Paid -
-            {{ this.numPaidEntries + this.numUnpaidEntries }} Total
-          </span>
-        </div>
-      </sky-repeater-item-title>
-      <sky-repeater-item-content>
-        <table class="center">
-          <tr>
-            <th class="team-check">Entry ID</th>
-            <th class="team-check">Submission Time</th>
-            <th class="team-check">Mark as Paid</th>
-            <th class="team-check">Paid</th>
-            <th class="team-name">Entry</th>
-            <th class="team-name">Email</th>
-            <th class="team-check">Delete Entry</th>
-          </tr>
-          <tr *ngFor="let entry of entries">
-            <td class="team-check">
-              {{ entry.id }}
-            </td>
-            <td class="team-name">
-              {{ entry.created_date | date: "short" }}
-            </td>
-            <td class="team-check">
-              <button type="button" (click)="togglePaid(entry.id!)">Mark</button>
-            </td>
-            <td class="team-check">
-              <sky-icon
-                style="color: green"
-                *ngIf="entry.is_paid"
-                icon="check-circle"
-              ></sky-icon>
-              <sky-icon
-                style="color: red"
-                *ngIf="!entry.is_paid"
-                icon="times"
-              ></sky-icon>
-            </td>
-            <td class="team-name">
-              {{ entry.name }}
-            </td>
-            <td class="team-name">
-              {{ entry.email }}
-            </td>
-            <td class="team-name">
-              <button type="button" (click)="deleteEntry(entry.id!)">
-                Delete
-              </button>
-            </td>
-          </tr>
-        </table>
-      </sky-repeater-item-content>
-    </sky-repeater-item>
-  </sky-repeater>
+<div class="paid-status-container">
+  <div class="status-summary">
+    <div class="summary-item">
+      <span class="label">Total Entries</span>
+      <span class="value">{{ entries.length }}</span>
+    </div>
+    <div class="summary-item">
+      <span class="label">Paid</span>
+      <span class="value paid">{{ numPaidEntries }}</span>
+    </div>
+    <div class="summary-item">
+      <span class="label">Unpaid</span>
+      <span class="value unpaid">{{ numUnpaidEntries }}</span>
+    </div>
+  </div>
+
+  <div class="entries-table-container">
+    <table class="entries-table">
+      <thead>
+        <tr>
+          <th class="col-id">Entry ID</th>
+          <th class="col-name">Entry Name</th>
+          <th class="col-email">Email</th>
+          <th class="col-date">Submission Time</th>
+          <th class="col-status">Status</th>
+          <th class="col-action">Action</th>
+          <th class="col-delete">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of entries" [class.paid]="entry.is_paid" [class.unpaid]="!entry.is_paid">
+          <td class="col-id">
+            {{ entry.id }}
+          </td>
+          <td class="col-name">
+            {{ entry.name }}
+          </td>
+          <td class="col-email">
+            {{ entry.email }}
+          </td>
+          <td class="col-date">
+            {{ entry.created_date | date: "short" }}
+          </td>
+          <td class="col-status">
+            <span class="status-badge" [class.is-paid]="entry.is_paid">
+              {{ entry.is_paid ? 'Paid' : 'Unpaid' }}
+            </span>
+          </td>
+          <td class="col-action">
+            <button 
+              type="button" 
+              (click)="togglePaid(entry.id!)"
+              class="action-btn"
+              [class.mark-paid]="!entry.is_paid"
+              [class.mark-unpaid]="entry.is_paid"
+            >
+              {{ entry.is_paid ? 'Mark Unpaid' : 'Mark Paid' }}
+            </button>
+          </td>
+          <td class="col-delete">
+            <button type="button" (click)="deleteEntry(entry.id!)" class="delete-btn">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="entries.length === 0" class="no-entries">
+    <p>No entries found for this bracket.</p>
+  </div>
+</div>
   

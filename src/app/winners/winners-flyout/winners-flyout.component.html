@@ -1,6 +1,30 @@
 <main>
   <h3 class="header">School: {{ schoolName }}</h3>
   <h3 class="header"># Selected: {{ count }}</h3>
+  
+  <div class="round-selector">
+    <label for="round-select">Round:</label>
+    <select id="round-select" [(ngModel)]="currentRound" [ngModelOptions]="{updateOn: 'change'}" class="round-input">
+      <option [value]="1">Round 1</option>
+      <option [value]="2">Round 2</option>
+      <option [value]="3">Round 3</option>
+      <option [value]="4">Round 4</option>
+      <option [value]="5">Round 5</option>
+      <option [value]="6">Championship</option>
+    </select>
+  </div>
+
+  <div class="action-buttons">
+    <button class="winner-btn" (click)="addWinner()" [disabled]="isLoading">
+      <sky-icon icon="check-circle" style="color: green"></sky-icon>
+      Winner
+    </button>
+    <button class="loser-btn" (click)="addLoser()" [disabled]="isLoading">
+      <sky-icon icon="times-circle" style="color: red"></sky-icon>
+      Loser
+    </button>
+  </div>
+
   <table class="center">
     <tr style="border-bottom: 1px solid black">
       <th class="team-name" style="border-left: 1px solid black">Entry Name</th>
@@ -14,3 +38,4 @@
     </tr>
   </table>
 </main>
+

@@ -160,7 +160,6 @@ main {
     .setting-value {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       gap: 12px;
 
       .status {
@@ -177,10 +176,6 @@ main {
           background-color: #e8f5e9;
           color: #2e7d32;
         }
-      }
-
-      button {
-        flex-shrink: 0;
       }
     }
   }
