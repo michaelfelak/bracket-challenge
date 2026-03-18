@@ -46,14 +46,24 @@ export class WinnersFlyoutComponent implements OnInit {
     if (this.isLoading) return;
 
     this.isLoading = true;
+    // Winner advances to the NEXT round, so round + 1
+    const advancingRound = this.currentRound + 1;
+    
     const request: AddWinnerRequest = {
       bracket_id: this.bracketId,
       seed_id: parseInt(this.context.seedId),
-      round: this.currentRound,
+      round: advancingRound,
     };
+
+    console.log(`[WINNERS-FLYOUT] Adding winner:`, request, {
+      schoolName: this.context.schoolName,
+      opponent: this.context.opponentSchoolName,
+      advancingToRound: advancingRound
+    });
 
     this.service.addWinner(request).subscribe({
       next: () => {
+        console.log(`[WINNERS-FLYOUT] Winner added successfully for ${this.context.schoolName} advancing to round ${advancingRound}`);
         // After winner is added, automatically mark the opponent as loser
         if (this.context.opponentSeedId) {
           this.markOpponentAsLoser();
@@ -64,6 +74,7 @@ export class WinnersFlyoutComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
+        console.error(`[WINNERS-FLYOUT] Error adding winner:`, error);
         alert('Error adding winner: ' + error.message);
       },
     });
@@ -76,13 +87,20 @@ export class WinnersFlyoutComponent implements OnInit {
       round: this.currentRound,
     };
 
+    console.log(`[WINNERS-FLYOUT] Marking opponent as loser:`, loserRequest, {
+      opponentName: this.context.opponentSchoolName
+    });
+
     this.service.addLoser(loserRequest).subscribe({
       next: () => {
+        console.log(`[WINNERS-FLYOUT] Opponent marked as loser successfully for ${this.context.opponentSchoolName}`);
         this.isLoading = false;
         this.flyoutService.close();
+        console.log(`[WINNERS-FLYOUT] Flyout closing, ready to refresh`);
       },
       error: (error) => {
         this.isLoading = false;
+        console.error(`[WINNERS-FLYOUT] Error marking loser:`, error);
         alert('Error marking loser: ' + error.message);
       },
     });

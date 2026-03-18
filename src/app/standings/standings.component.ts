@@ -56,7 +56,8 @@ export class StandingsComponent implements OnInit {
 
     this.service.getSettings().subscribe({
       next: (settings) => {
-        this.showStandingsLink = settings.flyout_enabled;
+        // Allow admins to always view the flyout, otherwise respect the setting
+        this.showStandingsLink = this.authService.isAdmin() || settings.flyout_enabled;
         this.currentYear = settings.current_year;
         this.retrieveLiveStandings(this.currentYear);
       },

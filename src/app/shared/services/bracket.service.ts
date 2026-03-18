@@ -181,4 +181,71 @@ export class BracketService {
   public deleteBlogEntry(id: string): Observable<any> {
     return this.http.delete<any>(this.baseUrlPrefix + `blogentry/${id}`);
   }
+
+  /**
+   * Generate Round 1 matchups from a list of seeds based on standard NCAA bracket seed pairing
+   * Seed pairs: [1-16, 8-9, 4-13, 5-12, 3-14, 6-11, 7-10, 2-15]
+   * Matchups are generated per region to maintain correct regional grouping
+   */
+  public generateRound1Matchups(seeds: Seed[]): WinnerByRound[] {
+    const MATCHUP_SEED_PAIRS = [
+      [1, 16],
+      [8, 9],
+      [4, 13],
+      [5, 12],
+      [3, 14],
+      [6, 11],
+      [7, 10],
+      [2, 15]
+    ];
+
+    const matchups: WinnerByRound[] = [];
+
+    // Get unique regions
+    const regionSet = new Set<string>();
+    seeds.forEach(seed => {
+      if (seed.region_name) {
+        regionSet.add(seed.region_name);
+      }
+    });
+
+    // For each region, generate the matchup pairs
+    regionSet.forEach(region => {
+      // Get seeds for this region
+      const regionSeeds = seeds.filter(s => s.region_name === region);
+
+      // Create a map of seed number to seed within this region only
+      const seedMapByNumber = new Map<number, Seed>();
+      regionSeeds.forEach(seed => {
+        if (seed.seed_number) {
+          seedMapByNumber.set(seed.seed_number, seed);
+        }
+      });
+
+      // Generate pairs for this region
+      MATCHUP_SEED_PAIRS.forEach(([seed1Num, seed2Num]) => {
+        const seed1 = seedMapByNumber.get(seed1Num);
+        const seed2 = seedMapByNumber.get(seed2Num);
+
+        if (seed1 && seed2) {
+          matchups.push({
+            seed_id: seed1.id,
+            seed_number: seed1.seed_number,
+            school_name: seed1.school_name,
+            region_name: seed1.region_name,
+            round: 1,
+          });
+          matchups.push({
+            seed_id: seed2.id,
+            seed_number: seed2.seed_number,
+            school_name: seed2.school_name,
+            region_name: seed2.region_name,
+            round: 1,
+          });
+        }
+      });
+    });
+
+    return matchups;
+  }
 }
