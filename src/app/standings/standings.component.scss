@@ -3,107 +3,103 @@
 }
 
 main {
-  margin-left: 5%;
-  margin-right: 5%;
+  margin-left: 3%;
+  margin-right: 3%;
   height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol";
 }
 
-.header {
-  margin: 30px 0 20px 0;
-  color: #333;
-  font-size: 28px;
-  font-weight: 600;
-  border-bottom: 3px solid #006EB8;
-  padding-bottom: 15px;
+.header-bar {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 8px 0 8px 0;
+  gap: 15px;
 }
 
-.header-info {
-  margin-bottom: 25px;
-  padding: 15px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  border-left: 4px solid #006EB8;
+.header {
+  margin: 8px 0 8px 0;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+  border-bottom: 2px solid #006EB8;
+  padding-bottom: 4px;
+  flex: 1;
+}
 
-  .info-text {
-    margin: 0 0 15px 0;
-    color: #666;
+.year-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+
+  label {
+    font-weight: 600;
+    color: #333;
     font-size: 14px;
-    line-height: 1.5;
   }
 
-  .year-selector {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  select {
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Helvetica, Arial, sans-serif;
+    transition: border-color 0.2s ease;
+    min-width: 80px;
 
-    label {
-      font-weight: 600;
-      color: #333;
-      font-size: 14px;
+    &:hover {
+      border-color: #006EB8;
     }
 
-    select {
-      padding: 6px 10px;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      background-color: white;
-      color: #333;
-      cursor: pointer;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-        Helvetica, Arial, sans-serif;
-      transition: border-color 0.2s ease;
-
-      &:hover {
-        border-color: #006EB8;
-      }
-
-      &:focus {
-        outline: none;
-        border-color: #006EB8;
-        box-shadow: 0 0 4px rgba(0, 110, 184, 0.2);
-      }
+    &:focus {
+      outline: none;
+      border-color: #006EB8;
+      box-shadow: 0 0 4px rgba(0, 110, 184, 0.2);
     }
   }
 }
 
 .standings-container {
-  margin: 20px 0;
+  margin: 8px 0;
 }
 
 .user-entries-section {
-  margin: 30px 0;
-  padding: 20px;
+  margin: 12px 0;
+  padding: 12px;
   background-color: #e8f4fd;
-  border-radius: 8px;
+  border-radius: 6px;
   border-left: 4px solid #006EB8;
 
   .section-header {
-    margin: 0 0 20px 0;
+    margin: 0 0 10px 0;
     color: #006EB8;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 600;
   }
 }
 
 .section-header {
   color: #333;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
-  margin: 25px 0 15px 0;
+  margin: 10px 0 8px 0;
 }
 
 .empty-state {
   text-align: center;
-  padding: 60px 20px;
+  padding: 30px 15px;
   background-color: #f9f9f9;
-  border-radius: 8px;
+  border-radius: 6px;
   color: #666;
-  font-size: 16px;
-  margin: 20px 0;
+  font-size: 14px;
+  margin: 10px 0;
 }
 
 .table-wrapper {
@@ -123,12 +119,12 @@ main {
     color: white;
 
     th {
-      padding: 12px 15px;
+      padding: 2px 4px;
       text-align: center;
       font-weight: 600;
-      font-size: 13px;
+      font-size: 10px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       cursor: pointer;
       transition: background-color 0.2s ease;
 
@@ -137,19 +133,19 @@ main {
       }
 
       .sort-indicator {
-        margin-left: 5px;
-        font-size: 11px;
+        margin-left: 3px;
+        font-size: 10px;
       }
     }
   }
 
   tbody {
     tr {
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid #e8e8e8;
       transition: background-color 0.2s ease;
 
       &:hover {
-        background-color: #f5f5f5;
+        background-color: #f9f9f9;
       }
 
       &:last-child {
@@ -157,37 +153,38 @@ main {
       }
 
       &.alt-row {
-        background-color: #fafafa;
+        background-color: #fefefe;
 
         &:hover {
-          background-color: #f0f0f0;
+          background-color: #f5f5f5;
         }
       }
 
       td {
-        padding: 12px 15px;
-        font-size: 14px;
+        padding: 2px 4px;
+        font-size: 11px;
         color: #333;
         text-align: center;
         vertical-align: middle;
+        line-height: 1.2;
       }
     }
   }
 }
 
 .rank-col {
-  width: 10%;
+  width: 6%;
   font-weight: 600;
   color: #333;
 }
 
 .name-col {
-  width: 30%;
+  width: 20%;
   text-align: left;
 }
 
 .points-col {
-  width: 15%;
+  width: 10%;
 }
 
 .entry-link {

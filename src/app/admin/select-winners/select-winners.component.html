@@ -21,85 +21,85 @@
 
     <!-- Bracket View -->
     <div *ngIf="!isLoading && !errorMessage && roundsData.length > 0" class="bracket-view">
-    <!-- 6 Collapsible Round Sections -->
-    <div *ngFor="let roundData of roundsData" class="round-section">
-      <!-- Round Header with Toggle -->
-      <div class="round-header" (click)="toggleRound(roundData)">
-        <sky-icon icon="angle-right" [attr.aria-label]="roundData.isCollapsed ? 'Expand' : 'Collapse'" class="toggle-icon" [ngClass]="{ collapsed: roundData.isCollapsed }"></sky-icon>
-        <h2>{{ roundData.roundName }}</h2>
-      </div>
+      <!-- 6 Collapsible Round Sections -->
+      <div *ngFor="let roundData of roundsData" class="round-section">
+        <!-- Round Header with Toggle -->
+        <div class="round-header" (click)="toggleRound(roundData)">
+          <sky-icon icon="angle-right" [attr.aria-label]="roundData.isCollapsed ? 'Expand' : 'Collapse'" class="toggle-icon" [ngClass]="{ collapsed: roundData.isCollapsed }"></sky-icon>
+          <h2>{{ roundData.roundName }}</h2>
+        </div>
 
-      <!-- Round Content (4 Regional Columns) -->
-      <div class="round-content" *ngIf="!roundData.isCollapsed">
-        <div class="regions-grid">
-          <!-- East Region -->
-          <div class="region-column">
-            <div class="region-header">East</div>
-            <div class="matchups-container">
-              <div *ngFor="let matchup of roundData.regionData.get('East')" class="matchup">
-                <button class="team-button" type="button" (click)="onTeamClick(matchup.team1, matchup.team2, roundData.round)">
-                  <span class="seed">[{{ matchup.team1.seed_number }}]</span>
-                  <span class="school">{{ matchup.team1.school_name }}</span>
-                </button>
-                <button class="team-button" type="button" (click)="onTeamClick(matchup.team2, matchup.team1, roundData.round)">
-                  <span class="seed">[{{ matchup.team2.seed_number }}]</span>
-                  <span class="school">{{ matchup.team2.school_name }}</span>
-                </button>
+        <!-- Round Content (4 Regional Columns) -->
+        <div class="round-content" *ngIf="!roundData.isCollapsed">
+          <div class="regions-grid">
+            <!-- East Region -->
+            <div class="region-column">
+              <div class="region-header">East</div>
+              <div class="teams-list">
+                <div *ngFor="let team of roundData.regionData.get('East')" class="team-row" [ngClass]="{ 'winner': team.isWinner }">
+                  <span class="team-info">
+                    <span class="seed">[{{ team.seed_number }}]</span>
+                    <span class="school">{{ team.school_name }}</span>
+                  </span>
+                  <div class="actions">
+                    <button class="action-btn winner-btn" type="button" (click)="markAsWinner(team, roundData.round)" title="Mark as Winner">✓</button>
+                    <button class="action-btn loser-btn" type="button" (click)="markAsLoser(team, roundData.round)" title="Mark as Loser">✕</button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- South Region -->
-          <div class="region-column">
-            <div class="region-header">South</div>
-            <div class="matchups-container">
-              <div *ngFor="let matchup of roundData.regionData.get('South')" class="matchup">
-                <button class="team-button" type="button" (click)="onTeamClick(matchup.team1, matchup.team2, roundData.round)">
-                  <span class="seed">[{{ matchup.team1.seed_number }}]</span>
-                  <span class="school">{{ matchup.team1.school_name }}</span>
-                </button>
-                <button class="team-button" type="button" (click)="onTeamClick(matchup.team2, matchup.team1, roundData.round)">
-                  <span class="seed">[{{ matchup.team2.seed_number }}]</span>
-                  <span class="school">{{ matchup.team2.school_name }}</span>
-                </button>
+            <!-- South Region -->
+            <div class="region-column">
+              <div class="region-header">South</div>
+              <div class="teams-list">
+                <div *ngFor="let team of roundData.regionData.get('South')" class="team-row" [ngClass]="{ 'winner': team.isWinner }">
+                  <span class="team-info">
+                    <span class="seed">[{{ team.seed_number }}]</span>
+                    <span class="school">{{ team.school_name }}</span>
+                  </span>
+                  <div class="actions">
+                    <button class="action-btn winner-btn" type="button" (click)="markAsWinner(team, roundData.round)" title="Mark as Winner">✓</button>
+                    <button class="action-btn loser-btn" type="button" (click)="markAsLoser(team, roundData.round)" title="Mark as Loser">✕</button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Midwest Region -->
-          <div class="region-column">
-            <div class="region-header">Midwest</div>
-            <div class="matchups-container">
-              <div *ngFor="let matchup of roundData.regionData.get('Midwest')" class="matchup">
-                <button class="team-button" type="button" (click)="onTeamClick(matchup.team1, matchup.team2, roundData.round)">
-                  <span class="seed">[{{ matchup.team1.seed_number }}]</span>
-                  <span class="school">{{ matchup.team1.school_name }}</span>
-                </button>
-                <button class="team-button" type="button" (click)="onTeamClick(matchup.team2, matchup.team1, roundData.round)">
-                  <span class="seed">[{{ matchup.team2.seed_number }}]</span>
-                  <span class="school">{{ matchup.team2.school_name }}</span>
-                </button>
+            <!-- Midwest Region -->
+            <div class="region-column">
+              <div class="region-header">Midwest</div>
+              <div class="teams-list">
+                <div *ngFor="let team of roundData.regionData.get('Midwest')" class="team-row" [ngClass]="{ 'winner': team.isWinner }">
+                  <span class="team-info">
+                    <span class="seed">[{{ team.seed_number }}]</span>
+                    <span class="school">{{ team.school_name }}</span>
+                  </span>
+                  <div class="actions">
+                    <button class="action-btn winner-btn" type="button" (click)="markAsWinner(team, roundData.round)" title="Mark as Winner">✓</button>
+                    <button class="action-btn loser-btn" type="button" (click)="markAsLoser(team, roundData.round)" title="Mark as Loser">✕</button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- West Region -->
-          <div class="region-column">
-            <div class="region-header">West</div>
-            <div class="matchups-container">
-              <div *ngFor="let matchup of roundData.regionData.get('West')" class="matchup">
-                <button class="team-button" type="button" (click)="onTeamClick(matchup.team1, matchup.team2, roundData.round)">
-                  <span class="seed">[{{ matchup.team1.seed_number }}]</span>
-                  <span class="school">{{ matchup.team1.school_name }}</span>
-                </button>
-                <button class="team-button" type="button" (click)="onTeamClick(matchup.team2, matchup.team1, roundData.round)">
-                  <span class="seed">[{{ matchup.team2.seed_number }}]</span>
-                  <span class="school">{{ matchup.team2.school_name }}</span>
-                </button>
+            <!-- West Region -->
+            <div class="region-column">
+              <div class="region-header">West</div>
+              <div class="teams-list">
+                <div *ngFor="let team of roundData.regionData.get('West')" class="team-row" [ngClass]="{ 'winner': team.isWinner }">
+                  <span class="team-info">
+                    <span class="seed">[{{ team.seed_number }}]</span>
+                    <span class="school">{{ team.school_name }}</span>
+                  </span>
+                  <div class="actions">
+                    <button class="action-btn winner-btn" type="button" (click)="markAsWinner(team, roundData.round)" title="Mark as Winner">✓</button>
+                    <button class="action-btn loser-btn" type="button" (click)="markAsLoser(team, roundData.round)" title="Mark as Loser">✕</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </div>

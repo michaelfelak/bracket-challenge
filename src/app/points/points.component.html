@@ -1,0 +1,69 @@
+<main>
+  <div class="points-container">
+    <h1>Team Points</h1>
+
+    <div *ngIf="isLoading" class="loading-state">
+      <p>Loading team points data...</p>
+    </div>
+
+    <div *ngIf="!isLoading && errorMessage" class="error-state">
+      <p>{{ errorMessage }}</p>
+    </div>
+
+    <div *ngIf="!isLoading && !errorMessage && pointsData.length === 0" class="empty-state">
+      <p>No team points data available.</p>
+    </div>
+
+    <div *ngIf="!isLoading && !errorMessage && pointsData.length > 0">
+      <div class="filter-section">
+        <label class="filter-checkbox">
+          <input type="checkbox" [(ngModel)]="showAliveOnly" />
+          <span>Show Alive Only</span>
+        </label>
+      </div>
+
+      <div class="table-container">
+        <table class="points-table">
+          <thead>
+            <tr>
+              <th class="region-col">Region</th>
+              <th class="seed-col">Seed</th>
+              <th class="school-col">School</th>
+              <th class="points-col clickable" (click)="sortByPointsValue()" [class.active]="sortByPoints">
+                Points
+                <span *ngIf="sortByPoints">{{ pointsDesc ? '▼' : '▲' }}</span>
+              </th>
+              <th class="wins-col clickable" (click)="sortByWinsValue()" [class.active]="sortByWins">
+                Wins
+                <span *ngIf="sortByWins">{{ winsDesc ? '▼' : '▲' }}</span>
+              </th>
+              <th class="entries-col clickable" (click)="sortByEntriesValue()" [class.active]="sortByEntries">
+                Entries<br />Selected
+                <span *ngIf="sortByEntries">{{ entriesDesc ? '▼' : '▲' }}</span>
+              </th>
+              <th class="bonus-col">Bonus<br />Selected</th>
+              <th class="status-col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let team of filteredPointsData; let i = index" [class.alt-row]="(pointsData.indexOf(team) % 2) === 1" [class.eliminated]="team.eliminated">
+              <td class="region-col" data-label="Region">{{ team.region_name }}</td>
+              <td class="seed-col" data-label="Seed">#{{ team.seed_number }}</td>
+              <td class="school-col" data-label="School">{{ team.school_name }}</td>
+              <td class="points-col" data-label="Points">{{ team.points }}</td>
+              <td class="wins-col" data-label="Wins">{{ team.wins }}</td>
+              <td class="entries-col" data-label="Entries Selected">{{ team.entries_selected }}</td>
+              <td class="bonus-col" data-label="Bonus Selected">{{ team.bonus_selected }}</td>
+              <td class="status-col" data-label="Status">
+                <span *ngIf="team.eliminated" class="eliminated-badge">Eliminated</span>
+                <span *ngIf="!team.eliminated" class="alive-badge">Alive</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</main>

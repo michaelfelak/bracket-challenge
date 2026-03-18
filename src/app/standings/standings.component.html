@@ -1,11 +1,6 @@
 <main>
-  <h1 class="header">Standings</h1>
-
-  <div class="header-info">
-    <p class="info-text">
-      Click an entry name to see the entry's selections. Bracket challenge scoring is based on correct picks throughout the tournament.
-    </p>
-
+  <div class="header-bar">
+    <h1 class="header">Standings</h1>
     <div class="year-selector">
       <label for="year-dropdown">Year:</label>
       <select id="year-dropdown" [(ngModel)]="currentYear" (change)="updateYear(currentYear)">
