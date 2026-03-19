@@ -1,0 +1,93 @@
+<div class="scenario-container">
+  <div *ngIf="isLoading" class="loading">
+    <p>Loading scenario...</p>
+  </div>
+
+  <div *ngIf="!isLoading && errorMessage" class="error-message">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage" class="scenario-wrapper">
+    <h1>{{ year }} Bracket Scenario Simulator</h1>
+
+    <div class="controls">
+      <button class="reset-btn" (click)="resetScenario()">Reset to Actual Results</button>
+      <button class="calculate-btn" (click)="calculateScenarioStandings()">Calculate Standings</button>
+    </div>
+
+    <div class="scenario-grid">
+      <!-- Left Column: Bracket -->
+      <div class="bracket-column">
+        <div class="bracket-wrapper">
+          <!-- Horizontal rounds display -->
+          <div *ngFor="let roundData of allRoundTeams" class="round-column">
+            <div class="round-header">
+              <strong>R{{ roundData.round }}</strong>
+              <span class="round-label" *ngIf="roundData.round === 1">(64)</span>
+              <span class="round-label" *ngIf="roundData.round === 2">(32)</span>
+              <span class="round-label" *ngIf="roundData.round === 3">(16)</span>
+              <span class="round-label" *ngIf="roundData.round === 4">(8)</span>
+              <span class="round-label" *ngIf="roundData.round === 5">(F4)</span>
+              <span class="round-label" *ngIf="roundData.round === 6">(Champ)</span>
+            </div>
+
+            <div class="teams-list">
+              <div *ngFor="let team of roundData.teams" 
+                   class="team-row"
+                   [class.winner]="team.id !== undefined && getTeamStatus(team.id, roundData.round) === 'winner'"
+                   [class.loser]="team.id !== undefined && getTeamStatus(team.id, roundData.round) === 'loser'">
+                
+                <div class="team-info">
+                  <span class="team-label" [title]="team.school_name">#{{ team.seed_number }}{{ getRegionAbbreviation(team.region_name || '') }} {{ abbreviateSchoolName(team.school_name || '') }}</span>
+                </div>
+
+                <div class="actions">
+                  <button class="winner-btn" 
+                          [class.active]="team.id !== undefined && getTeamStatus(team.id, roundData.round) === 'winner'"
+                          (click)="team.id !== undefined && selectTeam(team.id, roundData.round, 'winner')"
+                          title="Mark as winner (advances to next round)">
+                    ✓
+                  </button>
+                  <button class="loser-btn"
+                          [class.active]="team.id !== undefined && getTeamStatus(team.id, roundData.round) === 'loser'"
+                          (click)="team.id !== undefined && selectTeam(team.id, roundData.round, 'loser')"
+                          title="Mark as loser (eliminated)">
+                    ✗
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Standings -->
+      <div class="standings-column">
+        <h2>Live Standings</h2>
+
+        <div *ngIf="standings.length === 0" class="no-data">
+          <p>No standings yet</p>
+        </div>
+
+        <table *ngIf="standings.length > 0" class="standings-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Entry</th>
+              <th>Points</th>
+              <th>Teams</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let record of standings" class="standing-row">
+              <td class="rank">{{ record.rank }}</td>
+              <td class="entry-name">{{ record.entry_name }}</td>
+              <td class="points">{{ record.current_points }}</td>
+              <td class="teams-remaining">{{ record.teams_remaining }}/8</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

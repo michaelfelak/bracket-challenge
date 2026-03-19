@@ -5,6 +5,7 @@ import { StandingsComponent } from './standings/standings.component';
 import { AboutComponent } from './about/about.component';
 import { AdminComponent } from './admin/admin.component';
 import { BracketComponent } from './bracket/bracket.component';
+import { SimulatorComponent } from './bracket/scenario/simulator.component';
 import { EntryComponent } from './entry/entry.component';
 import { AdminRouteGuard } from './admin/index.guard';
 import { PointsComponent } from './points/points.component';
@@ -56,6 +57,10 @@ const routes: Routes = [
   {
     path: 'standings',
     component: StandingsComponent,
+  },
+  {
+    path: 'scenario',
+    component: SimulatorComponent,
   },
 ];
 

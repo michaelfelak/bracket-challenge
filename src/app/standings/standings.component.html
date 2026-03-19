@@ -12,9 +12,9 @@
   </div>
 
   <!-- User's Entries Section -->
-  <div *ngIf="isLoggedIn" class="user-entries-section">
+  <div class="user-entries-section">
     <h2 class="section-header">Your Entries</h2>
-    <div *ngIf="userEntries && userEntries.length > 0" class="table-wrapper">
+    <div *ngIf="isLoggedIn && userEntries && userEntries.length > 0" class="table-wrapper">
       <table class="standings-table" #userEntriesTable>
         <thead>
           <tr>
@@ -55,7 +55,10 @@
         </tbody>
       </table>
     </div>
-    <div *ngIf="!userEntries || userEntries.length === 0" class="empty-state">
+    <div *ngIf="!isLoggedIn" class="empty-state">
+      <p>Log in to view your entries</p>
+    </div>
+    <div *ngIf="isLoggedIn && (!userEntries || userEntries.length === 0)" class="empty-state">
       <p>No entries submitted</p>
     </div>
   </div>

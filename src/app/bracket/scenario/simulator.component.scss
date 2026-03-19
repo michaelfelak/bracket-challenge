@@ -1,0 +1,691 @@
+.scenario-container {
+  padding: 20px;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.loading,
+.error-message {
+  text-align: center;
+  padding: 40px;
+  font-size: 16px;
+  color: #666;
+}
+
+.error-message {
+  color: #d32f2f;
+  background: #ffebee;
+  border-radius: 4px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.scenario-wrapper {
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 28px;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.reset-btn,
+.calculate-btn {
+  padding: 10px 20px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.reset-btn {
+  background: #1976d2;
+
+  &:hover {
+    background: #1565c0;
+  }
+
+  &:active {
+    background: #0d47a1;
+  }
+}
+
+.calculate-btn {
+  background: #388e3c;
+
+  &:hover {
+    background: #2e7d32;
+  }
+
+  &:active {
+    background: #1b5e20;
+  }
+}
+
+.scenario-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+  margin-bottom: 40px;
+  max-height: calc(100vh - 300px);
+
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr;
+    max-height: none;
+  }
+}
+
+// Bracket Column - Excel-like narrow layout
+.bracket-column {
+  background: white;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+
+    &:hover {
+      background: #555;
+    }
+  }
+}
+
+.bracket-wrapper {
+  display: flex;
+  gap: 6px;
+  min-width: min-content;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-grow: 1;
+}
+
+// Each round as a vertical column
+.round-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  min-width: 120px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 2px;
+  }
+}
+
+.round-header {
+  background: #e3f2fd;
+  border-bottom: 2px solid #1976d2;
+  padding: 8px 6px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  color: #1976d2;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-height: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+
+  .round-label {
+    font-size: 9px;
+    color: #666;
+    font-weight: normal;
+  }
+}
+
+.matchups-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 1px;
+}
+
+.team-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid #ddd;
+  background: white;
+  padding: 2px 4px;
+  transition: all 0.15s;
+
+  .team-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-width: 0;
+
+    .team-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: #1976d2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.3;
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  &.winner {
+    background: #c8e6c9;
+    border-color: #2e7d32;
+
+    .team-info .team-label {
+      color: #1b5e20;
+    }
+  }
+
+  &.loser {
+    background: #ffcdd2;
+    border-color: #c62828;
+    opacity: 0.7;
+
+    .team-info .team-label {
+      color: #b71c1c;
+      text-decoration: line-through;
+    }
+  }
+}
+
+.winner-btn,
+.loser-btn {
+  padding: 4px 6px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 3px;
+  transition: all 0.15s;
+  min-width: 24px;
+  text-align: center;
+
+  &:hover {
+    border-color: #999;
+    background: #f5f5f5;
+  }
+}
+
+.winner-btn {
+  color: #2e7d32;
+  border-color: #c8e6c9;
+
+  &.active {
+    background: #2e7d32;
+    color: white;
+    border-color: #1b5e20;
+  }
+}
+
+.loser-btn {
+  color: #c62828;
+  border-color: #ffcdd2;
+
+  &.active {
+    background: #c62828;
+    color: white;
+    border-color: #b71c1c;
+  }
+}
+
+// Standings Column
+.standings-column {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #999;
+    border-radius: 3px;
+
+    &:hover {
+      background: #666;
+    }
+  }
+
+  h2 {
+    margin: 0 0 12px 0;
+    font-size: 16px;
+    color: #333;
+    border-bottom: 2px solid #1976d2;
+    padding-bottom: 8px;
+    flex-shrink: 0;
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+}
+
+.no-data {
+  text-align: center;
+  padding: 30px 16px;
+  color: #999;
+  font-size: 13px;
+}
+
+.standings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  table-layout: fixed;
+
+  thead {
+    background: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+
+    th {
+      padding: 8px 6px;
+      text-align: left;
+      font-weight: 600;
+      color: #666;
+      font-size: 10px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      word-break: break-word;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid #f0f0f0;
+      transition: background 0.15s;
+
+      &:hover {
+        background: #f9f9f9;
+      }
+
+      &:nth-child(even) {
+        background: #fafafa;
+      }
+
+      td {
+        padding: 8px 6px;
+        color: #333;
+        word-break: break-word;
+      }
+    }
+  }
+}
+
+.standing-row {
+  td {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 7px 6px;
+    overflow: hidden;
+
+    &.rank {
+      font-weight: 600;
+      color: #1976d2;
+      text-align: center;
+      width: 15%;
+    }
+
+    &.entry-name {
+      width: 45%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 0;
+    }
+
+    &.points {
+      font-weight: 600;
+      color: #2e7d32;
+      text-align: right;
+      width: 20%;
+    }
+
+    &.teams-remaining {
+      text-align: center;
+      color: #999;
+      font-size: 11px;
+      width: 20%;
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .scenario-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .standings-column {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .scenario-container {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+
+  .controls {
+    gap: 8px;
+    margin-bottom: 15px;
+  }
+
+  .reset-btn,
+  .calculate-btn {
+    padding: 8px 15px;
+    font-size: 13px;
+  }
+
+  .bracket-column {
+    padding: 8px;
+  }
+
+  .round-column {
+    min-width: 90px;
+  }
+
+  .round-header {
+    padding: 6px 4px;
+    font-size: 11px;
+    min-height: 32px;
+
+    strong {
+      font-size: 12px;
+      margin-bottom: 1px;
+    }
+
+    .round-label {
+      font-size: 8px;
+    }
+  }
+
+  .team-row {
+    padding: 2px 2px;
+    gap: 2px;
+
+    .team-label {
+      font-size: 9px;
+    }
+  }
+
+  .winner-btn,
+  .loser-btn {
+    padding: 3px 4px;
+    font-size: 10px;
+    min-width: 20px;
+  }
+
+  .standings-column {
+    padding: 12px;
+
+    h2 {
+      font-size: 14px;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+    }
+  }
+
+  .standings-table {
+    font-size: 11px;
+
+    thead {
+      th {
+        padding: 6px 4px;
+        font-size: 9px;
+      }
+    }
+
+    tbody {
+      tr {
+        td {
+          padding: 6px 4px;
+          font-size: 10px;
+        }
+      }
+    }
+  }
+
+  .standing-row {
+    td {
+      padding: 5px 4px;
+
+      &.rank {
+        width: 15%;
+        font-size: 10px;
+      }
+
+      &.entry-name {
+        width: 45%;
+        font-size: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 0;
+      }
+
+      &.points {
+        width: 20%;
+        font-size: 10px;
+      }
+
+      &.teams-remaining {
+        width: 20%;
+        font-size: 9px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .scenario-container {
+    padding: 8px;
+  }
+
+  h1 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .controls {
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .reset-btn,
+  .calculate-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .scenario-grid {
+    gap: 12px;
+    max-height: none;
+  }
+
+  .bracket-column {
+    padding: 6px;
+    border-radius: 6px;
+  }
+
+  .bracket-wrapper {
+    gap: 4px;
+  }
+
+  .round-column {
+    min-width: 80px;
+  }
+
+  .round-header {
+    padding: 4px 3px;
+    font-size: 10px;
+    min-height: 28px;
+
+    strong {
+      font-size: 11px;
+      margin-bottom: 1px;
+    }
+
+    .round-label {
+      font-size: 7px;
+    }
+  }
+
+  .team-row {
+    padding: 1px 2px;
+    gap: 1px;
+    border-radius: 2px;
+
+    .team-info {
+      .team-label {
+        font-size: 8px;
+        line-height: 1.2;
+      }
+    }
+
+    .actions {
+      gap: 1px;
+    }
+  }
+
+  .winner-btn,
+  .loser-btn {
+    padding: 2px 3px;
+    font-size: 9px;
+    min-width: 18px;
+    border-radius: 2px;
+  }
+
+  .standings-column {
+    padding: 10px;
+    border-radius: 6px;
+
+    h2 {
+      font-size: 13px;
+      margin-bottom: 8px;
+      padding-bottom: 5px;
+    }
+  }
+
+  .standings-table {
+    font-size: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+    thead {
+      th {
+        padding: 4px 3px;
+        font-size: 8px;
+        white-space: nowrap;
+      }
+    }
+
+    tbody {
+      tr {
+        td {
+          padding: 4px 3px;
+          font-size: 9px;
+        }
+      }
+    }
+  }
+
+  .standing-row {
+    td {
+      padding: 4px 3px;
+
+      &.rank {
+        width: 15%;
+        font-size: 9px;
+      }
+
+      &.entry-name {
+        width: 45%;
+        font-size: 9px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 0;
+      }
+
+      &.points {
+        width: 20%;
+        font-size: 9px;
+      }
+
+      &.teams-remaining {
+        width: 20%;
+        font-size: 8px;
+      }
+    }
+  }
+
+  .no-data {
+    padding: 20px 10px;
+    font-size: 11px;
+  }
+}

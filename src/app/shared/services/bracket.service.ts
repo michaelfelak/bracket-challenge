@@ -13,6 +13,7 @@ import { Region } from '../models/region.model';
 import { Settings } from '../models/settings.model';
 import { AddWinnerRequest, Winner, WinnerByRound } from '../models/winner.model';
 import { BlogEntry } from '../models/blog.model';
+import { ScenarioStandingsRequest, ScenarioStandingsRecord } from '../models/scenario';
 import { AuthService } from './auth.service';
 import { API_CONSTANTS } from '../constants/api.constants';
 
@@ -113,6 +114,11 @@ export class BracketService {
     const url = this.baseUrl + year + '/standings';
     
     return this.http.get<StandingsRecord[]>(url);
+  }
+
+  public getScenarioStandings(year: number, request: ScenarioStandingsRequest): Observable<ScenarioStandingsRecord[]> {
+    const url = this.baseUrl + year + '/scenario-standings';
+    return this.http.post<ScenarioStandingsRecord[]>(url, request);
   }
 
   public getStandingsEntry(id: string | undefined): Observable<CompletedEntry> {
