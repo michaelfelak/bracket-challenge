@@ -4,6 +4,7 @@ import { SkyIconModule } from '@skyux/indicators';
 import { BracketService } from 'src/app/shared/services/bracket.service';
 import { SettingsService } from 'src/app/shared/services/settings.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { LoggerService } from 'src/app/shared/services/logger.service';
 import { WinnerByRound } from 'src/app/shared/models/winner.model';
 import { Seed } from 'src/app/shared/models/seed';
 import { AddWinnerRequest } from 'src/app/shared/models/winner.model';
@@ -44,6 +45,7 @@ export class SelectWinnersComponent implements OnInit {
     private service: BracketService,
     private settingsService: SettingsService,
     private authService: AuthService,
+    private logger: LoggerService,
   ) {
     this.isAdmin = this.authService.isAdmin();
   }
@@ -58,33 +60,33 @@ export class SelectWinnersComponent implements OnInit {
   private loadBracketData(): void {
     this.isLoading = true;
     this.errorMessage = '';
-    console.log('Loading bracket for ID:', this.effectiveBracketId);
+    this.logger.debug('Loading bracket for ID:', this.effectiveBracketId);
 
     // Load seeds for Round 1
     this.service.getSeedList(this.effectiveBracketId).subscribe({
       next: (seeds) => {
-        console.log('Seeds loaded:', seeds);
-        console.log('Sample seed regions:', seeds.slice(0, 10).map(s => ({ name: s.school_name, region: s.region_name, seed: s.seed_number })));
+        this.logger.debug('Seeds loaded:', seeds);
+        this.logger.debug('Sample seed regions:', seeds.slice(0, 10).map(s => ({ name: s.school_name, region: s.region_name, seed: s.seed_number })));
         
         // Generate Round 1 matchups from all seeds
         const round1Teams = this.service.generateRound1Matchups(seeds);
-        console.log('Round 1 teams generated:', round1Teams.length);
-        console.log('Sample round1 teams:', round1Teams.slice(0, 10).map(t => ({ name: t.school_name, region: t.region_name, seed: t.seed_number })));
+        this.logger.debug('Round 1 teams generated:', round1Teams.length);
+        this.logger.debug('Sample round1 teams:', round1Teams.slice(0, 10).map(t => ({ name: t.school_name, region: t.region_name, seed: t.seed_number })));
         
         // Load existing winners for rounds 2-6
         this.service.getWinnersByRound(this.effectiveBracketId).subscribe({
           next: (winnersData) => {
-            console.log('Winners data received (raw):', winnersData);
-            console.log('Winners data type:', typeof winnersData);
-            console.log('Winners data is array:', Array.isArray(winnersData));
+            this.logger.debug('Winners data received (raw):', winnersData);
+            this.logger.debug('Winners data type:', typeof winnersData);
+            this.logger.debug('Winners data is array:', Array.isArray(winnersData));
             
             // Handle null or undefined
             const winnersList = winnersData || [];
-            console.log('Winners list after null check:', winnersList);
+            this.logger.debug('Winners list after null check:', winnersList);
             
             if (winnersList.length > 0) {
-              console.log('Sample winners with rounds:', winnersList.slice(0, 5).map(w => ({ name: w.school_name, round: w.round, seedId: w.seed_id })));
-              console.log('FULL winner object:', JSON.stringify(winnersList[0]));
+              this.logger.debug('Sample winners with rounds:', winnersList.slice(0, 5).map(w => ({ name: w.school_name, round: w.round, seedId: w.seed_id })));
+              this.logger.debug('FULL winner object:', JSON.stringify(winnersList[0]));
             }
             
             // Create a Set of winning seed IDs for quick lookup
@@ -96,7 +98,7 @@ export class SelectWinnersComponent implements OnInit {
                 }
               });
             }
-            console.log('Winning seed IDs:', Array.from(winningSeedIds));
+            this.logger.debug('Winning seed IDs:', Array.from(winningSeedIds));
             
             // Mark Round 1 teams that are winners
             const round1TeamsWithWinners = round1Teams.map(team => ({
@@ -111,14 +113,14 @@ export class SelectWinnersComponent implements OnInit {
             this.isLoading = false;
           },
           error: (error) => {
-            console.error('Error loading winners:', error);
+            this.logger.error('Error loading winners:', error);
             this.errorMessage = 'Failed to load tournament data.';
             this.isLoading = false;
           }
         });
       },
       error: (error) => {
-        console.error('Error loading seeds:', error);
+        this.logger.error('Error loading seeds:', error);
         this.errorMessage = 'Failed to load bracket seeds. Check the bracket ID.';
         this.isLoading = false;
       }
@@ -191,7 +193,7 @@ export class SelectWinnersComponent implements OnInit {
 
   public markAsWinner(team: TeamWithStatus, round: number): void {
     if (!team.seed_id || !team.school_name) {
-      console.warn(`[SELECT-WINNERS] Cannot mark as winner: invalid team data`);
+      this.logger.warn(`[SELECT-WINNERS] Cannot mark as winner: invalid team data`);
       return;
     }
 
@@ -201,15 +203,15 @@ export class SelectWinnersComponent implements OnInit {
       round: round,
     };
 
-    console.log(`[SELECT-WINNERS] Marking ${team.school_name} as winner in round ${round}`);
+    this.logger.debug(`[SELECT-WINNERS] Marking ${team.school_name} as winner in round ${round}`);
     
     this.service.addWinner(winnerRequest).subscribe({
       next: () => {
-        console.log(`[SELECT-WINNERS] Winner added for ${team.school_name}`);
+        this.logger.debug(`[SELECT-WINNERS] Winner added for ${team.school_name}`);
         this.refreshData();
       },
       error: (error) => {
-        console.error(`[SELECT-WINNERS] Error marking winner:`, error);
+        this.logger.error(`[SELECT-WINNERS] Error marking winner:`, error);
         alert('Error marking winner: ' + error.message);
       }
     });
@@ -217,7 +219,7 @@ export class SelectWinnersComponent implements OnInit {
 
   public markAsLoser(team: TeamWithStatus, round: number): void {
     if (!team.seed_id || !team.school_name) {
-      console.warn(`[SELECT-WINNERS] Cannot mark as loser: invalid team data`);
+      this.logger.warn(`[SELECT-WINNERS] Cannot mark as loser: invalid team data`);
       return;
     }
 
@@ -227,21 +229,21 @@ export class SelectWinnersComponent implements OnInit {
       round: round,
     };
 
-    console.log(`[SELECT-WINNERS] Marking ${team.school_name} as loser`);
+    this.logger.debug(`[SELECT-WINNERS] Marking ${team.school_name} as loser`);
     this.service.addLoser(loserRequest).subscribe({
       next: () => {
-        console.log(`[SELECT-WINNERS] Loser marked for ${team.school_name}`);
+        this.logger.debug(`[SELECT-WINNERS] Loser marked for ${team.school_name}`);
         this.refreshData();
       },
       error: (error) => {
-        console.error(`[SELECT-WINNERS] Error marking loser:`, error);
+        this.logger.error(`[SELECT-WINNERS] Error marking loser:`, error);
         alert('Error marking loser: ' + error.message);
       }
     });
   }
 
   public refreshData(): void {
-    console.log(`[SELECT-WINNERS] Refreshing bracket data`);
+    this.logger.debug(`[SELECT-WINNERS] Refreshing bracket data`);
     this.loadBracketData();
   }
 }

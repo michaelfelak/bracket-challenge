@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { BracketService } from '../../shared/services/bracket.service';
 import { SettingsService } from '../../shared/services/settings.service';
+import { LoggerService } from '../../shared/services/logger.service';
 import { Seed } from '../../shared/models/seed';
 import { ScenarioWinner, ScenarioLoser, ScenarioStandingsRecord, ScenarioStandingsRequest } from '../../shared/models/scenario';
 import { WinnerByRound } from '../../shared/models/winner.model';
@@ -49,6 +51,7 @@ export class SimulatorComponent implements OnInit {
   constructor(
     private bracketService: BracketService,
     private settingsService: SettingsService,
+    private logger: LoggerService,
     private route: ActivatedRoute
   ) {}
 
@@ -135,14 +138,29 @@ export class SimulatorComponent implements OnInit {
   }
 
   private loadActualResults(): void {
-    this.bracketService.getWinnersByRound(this.settingsService.CURRENT_BRACKET_ID).subscribe({
-      next: (winners: WinnerByRound[] | null) => {
+    const winnersObservable = this.bracketService.getWinnersByRound(this.settingsService.CURRENT_BRACKET_ID);
+    const losersObservable = this.bracketService.getLosersByRound(this.settingsService.CURRENT_BRACKET_ID);
+    
+    this.logger.debug(`[Simulator] Bracket ID: ${this.settingsService.CURRENT_BRACKET_ID}`);
+    this.logger.debug('[Simulator] Fetching winners and losers...');
+
+    forkJoin({
+      winners: winnersObservable,
+      losers: losersObservable
+    }).subscribe({
+      next: (results: { winners: WinnerByRound[] | null; losers: WinnerByRound[] | null }) => {
+        this.logger.debug('[Simulator] Loaded results from API');
+        this.logger.debug('[Simulator] Winners from API:', results.winners);
+        this.logger.debug('[Simulator] Losers from API:', results.losers);
+        
         this.winners = [];
         this.losers = [];
         this.teamStates.clear();
 
-        if (winners && Array.isArray(winners)) {
-          winners.forEach((w: WinnerByRound) => {
+        // Process winners
+        if (results.winners && Array.isArray(results.winners)) {
+          this.logger.debug(`[Simulator] Processing ${results.winners.length} winners`);
+          results.winners.forEach((w: WinnerByRound) => {
             if (w.seed_id !== undefined && w.round !== undefined) {
               this.winners.push({
                 seed_id: w.seed_id,
@@ -157,11 +175,37 @@ export class SimulatorComponent implements OnInit {
           });
         }
 
+        // Process losers
+        if (results.losers && Array.isArray(results.losers)) {
+          this.logger.debug(`[Simulator] Processing ${results.losers.length} losers`);
+          results.losers.forEach((l: WinnerByRound) => {
+            this.logger.debug(`[Simulator] Loser details - seed_id: ${l.seed_id}, round: ${l.round}`);
+            if (l.seed_id !== undefined && l.round !== undefined) {
+              this.losers.push({
+                seed_id: l.seed_id,
+                round: l.round
+              });
+              
+              // Mark as loser in team states
+              const teamKey = `${l.seed_id}-${l.round}`;
+              this.teamStates.set(teamKey, 'loser');
+              this.logger.debug(`[Simulator] Marked ${teamKey} as loser`);
+            }
+          });
+        } else {
+          this.logger.debug('[Simulator] No losers returned from API');
+        }
+
+        this.logger.debug(`[Simulator] Final state - Winners: ${this.winners.length}, Losers: ${this.losers.length}`);
+        this.logger.debug('[Simulator] Team states map:', Array.from(this.teamStates.entries()));
+
         this.generateAllRoundTeams();
         this.updateStandings();
         this.isLoading = false;
       },
-      error: () => {
+      error: (error) => {
+        this.logger.error('[Simulator] Error in forkJoin:', error);
+        this.logger.error('[Simulator] Error details:', error);
         this.generateAllRoundTeams();
         this.updateStandings();
         this.isLoading = false;
@@ -175,10 +219,10 @@ export class SimulatorComponent implements OnInit {
     
     if (action === 'winner') {
       this.teamStates.set(teamKey, 'winner');
-      console.log(`[Simulator] Team marked as WINNER: ${selectedTeam?.school_name || 'Unknown'} (Seed #${selectedTeam?.seed_number}, Round ${round})`);
+      this.logger.debug(`[Simulator] Team marked as WINNER: ${selectedTeam?.school_name || 'Unknown'} (Seed #${selectedTeam?.seed_number}, Round ${round})`);
     } else if (action === 'loser') {
       this.teamStates.set(teamKey, 'loser');
-      console.log(`[Simulator] Team marked as LOSER: ${selectedTeam?.school_name || 'Unknown'} (Seed #${selectedTeam?.seed_number}, Round ${round})`);
+      this.logger.debug(`[Simulator] Team marked as LOSER: ${selectedTeam?.school_name || 'Unknown'} (Seed #${selectedTeam?.seed_number}, Round ${round})`);
     }
 
     // Update winners/losers arrays from team states
@@ -204,16 +248,16 @@ export class SimulatorComponent implements OnInit {
       }
     });
 
-    console.log(`[Simulator] Updated - Winners: ${this.winners.length}, Losers: ${this.losers.length}`);
+    this.logger.debug(`[Simulator] Updated - Winners: ${this.winners.length}, Losers: ${this.losers.length}`);
 
     // Regenerate teams for later rounds since selections changed
     this.generateAllRoundTeams();
   }
 
   public calculateScenarioStandings(): void {
-    console.log('[Simulator] Calculate button clicked - triggering standings calculation');
-    console.log(`[Simulator] Winners array:`, this.winners);
-    console.log(`[Simulator] Losers array:`, this.losers);
+    this.logger.debug('[Simulator] Calculate button clicked - triggering standings calculation');
+    this.logger.debug(`[Simulator] Winners array:`, this.winners);
+    this.logger.debug(`[Simulator] Losers array:`, this.losers);
     this.updateStandings();
   }
 
@@ -236,45 +280,30 @@ export class SimulatorComponent implements OnInit {
       losers: this.losers
     };
 
-    console.log(`[Simulator] Recalculating Standings with ${this.winners.length} winners and ${this.losers.length} losers`);
-    console.log('[Simulator] Request payload:', JSON.stringify(request));
-    console.log('[Simulator] Year:', this.year);
+    this.logger.debug(`[Simulator] Recalculating Standings with ${this.winners.length} winners and ${this.losers.length} losers`);
+    this.logger.debug('[Simulator] Request payload:', JSON.stringify(request));
+    this.logger.debug('[Simulator] Year:', this.year);
 
     this.bracketService.getScenarioStandings(this.year, request).subscribe({
       next: (standings: ScenarioStandingsRecord[]) => {
-        console.log(`[Simulator] API Response received - ${standings?.length || 0} entries`);
-        console.log('[Simulator] Standings data:', standings);
+        this.logger.debug(`[Simulator] API Response received - ${standings?.length || 0} entries`);
+        this.logger.debug('[Simulator] Standings data:', standings);
         this.standings = standings || [];
-        console.log(`[Simulator] Standings Updated - ${this.standings.length} entries calculated`);
+        this.logger.debug(`[Simulator] Standings Updated - ${this.standings.length} entries calculated`);
       },
       error: (error: any) => {
-        console.error('[Simulator] Error fetching standings:', error);
-        console.error('[Simulator] Error status:', error.status);
-        console.error('[Simulator] Error statusText:', error.statusText);
-        console.error('[Simulator] Full error:', error);
+        this.logger.error('[Simulator] Error fetching standings:', error);
+        this.logger.error('[Simulator] Error status:', error.status);
+        this.logger.error('[Simulator] Error statusText:', error.statusText);
+        this.logger.error('[Simulator] Full error:', error);
         this.standings = [];
       }
     });
   }
 
   public abbreviateSchoolName(name: string): string {
-    if (!name || name.length <= 12) return name || '';
-    
-    // Split by space and take first letters
-    const parts = name.split(' ');
-    if (parts.length > 1) {
-      // Multi-word: try to fit first two words
-      const firstTwo = parts.slice(0, 2).join(' ');
-      if (firstTwo.length <= 12) return firstTwo;
-      
-      // If first two words are too long, just take first word
-      const firstWord = parts[0];
-      if (firstWord.length <= 12) return firstWord;
-      return firstWord.substring(0, 12);
-    }
-    
-    // Single long word: abbreviate to 12 chars
-    return name.substring(0, 12);
+    // Don't abbreviate - allow text wrapping
+    return name || '';
   }
 
   public getRegionAbbreviation(regionName: string): string {

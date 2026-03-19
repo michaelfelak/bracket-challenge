@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { WinnersFlyoutContext } from './winners-flyout.context';
 import { BracketService } from 'src/app/shared/services/bracket.service';
 import { SettingsService } from 'src/app/shared/services/settings.service';
+import { LoggerService } from 'src/app/shared/services/logger.service';
 import { SkyIconModule } from '@skyux/indicators';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -31,6 +32,7 @@ export class WinnersFlyoutComponent implements OnInit {
     private service: BracketService,
     private settingsService: SettingsService,
     private flyoutService: SkyFlyoutService,
+    private logger: LoggerService,
   ) {}
 
   public ngOnInit() {
@@ -55,7 +57,7 @@ export class WinnersFlyoutComponent implements OnInit {
       round: advancingRound,
     };
 
-    console.log(`[WINNERS-FLYOUT] Adding winner:`, request, {
+    this.logger.debug(`[WINNERS-FLYOUT] Adding winner:`, request, {
       schoolName: this.context.schoolName,
       opponent: this.context.opponentSchoolName,
       advancingToRound: advancingRound
@@ -63,7 +65,7 @@ export class WinnersFlyoutComponent implements OnInit {
 
     this.service.addWinner(request).subscribe({
       next: () => {
-        console.log(`[WINNERS-FLYOUT] Winner added successfully for ${this.context.schoolName} advancing to round ${advancingRound}`);
+        this.logger.debug(`[WINNERS-FLYOUT] Winner added successfully for ${this.context.schoolName} advancing to round ${advancingRound}`);
         // After winner is added, automatically mark the opponent as loser
         if (this.context.opponentSeedId) {
           this.markOpponentAsLoser();
@@ -74,7 +76,7 @@ export class WinnersFlyoutComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
-        console.error(`[WINNERS-FLYOUT] Error adding winner:`, error);
+        this.logger.error(`[WINNERS-FLYOUT] Error adding winner:`, error);
         alert('Error adding winner: ' + error.message);
       },
     });
@@ -87,20 +89,20 @@ export class WinnersFlyoutComponent implements OnInit {
       round: this.currentRound,
     };
 
-    console.log(`[WINNERS-FLYOUT] Marking opponent as loser:`, loserRequest, {
+    this.logger.debug(`[WINNERS-FLYOUT] Marking opponent as loser:`, loserRequest, {
       opponentName: this.context.opponentSchoolName
     });
 
     this.service.addLoser(loserRequest).subscribe({
       next: () => {
-        console.log(`[WINNERS-FLYOUT] Opponent marked as loser successfully for ${this.context.opponentSchoolName}`);
+        this.logger.debug(`[WINNERS-FLYOUT] Opponent marked as loser successfully for ${this.context.opponentSchoolName}`);
         this.isLoading = false;
         this.flyoutService.close();
-        console.log(`[WINNERS-FLYOUT] Flyout closing, ready to refresh`);
+        this.logger.debug(`[WINNERS-FLYOUT] Flyout closing, ready to refresh`);
       },
       error: (error) => {
         this.isLoading = false;
-        console.error(`[WINNERS-FLYOUT] Error marking loser:`, error);
+        this.logger.error(`[WINNERS-FLYOUT] Error marking loser:`, error);
         alert('Error marking loser: ' + error.message);
       },
     });

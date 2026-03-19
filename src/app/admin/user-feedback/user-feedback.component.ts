@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FeedbackService } from '../../shared/services/feedback.service';
+import { LoggerService } from '../../shared/services/logger.service';
 import { Feedback } from '../../shared/models/feedback.model';
 
 @Component({
@@ -179,7 +180,9 @@ export class UserFeedbackComponent implements OnInit {
   isLoading = true;
   errorMessage = '';
 
-  constructor(private feedbackService: FeedbackService) {}
+  @Output() unaddressedCountChange = new EventEmitter<number>();
+
+  constructor(private feedbackService: FeedbackService, private logger: LoggerService) {}
 
   ngOnInit(): void {
     this.loadFeedback();
@@ -197,12 +200,17 @@ export class UserFeedbackComponent implements OnInit {
           const dateB = new Date(b.created_at || '').getTime();
           return dateB - dateA;
         });
+        
+        // Calculate unaddressed count and emit
+        const unaddressedCount = this.feedbackList.filter(item => !item.is_addressed).length;
+        this.unaddressedCountChange.emit(unaddressedCount);
+        
         this.isLoading = false;
       },
       error: (err) => {
         this.errorMessage = 'Failed to load feedback. Please try again.';
         this.isLoading = false;
-        console.error('Feedback load error:', err);
+        this.logger.error('Feedback load error:', err);
       }
     });
   }
@@ -214,10 +222,14 @@ export class UserFeedbackComponent implements OnInit {
     this.feedbackService.updateFeedbackStatus(feedback.id, newStatus).subscribe({
       next: () => {
         feedback.is_addressed = newStatus;
+        
+        // Recalculate unaddressed count and emit
+        const unaddressedCount = this.feedbackList.filter(item => !item.is_addressed).length;
+        this.unaddressedCountChange.emit(unaddressedCount);
       },
       error: (err) => {
         this.errorMessage = 'Failed to update feedback status. Please try again.';
-        console.error('Update feedback status error:', err);
+        this.logger.error('Update feedback status error:', err);
       }
     });
   }
