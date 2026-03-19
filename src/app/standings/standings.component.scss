@@ -22,7 +22,7 @@ main {
 .header {
   margin: 8px 0 8px 0;
   color: #333;
-  font-size: 18px;
+  font-size: 28px;
   font-weight: 600;
   border-bottom: 2px solid #006EB8;
   padding-bottom: 4px;
@@ -38,12 +38,12 @@ main {
   label {
     font-weight: 600;
     color: #333;
-    font-size: 14px;
+    font-size: 16px;
   }
 
   select {
-    padding: 6px 10px;
-    font-size: 14px;
+    padding: 8px 12px;
+    font-size: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: white;
@@ -71,23 +71,31 @@ main {
 }
 
 .user-entries-section {
-  margin: 12px 0;
-  padding: 12px;
+  margin: 15px auto;
+  padding: 15px;
   background-color: #e8f4fd;
   border-radius: 6px;
-  border-left: 4px solid #006EB8;
+  border-left: 5px solid #006EB8;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  width: 85%;
+
+  .table-wrapper {
+    max-width: 100%;
+  }
 
   .section-header {
-    margin: 0 0 10px 0;
+    margin: 0 0 12px 0;
     color: #006EB8;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 }
 
 .section-header {
   color: #333;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   margin: 10px 0 8px 0;
 }
@@ -98,12 +106,14 @@ main {
   background-color: #f9f9f9;
   border-radius: 6px;
   color: #666;
-  font-size: 14px;
+  font-size: 16px;
   margin: 10px 0;
 }
 
 .table-wrapper {
   overflow-x: auto;
+  max-width: 85%;
+  margin: 0 auto;
 }
 
 .standings-table {
@@ -113,20 +123,22 @@ main {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
+  table-layout: fixed;
 
   thead {
     background-color: #006EB8;
     color: white;
 
     th {
-      padding: 2px 4px;
+      padding: 8px 6px;
       text-align: center;
       font-weight: 600;
-      font-size: 10px;
+      font-size: 14px;
       text-transform: uppercase;
       letter-spacing: 0.3px;
       cursor: pointer;
       transition: background-color 0.2s ease;
+      word-break: break-word;
 
       &.sortable:hover {
         background-color: #00527a;
@@ -161,30 +173,43 @@ main {
       }
 
       td {
-        padding: 2px 4px;
-        font-size: 11px;
+        padding: 8px 6px;
+        font-size: 15px;
         color: #333;
         text-align: center;
         vertical-align: middle;
-        line-height: 1.2;
+        line-height: 1.4;
+        word-break: break-word;
+        overflow: hidden;
       }
     }
   }
 }
 
 .rank-col {
-  width: 6%;
+  width: 12%;
   font-weight: 600;
   color: #333;
+  text-align: center;
 }
 
 .name-col {
-  width: 20%;
+  width: 40%;
   text-align: left;
 }
 
+.name-col span,
+.name-col button {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
 .points-col {
-  width: 10%;
+  width: 16%;
+  text-align: center;
 }
 
 .entry-link {
@@ -199,105 +224,207 @@ main {
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+  main {
+    margin-left: 2%;
+    margin-right: 2%;
+  }
+}
+
 @media (max-width: 768px) {
   main {
-    margin-left: 4%;
-    margin-right: 4%;
+    margin-left: 2%;
+    margin-right: 2%;
+  }
+
+  .table-wrapper {
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .user-entries-section {
+    max-width: 100%;
+    margin: 15px 0;
+  }
+
+  .header-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 15px 0;
   }
 
   .header {
-    font-size: 24px;
-    margin: 20px 0 15px 0;
+    font-size: 20px;
+    margin: 0;
   }
 
-  .header-info {
-    padding: 12px;
-    margin-bottom: 20px;
+  .year-selector {
+    width: 100%;
 
-    .info-text {
-      margin-bottom: 10px;
-      font-size: 13px;
+    select {
+      flex: 1;
     }
+  }
 
-    .year-selector {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
+  .user-entries-section {
+    margin: 15px 0;
+    padding: 10px;
+
+    .section-header {
+      font-size: 14px;
+      margin: 0 0 8px 0;
     }
+  }
+
+  .section-header {
+    font-size: 16px;
+    margin: 10px 0 8px 0;
+  }
+
+  .empty-state {
+    padding: 20px 10px;
+    font-size: 15px;
   }
 
   .standings-table {
     thead {
       th {
-        padding: 10px 8px;
-        font-size: 11px;
+        padding: 6px 4px;
+        font-size: 12px;
       }
     }
 
     tbody {
       tr {
         td {
-          padding: 10px 8px;
+          padding: 6px 4px;
           font-size: 13px;
         }
       }
     }
   }
+
+  .rank-col {
+    width: 12%;
+  }
+
+  .name-col {
+    width: 40%;
+  }
+
+  .points-col {
+    width: 16%;
+  }
 }
 
 @media (max-width: 480px) {
   main {
-    margin-left: 3%;
-    margin-right: 3%;
+    margin-left: 1%;
+    margin-right: 1%;
+    padding: 4px;
+  }
+
+  .table-wrapper {
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .user-entries-section {
+    max-width: 100%;
+    margin: 12px 0;
+  }
+
+  .header-bar {
+    flex-direction: column;
+    align-items: stretch;
+    margin: 10px 0;
+    gap: 8px;
   }
 
   .header {
-    font-size: 20px;
-    margin: 15px 0 10px 0;
+    font-size: 16px;
+    margin: 0;
+    padding-bottom: 2px;
   }
 
-  .header-info {
-    padding: 10px;
-    margin-bottom: 15px;
+  .year-selector {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
 
-    .info-text {
-      margin-bottom: 8px;
-      font-size: 12px;
+    label {
+      font-size: 14px;
+      font-weight: 600;
     }
 
-    .year-selector {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 6px;
-
-      label {
-        font-size: 12px;
-      }
+    select {
+      width: 100%;
+      padding: 7px 8px;
+      font-size: 13px;
     }
+  }
+
+  .user-entries-section {
+    margin: 12px 0;
+    padding: 8px;
+    border-radius: 4px;
+
+    .section-header {
+      font-size: 15px;
+      margin: 0 0 6px 0;
+    }
+  }
+
+  .section-header {
+    font-size: 13px;
+    margin: 8px 0 6px 0;
+  }
+
+  .empty-state {
+    padding: 15px 8px;
+    font-size: 13px;
+    margin: 8px 0;
+    border-radius: 4px;
+  }
+
+  .table-wrapper {
+    overflow-x: hidden;
   }
 
   .standings-table {
-    font-size: 12px;
+    font-size: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
 
     thead {
       th {
-        padding: 8px 6px;
+        padding: 5px 3px;
         font-size: 10px;
+        line-height: 1.2;
       }
     }
 
     tbody {
       tr {
         td {
-          padding: 8px 6px;
+          padding: 5px 3px;
+          font-size: 11px;
+          line-height: 1.3;
         }
       }
     }
   }
 
-  .rank-col,
-  .name-col,
+  .rank-col {
+    width: 12%;
+  }
+
+  .name-col {
+    width: 40%;
+  }
+
   .points-col {
-    width: auto;
+    width: 16%;
   }
 }
