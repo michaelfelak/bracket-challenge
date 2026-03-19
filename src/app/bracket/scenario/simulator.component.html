@@ -38,17 +38,19 @@
                    [class.loser]="team.id !== undefined && getTeamStatus(team.id, roundData.round) === 'loser'">
                 
                 <div class="team-info">
-                  <span class="team-label" [title]="team.school_name">#{{ team.seed_number }}{{ getRegionAbbreviation(team.region_name || '') }} {{ abbreviateSchoolName(team.school_name || '') }}</span>
+                  <span class="team-label" [title]="team.school_name">#{{ team.seed_number }}{{ getRegionAbbreviation(team.region_name || '') }} {{ team.school_name || 'Unknown' }}</span>
                 </div>
 
                 <div class="actions">
                   <button class="winner-btn" 
+                          *ngIf="team.id === undefined || getTeamStatus(team.id, roundData.round) === 'available'"
                           [class.active]="team.id !== undefined && getTeamStatus(team.id, roundData.round) === 'winner'"
                           (click)="team.id !== undefined && selectTeam(team.id, roundData.round, 'winner')"
                           title="Mark as winner (advances to next round)">
                     ✓
                   </button>
                   <button class="loser-btn"
+                          *ngIf="team.id === undefined || getTeamStatus(team.id, roundData.round) === 'available'"
                           [class.active]="team.id !== undefined && getTeamStatus(team.id, roundData.round) === 'loser'"
                           (click)="team.id !== undefined && selectTeam(team.id, roundData.round, 'loser')"
                           title="Mark as loser (eliminated)">

@@ -86,7 +86,9 @@
 
     <!-- User Feedback Tab -->
     <div *ngIf="activeTab === 'feedback'" class="tab-pane active">
-      <app-user-feedback></app-user-feedback>
+      <app-user-feedback
+        (unaddressedCountChange)="onUnaddressedFeedbackCountChange($event)"
+      ></app-user-feedback>
     </div>
   </div>
 </main>

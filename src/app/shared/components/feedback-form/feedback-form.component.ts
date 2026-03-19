@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { FeedbackService } from '../../services/feedback.service';
 import { AuthService } from '../../services/auth.service';
 import { SettingsService } from '../../services/settings.service';
+import { LoggerService } from '../../services/logger.service';
 
 @Component({
   selector: 'app-feedback-form',
@@ -320,7 +321,8 @@ export class FeedbackFormComponent {
     private fb: FormBuilder,
     private feedbackService: FeedbackService,
     private authService: AuthService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private logger: LoggerService
   ) {
     this.feedbackForm = this.fb.group({
       feedback_text: ['', [Validators.required, Validators.minLength(10)]]
@@ -368,7 +370,7 @@ export class FeedbackFormComponent {
       error: (err: any) => {
         this.errorMessage = 'Failed to submit feedback. Please try again.';
         this.isSubmitting = false;
-        console.error('Feedback submission error:', err);
+        this.logger.error('Feedback submission error:', err);
       }
     });
   }

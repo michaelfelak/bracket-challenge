@@ -160,6 +160,10 @@ export class BracketService {
     return this.http.get<WinnerByRound[]>(this.baseUrl + id + '/winnersbyround');
   }
 
+  public getLosersByRound(id: number): Observable<WinnerByRound[]> {
+    return this.http.get<WinnerByRound[]>(this.baseUrl + id + '/losersbyround');
+  }
+
   public deleteWinner(id: number) {
     return this.http.delete(this.baseUrl + 'winner/' + id);
   }

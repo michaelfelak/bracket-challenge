@@ -26,6 +26,7 @@
         <table class="points-table">
           <thead>
             <tr>
+              <th class="status-col">Status</th>
               <th class="region-col">Region</th>
               <th class="seed-col">Seed</th>
               <th class="school-col">School</th>
@@ -42,11 +43,14 @@
                 <span *ngIf="sortByEntries">{{ entriesDesc ? '▼' : '▲' }}</span>
               </th>
               <th class="bonus-col">Bonus<br />Selected</th>
-              <th class="status-col">Status</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let team of filteredPointsData; let i = index" [class.alt-row]="(pointsData.indexOf(team) % 2) === 1" [class.eliminated]="team.eliminated">
+              <td class="status-col" data-label="Status">
+                <span *ngIf="team.eliminated" class="eliminated-badge">Eliminated</span>
+                <span *ngIf="!team.eliminated" class="alive-badge">Alive</span>
+              </td>
               <td class="region-col" data-label="Region">{{ team.region_name }}</td>
               <td class="seed-col" data-label="Seed">#{{ team.seed_number }}</td>
               <td class="school-col" data-label="School">{{ team.school_name }}</td>
@@ -54,10 +58,6 @@
               <td class="wins-col" data-label="Wins">{{ team.wins }}</td>
               <td class="entries-col" data-label="Entries Selected">{{ team.entries_selected }}</td>
               <td class="bonus-col" data-label="Bonus Selected">{{ team.bonus_selected }}</td>
-              <td class="status-col" data-label="Status">
-                <span *ngIf="team.eliminated" class="eliminated-badge">Eliminated</span>
-                <span *ngIf="!team.eliminated" class="alive-badge">Alive</span>
-              </td>
             </tr>
           </tbody>
         </table>

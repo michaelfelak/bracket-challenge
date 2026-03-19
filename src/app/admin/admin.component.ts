@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AddRecordComponent } from './add-record/add-record.component';
 import { BracketService } from '../shared/services/bracket.service';
+import { FeedbackService } from '../shared/services/feedback.service';
 import { SettingsService } from '../shared/services/settings.service';
 import { AuthService } from '../shared/services/auth.service';
+import { LoggerService } from '../shared/services/logger.service';
 import { BracketGridComponent } from './bracket-grid/bracket-grid.component';
 import { Bracket } from '../shared/models/bracket';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -44,14 +46,15 @@ export class AdminComponent implements OnInit {
   public settings: Settings | undefined;
   public brackets: Bracket[] = [];
   public existingSeeds: Seed[] = [];
-  public activeTab: string = 'entries';
+  public activeTab: string = 'winners';
   public selectedBracketIdLocal: number = 0;
   public isAdmin: boolean = false;
+  public unaddressedFeedbackCount: number = 0;
 
   public tabs: Tab[] = [
+    { id: 'winners', label: 'Select Winners' },
     { id: 'entries', label: 'Entries' },
     { id: 'paid-status', label: 'Paid Status' },
-    { id: 'winners', label: 'Select Winners' },
     { id: 'blog', label: 'Blog' },
     { id: 'feedback', label: 'User Feedback' },
     { id: 'settings', label: 'Settings' },
@@ -63,8 +66,10 @@ export class AdminComponent implements OnInit {
 
   constructor(
     private service: BracketService,
+    private feedbackService: FeedbackService,
     private settingsService: SettingsService,
-    private authService: AuthService
+    private authService: AuthService,
+    private logger: LoggerService
   ) {
     this.selectedBracketIdLocal = this.settingsService.CURRENT_BRACKET_ID;
     this.isAdmin = this.authService.isAdmin();
@@ -72,6 +77,7 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     this.getSettings();
+    this.loadUnaddressedFeedbackCount();
     this.service.getBracketList().subscribe((result) => {
       this.brackets = result;
       if (result.length > 0 && this.selectedBracketIdLocal === 0) {
@@ -82,6 +88,26 @@ export class AdminComponent implements OnInit {
 
   public selectTab(tabId: string): void {
     this.activeTab = tabId;
+  }
+
+  public onUnaddressedFeedbackCountChange(count: number): void {
+    this.unaddressedFeedbackCount = count;
+    const feedbackTab = this.tabs.find(tab => tab.id === 'feedback');
+    if (feedbackTab) {
+      feedbackTab.label = count > 0 ? `User Feedback (${count})` : 'User Feedback';
+    }
+  }
+
+  private loadUnaddressedFeedbackCount(): void {
+    this.feedbackService.getAllFeedback().subscribe({
+      next: (feedback) => {
+        const unaddressedCount = feedback.filter(item => !item.is_addressed).length;
+        this.onUnaddressedFeedbackCountChange(unaddressedCount);
+      },
+      error: (err) => {
+        this.logger.error('Error loading feedback count:', err);
+      }
+    });
   }
 
   public onBracketSelect(): void {

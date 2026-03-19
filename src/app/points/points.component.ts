@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { BracketService } from '../shared/services/bracket.service';
 import { SettingsService } from '../shared/services/settings.service';
+import { LoggerService } from '../shared/services/logger.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { FormsModule } from '@angular/forms';
 import { Winner } from '../shared/models/winner.model';
@@ -37,7 +38,8 @@ export class PointsComponent implements OnInit {
   constructor(
     private titleService: Title,
     private bracketService: BracketService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private logger: LoggerService
   ) {}
 
   ngOnInit() {
@@ -56,7 +58,7 @@ export class PointsComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading points data:', error);
+        this.logger.error('Error loading points data:', error);
         this.errorMessage = 'Failed to load team points data. Please try again.';
         this.isLoading = false;
       }
