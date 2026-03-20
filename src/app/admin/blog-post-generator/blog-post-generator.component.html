@@ -1,0 +1,50 @@
+<main>
+  <div class="generator-container">
+    <h2>Generate Blog Post</h2>
+    <p>Generates a detailed prompt for GitHub Copilot that creates engaging, data-driven blog posts.</p>
+
+    <div class="controls">
+      <button (click)="generateBlogPost()" [disabled]="isLoading" class="btn-primary">
+        {{ isLoading ? 'Generating...' : 'Generate Copilot Prompt' }}
+      </button>
+      <button (click)="copyPromptToContentBox()" [disabled]="isLoading || !blogPostContent" class="btn-secondary">
+        📋 Copy to Blog Content Below
+      </button>
+      <button (click)="togglePromptExpanded()" [disabled]="isLoading || !blogPostContent" class="btn-tertiary">
+        {{ isPromptExpanded ? '▼ Hide Full Prompt' : '▶ Show Full Prompt' }}
+      </button>
+    </div>
+
+    <!-- Copy Popover -->
+    <div *ngIf="showCopyPopover" class="popover">
+      ✓ Copied to blog content box!
+    </div>
+
+    <!-- Full Prompt (hidden by default) -->
+    <div *ngIf="blogPostContent && isPromptExpanded" class="blog-output">
+      <div class="info-box">
+        <strong>Alternative Workflow:</strong>
+        <ol>
+          <li>Copy the prompt below</li>
+          <li>Go to <a href="https://github.com/copilot" target="_blank">GitHub Copilot</a> or VS Code Copilot Chat</li>
+          <li>Paste and generate your blog post</li>
+        </ol>
+      </div>
+
+      <h3>Full Copilot Prompt</h3>
+      <div class="content-box">
+        <textarea [(ngModel)]="blogPostContent" rows="25" class="raw-textarea"></textarea>
+      </div>
+
+      <div class="button-group">
+        <button (click)="copyToClipboard()" [disabled]="!blogPostContent" class="btn-secondary">
+          📋 Copy Prompt to Clipboard
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="loading">
+      <p>Loading tournament data...</p>
+    </div>
+  </div>
+</main>

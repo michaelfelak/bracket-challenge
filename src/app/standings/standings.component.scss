@@ -209,9 +209,70 @@ main {
   max-width: 100%;
 }
 
-.points-col {
-  width: 16%;
+.superfan-col {
+  width: 18%;
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.superfan-with-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.seed-badge {
+  min-width: 25px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.logo-container {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  height: 24px;
+}
+
+.superfan-logo {
+  height: 24px;
+  width: auto;
+  max-width: 40px;
+  object-fit: contain;
+}
+
+.school-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+}
+
+.eliminated-icon {
+  margin-left: 4px;
+  font-size: 14px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.points-col {
+  width: 12.66%;
+  text-align: center;
+}
+
+.full-text {
+  display: inline;
+}
+
+.abbr-text {
+  display: none;
 }
 
 .entry-link {
@@ -317,6 +378,14 @@ main {
 
   .points-col {
     width: 16%;
+  }
+
+  .superfan-col {
+    width: 15%;
+  }
+
+  .school-text {
+    display: none;
   }
 }
 
@@ -428,5 +497,45 @@ main {
 
   .points-col {
     width: 16%;
+  }
+
+  .superfan-col {
+    width: 20%;
+    padding: 4px 2px;
+  }
+
+  .superfan-with-status {
+    gap: 3px;
+    justify-content: flex-start;
+  }
+
+  .seed-badge {
+    min-width: auto;
+    font-size: 12px;
+  }
+
+  .logo-container {
+    min-width: 20px;
+  }
+
+  .superfan-logo {
+    height: 20px;
+    max-width: 30px;
+  }
+
+  .school-text {
+    display: none;
+  }
+
+  .full-text {
+    display: none;
+  }
+
+  .abbr-text {
+    display: inline;
+  }
+
+  .eliminated-icon {
+    font-size: 12px;
   }
 }

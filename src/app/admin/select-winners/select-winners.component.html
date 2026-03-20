@@ -36,7 +36,7 @@
             <div class="region-column">
               <div class="region-header">East</div>
               <div class="teams-list">
-                <div *ngFor="let team of roundData.regionData.get('East')" class="team-row" [ngClass]="{ 'winner': team.isWinner }">
+                <div *ngFor="let team of roundData.regionData.get('East')" class="team-row" [ngClass]="{ 'winner': team.isWinner, 'loser': team.isLoser }">
                   <span class="team-info">
                     <span class="seed">[{{ team.seed_number }}]</span>
                     <span class="school">{{ team.school_name }}</span>
@@ -53,7 +53,7 @@
             <div class="region-column">
               <div class="region-header">South</div>
               <div class="teams-list">
-                <div *ngFor="let team of roundData.regionData.get('South')" class="team-row" [ngClass]="{ 'winner': team.isWinner }">
+                <div *ngFor="let team of roundData.regionData.get('South')" class="team-row" [ngClass]="{ 'winner': team.isWinner, 'loser': team.isLoser }">
                   <span class="team-info">
                     <span class="seed">[{{ team.seed_number }}]</span>
                     <span class="school">{{ team.school_name }}</span>
@@ -70,7 +70,7 @@
             <div class="region-column">
               <div class="region-header">Midwest</div>
               <div class="teams-list">
-                <div *ngFor="let team of roundData.regionData.get('Midwest')" class="team-row" [ngClass]="{ 'winner': team.isWinner }">
+                <div *ngFor="let team of roundData.regionData.get('Midwest')" class="team-row" [ngClass]="{ 'winner': team.isWinner, 'loser': team.isLoser }">
                   <span class="team-info">
                     <span class="seed">[{{ team.seed_number }}]</span>
                     <span class="school">{{ team.school_name }}</span>
@@ -87,7 +87,7 @@
             <div class="region-column">
               <div class="region-header">West</div>
               <div class="teams-list">
-                <div *ngFor="let team of roundData.regionData.get('West')" class="team-row" [ngClass]="{ 'winner': team.isWinner }">
+                <div *ngFor="let team of roundData.regionData.get('West')" class="team-row" [ngClass]="{ 'winner': team.isWinner, 'loser': team.isLoser }">
                   <span class="team-info">
                     <span class="seed">[{{ team.seed_number }}]</span>
                     <span class="school">{{ team.school_name }}</span>

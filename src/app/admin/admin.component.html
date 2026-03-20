@@ -16,9 +16,16 @@
     <button 
       *ngFor="let tab of tabs" 
       [class.active]="activeTab === tab.id"
+      [class.dragging]="draggedTabId === tab.id"
       (click)="selectTab(tab.id)"
+      (dragstart)="onTabDragStart($event, tab.id)"
+      (dragover)="onTabDragOver($event)"
+      (drop)="onTabDrop($event, tab.id)"
+      (dragend)="onTabDragEnd()"
       class="tab-button"
       type="button"
+      draggable="true"
+      [attr.title]="'Drag to reorder. Currently at position ' + (tabs.indexOf(tab) + 1)"
     >
       {{ tab.label }}
     </button>
@@ -80,8 +87,17 @@
 
     <!-- Blog Tab -->
     <div *ngIf="activeTab === 'blog'" class="tab-pane active">
-      <h2>Blog Management</h2>
-      <app-add-blog></app-add-blog>
+      <div class="blog-sections">
+        <div class="blog-section">
+          <h2>Generate Blog Post</h2>
+          <app-blog-post-generator [bracketId]="selectedBracketId"></app-blog-post-generator>
+        </div>
+        <hr style="margin: 50px 0;" />
+        <div class="blog-section">
+          <h2>Manage Blog Entries</h2>
+          <app-add-blog></app-add-blog>
+        </div>
+      </div>
     </div>
 
     <!-- User Feedback Tab -->

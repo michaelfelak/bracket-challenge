@@ -20,9 +20,10 @@
           <tr>
             <th class="rank-col">Rank</th>
             <th class="name-col">Entry Name</th>
+            <th class="superfan-col"><span class="full-text">Superfan Team</span><span class="abbr-text">Superfan</span></th>
             <th class="points-col">Current<br />Points</th>
             <th class="points-col">Total<br />Wins</th>
-            <th class="points-col">Remaining<br />Teams</th>
+            <th class="points-col"><span class="full-text">Remaining</span><span class="abbr-text">Rem</span><br />Teams</th>
           </tr>
         </thead>
         <tbody>
@@ -41,6 +42,28 @@
                 {{ pick.entry_name }}
               </button>
               <span *ngIf="!showStandingsLink">{{ pick.entry_name }}</span>
+            </td>
+            <td class="superfan-col" data-label="Superfan Team">
+              <div *ngIf="pick.superfan_seed" class="superfan-with-status">
+                <span class="seed-badge">#{{ pick.superfan_seed }}</span>
+                <div class="logo-container">
+                  <img
+                    *ngIf="pick.superfan_logo_id"
+                    [src]="'assets/logos/' + pick.superfan_logo_id + '.png'"
+                    [alt]="pick.superfan_school"
+                    class="superfan-logo"
+                    (error)="onLogoError($event)"
+                  />
+                </div>
+                <span class="school-text">{{ pick.superfan_school }}</span>
+                <sky-icon
+                  *ngIf="pick.superfan_eliminated"
+                  class="eliminated-icon"
+                  icon="times"
+                  style="color: red"
+                ></sky-icon>
+              </div>
+              <span *ngIf="!pick.superfan_seed">-</span>
             </td>
             <td class="points-col" data-label="Current Points">
               {{ pick.current_points }}
@@ -80,6 +103,7 @@
           <tr>
             <th class="rank-col">Rank</th>
             <th class="name-col">Entry Name</th>
+            <th class="superfan-col"><span class="full-text">Superfan Team</span><span class="abbr-text">Superfan</span></th>
             <th class="points-col sortable" (click)="sortByCurrentPoints()">
               Current<br />Points
               <span class="sort-indicator" *ngIf="sortCurrentPoints">
@@ -93,7 +117,7 @@
               </span>
             </th>
             <th class="points-col sortable" (click)="sortByRemainingPoints()">
-              Remaining<br />Teams
+              <span class="full-text">Remaining</span><span class="abbr-text">Rem</span><br />Teams
               <span class="sort-indicator" *ngIf="sortRemainingPoints">
                 {{ remainingPointsDesc ? "▼" : "▲" }}
               </span>
@@ -116,6 +140,28 @@
                 {{ pick.entry_name }}
               </button>
               <span *ngIf="!showStandingsLink">{{ pick.entry_name }}</span>
+            </td>
+            <td class="superfan-col" data-label="Superfan Team">
+              <div *ngIf="pick.superfan_seed" class="superfan-with-status">
+                <span class="seed-badge">#{{ pick.superfan_seed }}</span>
+                <div class="logo-container">
+                  <img
+                    *ngIf="pick.superfan_logo_id"
+                    [src]="'assets/logos/' + pick.superfan_logo_id + '.png'"
+                    [alt]="pick.superfan_school"
+                    class="superfan-logo"
+                    (error)="onLogoError($event)"
+                  />
+                </div>
+                <span class="school-text">{{ pick.superfan_school }}</span>
+                <sky-icon
+                  *ngIf="pick.superfan_eliminated"
+                  class="eliminated-icon"
+                  icon="times"
+                  style="color: red"
+                ></sky-icon>
+              </div>
+              <span *ngIf="!pick.superfan_seed">-</span>
             </td>
             <td class="points-col" data-label="Current Points">
               {{ pick.current_points }}
