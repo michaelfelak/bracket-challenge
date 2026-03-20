@@ -132,5 +132,11 @@ export class PointsComponent implements OnInit {
       }
     }
   }
+
+  public onLogoError(event: any): void {
+    if (event.target) {
+      event.target.style.display = 'none';
+    }
+  }
 }
 

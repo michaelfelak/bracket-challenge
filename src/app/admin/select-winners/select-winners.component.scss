@@ -176,16 +176,6 @@
     background-color: #f9f9f9;
   }
 
-  &.winner {
-    background-color: #d4edda;
-    border-color: #28a745;
-    
-    .team-info {
-      color: #155724;
-      font-weight: 600;
-    }
-  }
-
   &.loser {
     background-color: #f8d7da;
     border-color: #dc3545;

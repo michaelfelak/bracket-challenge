@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { BracketService } from '../shared/services/bracket.service';
+import { TrackingService } from '../shared/services/tracking.service';
 import { SkyFlyoutService, SkyFlyoutInstance, SkyFlyoutConfig } from '@skyux/flyout';
 import { StandingsFlyoutComponent } from './standings-flyout/standings-flyout.component';
 import { StandingsFlyoutContext } from './standings-flyout/standings-flyout.context';
@@ -10,11 +11,10 @@ import { FooterComponent } from '../shared/footer/footer.component';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../shared/services/auth.service';
 import { SkyIconModule } from '@skyux/indicators';
-import { SchoolLogoComponent } from '../shared/school-logo/school-logo.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FooterComponent, FormsModule, SkyIconModule, SchoolLogoComponent],
+  imports: [CommonModule, FooterComponent, FormsModule, SkyIconModule],
   selector: 'app-standings',
   templateUrl: './standings.component.html',
   styleUrls: ['./standings.component.scss'],
@@ -42,6 +42,7 @@ export class StandingsComponent implements OnInit {
   constructor(
     private titleService: Title,
     private service: BracketService,
+    private trackingService: TrackingService,
     private flyoutService: SkyFlyoutService,
     private authService: AuthService
   ) {
@@ -55,6 +56,7 @@ export class StandingsComponent implements OnInit {
 
   public ngOnInit() {
     this.titleService.setTitle('Bracket Challenge - Standings');
+    this.trackingService.trackEvent('standings_view', { year: this.currentYear });
 
     this.service.getSettings().subscribe({
       next: (settings) => {
@@ -126,6 +128,11 @@ export class StandingsComponent implements OnInit {
   }
 
   public onNameClick(id: string | undefined, userId?: number | undefined) {
+    this.trackingService.trackEvent('standings_flyout_opened', { 
+      entryId: id,
+      userId: userId
+    });
+    
     const record: StandingsFlyoutContext = {
       entryId: id!.toString(),
     };
@@ -147,6 +154,11 @@ export class StandingsComponent implements OnInit {
   }
 
   public updateYear(year: number) {
+    this.trackingService.trackEvent('standings_year_changed', { 
+      year: year,
+      previousYear: this.currentYear
+    });
+    
     this.currentYear = year;
     this.sortCurrentPoints = false;
     this.sortCorrectPicks = false;
@@ -157,6 +169,11 @@ export class StandingsComponent implements OnInit {
   }
 
   public sortByCurrentPoints() {
+    this.trackingService.trackEvent('standings_sort_changed', { 
+      sortBy: 'current_points',
+      descending: !this.currentPointsDesc
+    });
+    
     this.sortCurrentPoints = true;
     this.sortRemainingPoints = this.sortPossiblePoints = this.sortCorrectPicks = false;
     this.currentPointsDesc = !this.currentPointsDesc;
@@ -175,6 +192,11 @@ export class StandingsComponent implements OnInit {
   }
 
   public sortByCorrectPicks() {
+    this.trackingService.trackEvent('standings_sort_changed', { 
+      sortBy: 'correct_picks',
+      descending: !this.correctPicksDesc
+    });
+    
     this.sortCorrectPicks = true;
     this.sortRemainingPoints = this.sortPossiblePoints = this.sortCurrentPoints = false;
     this.correctPicksDesc = !this.correctPicksDesc;
@@ -193,6 +215,11 @@ export class StandingsComponent implements OnInit {
   }
 
   public sortByRemainingPoints() {
+    this.trackingService.trackEvent('standings_sort_changed', { 
+      sortBy: 'remaining_points',
+      descending: !this.remainingPointsDesc
+    });
+    
     this.sortRemainingPoints = true;
     this.sortPossiblePoints = this.sortCorrectPicks = this.sortCurrentPoints = false;
     this.remainingPointsDesc = !this.remainingPointsDesc;

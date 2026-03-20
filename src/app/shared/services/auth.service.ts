@@ -4,6 +4,8 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { API_CONSTANTS } from '../constants/api.constants';
+import { TrackingService } from './tracking.service';
+import { environment } from '../../../environments/environment';
 
 export interface LoginRequest {
   username: string;
@@ -34,11 +36,27 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<string | null>;
   public currentUser$: Observable<string | null>;
   public jwtHelper = new JwtHelperService();
+  private isDevelopment = environment.production === false && localStorage.getItem('ENVIRONMENT') === 'development';
 
-  constructor(private http: HttpClient) {
+  /**
+   * Log only in development mode (requires ENVIRONMENT=development in localStorage)
+   */
+  private devLog(message: string, data?: any): void {
+    if (this.isDevelopment) {
+      console.log(message, data || '');
+    }
+  }
+
+  constructor(private http: HttpClient, private trackingService: TrackingService) {
     this.apiUrl = API_CONSTANTS.AUTH_API_URL;
     this.currentUserSubject = new BehaviorSubject<string | null>(this.getUsernameFromToken());
     this.currentUser$ = this.currentUserSubject.asObservable();
+    
+    // Set user ID if already authenticated
+    const currentUser = this.getCurrentUsername();
+    if (currentUser) {
+      this.trackingService.setUserId(currentUser);
+    }
   }
 
   /**
@@ -57,16 +75,21 @@ export class AuthService {
    * Login with username and password
    */
   login(username: string, password: string): Observable<boolean> {
+    this.devLog(`[AuthService] Login attempt for user: ${username}`);
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { username, password })
       .pipe(
         tap(response => {
           if (response.token) {
+            this.devLog(`[AuthService] Login successful for user: ${username}`);
             localStorage.setItem(this.TOKEN_KEY, response.token);
             // Store email if returned in response (backend update required)
             if ((response as any).email) {
               localStorage.setItem(this.EMAIL_KEY, (response as any).email);
             }
             this.currentUserSubject.next(username);
+            this.trackingService.setUserId(username);
+            this.devLog(`[AuthService] Tracking user_login event`);
+            this.trackingService.trackEvent('user_login', { username });
           }
         }),
         map(() => true),
@@ -78,13 +101,18 @@ export class AuthService {
    * Register a new user with username, email and password
    */
   register(username: string, email: string, password: string): Observable<boolean> {
+    this.devLog(`[AuthService] Register attempt for user: ${username}`);
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, { username, email, password })
       .pipe(
         tap(response => {
           if (response.token) {
+            this.devLog(`[AuthService] Registration successful for user: ${username}`);
             localStorage.setItem(this.TOKEN_KEY, response.token);
             localStorage.setItem(this.EMAIL_KEY, email);
             this.currentUserSubject.next(username);
+            this.trackingService.setUserId(username);
+            this.devLog(`[AuthService] Tracking user_register event`);
+            this.trackingService.trackEvent('user_register', { username, email });
           }
         }),
         map(() => true),
@@ -96,9 +124,15 @@ export class AuthService {
    * Logout the current user
    */
   logout(): void {
+    const username = this.getCurrentUsername();
+    this.devLog(`[AuthService] Logout for user: ${username}`);
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.EMAIL_KEY);
     this.currentUserSubject.next(null);
+    this.trackingService.clearUserId();
+    this.devLog(`[AuthService] Tracking user_logout event`);
+    this.trackingService.trackEvent('user_logout', { username });
+    this.trackingService.flush(); // Ensure logout event is sent immediately
   }
 
   /**

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BracketService } from '../shared/services/bracket.service';
+import { TrackingService } from '../shared/services/tracking.service';
 import { FooterComponent } from '../shared/footer/footer.component';
 
 interface SiteUpdate {
@@ -15,7 +16,7 @@ interface SiteUpdate {
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss'],
 })
-export class AboutComponent {
+export class AboutComponent implements OnInit {
   public showRules = true;
 
   public siteUpdates: SiteUpdate[] = [
@@ -69,7 +70,11 @@ export class AboutComponent {
     }
   ];
 
-  constructor(private service: BracketService) {}
+  constructor(private service: BracketService, private trackingService: TrackingService) {}
+
+  public ngOnInit(): void {
+    this.trackingService.trackEvent('about_view');
+  }
 
   public toggleRules(): void {
     this.showRules = !this.showRules;
