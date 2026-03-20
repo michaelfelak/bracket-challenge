@@ -8,6 +8,7 @@ export class StandingsRecord {
   win_total?: number;
   teams_remaining?: number;
   user_id?: number;
+  username?: string;
   superfan_seed?: number;
   superfan_seed_id?: number;
   superfan_school?: string;

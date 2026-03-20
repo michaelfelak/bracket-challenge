@@ -1,16 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FeedbackService } from '../../services/feedback.service';
 import { AuthService } from '../../services/auth.service';
 import { SettingsService } from '../../services/settings.service';
 import { LoggerService } from '../../services/logger.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-feedback-form',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
-  providers: [FeedbackService],
   template: `
     <div class="feedback-button-container" *ngIf="isAuthenticated">
       <button 
@@ -306,7 +307,7 @@ import { LoggerService } from '../../services/logger.service';
     }
   `]
 })
-export class FeedbackFormComponent {
+export class FeedbackFormComponent implements OnInit, OnDestroy {
   feedbackForm: FormGroup;
   isAuthenticated = false;
   isPopoverOpen = false;
@@ -316,6 +317,7 @@ export class FeedbackFormComponent {
   placeholderText = `• What feedback do you have?
 • Are there any features you would like to see?
 • Is something not working as expected?`;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -329,6 +331,20 @@ export class FeedbackFormComponent {
     });
 
     this.isAuthenticated = this.authService.isAuthenticated();
+  }
+
+  ngOnInit(): void {
+    // Subscribe to auth changes to update isAuthenticated dynamically
+    this.authService.currentUser$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.isAuthenticated = this.authService.isAuthenticated();
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   togglePopover(): void {

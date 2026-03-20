@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { BracketService } from './shared/services/bracket.service';
 import { AuthService } from './shared/services/auth.service';
 import { TrackingService } from './shared/services/tracking.service';
@@ -6,7 +6,6 @@ import { Router, NavigationEnd } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { environment } from '../environments/environment';
-import { FeedbackFormComponent } from './shared/components/feedback-form/feedback-form.component';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +20,6 @@ export class AppComponent {
   public menuOpen = false;
   public showUserDropdown = false;
   public appSwitcherOpen = false;
-  @ViewChild(FeedbackFormComponent) feedbackForm!: FeedbackFormComponent;
   private isDevelopment = !environment.production && localStorage.getItem('ENVIRONMENT') === 'development';
 
   /**
@@ -134,11 +132,5 @@ export class AppComponent {
 
   closeUserDropdown(): void {
     this.showUserDropdown = false;
-  }
-
-  toggleFeedback(): void {
-    if (this.feedbackForm) {
-      this.feedbackForm.togglePopover();
-    }
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { API_CONSTANTS } from '../../shared/constants/api.constants';
+import { AuthService } from '../../shared/services/auth.service';
 import { environment } from '../../../environments/environment';
 
 interface EventSummary {
@@ -43,6 +44,8 @@ export class UsageAnalyticsComponent implements OnInit {
   public selectedDay: number = 6; // Saturday by default (0=Sunday, 1=Monday, ..., 6=Saturday)
   public selectedDateDisplay: string = '';
   public Math = Math;
+  public hideCurrentUser = true; // Filter off by default
+  public currentUser: string | null = null;
   
   private baseUrl: string;
   private isDevelopment = environment.production === false && localStorage.getItem('ENVIRONMENT') === 'development';
@@ -56,11 +59,15 @@ export class UsageAnalyticsComponent implements OnInit {
     }
   }
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
     this.baseUrl = API_CONSTANTS.BRACKET_API_URL;
   }
 
   public ngOnInit(): void {
+    // Get current user
+    this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+    });
     this.selectDay(6); // Load Saturday by default
   }
 
@@ -156,6 +163,23 @@ export class UsageAnalyticsComponent implements OnInit {
    */
   public topItems<T>(items: T[], n: number): T[] {
     return items.slice(0, n);
+  }
+
+  /**
+   * Get filtered user activity based on current filter
+   */
+  public getFilteredUserActivity(users: UserActivity[]): UserActivity[] {
+    if (!this.hideCurrentUser || !this.currentUser) {
+      return users;
+    }
+    return users.filter(user => user.userId.toLowerCase() !== this.currentUser?.toLowerCase());
+  }
+
+  /**
+   * Toggle showing/hiding current user
+   */
+  public toggleHideCurrentUser(): void {
+    this.hideCurrentUser = !this.hideCurrentUser;
   }
 
   /**
