@@ -1,0 +1,71 @@
+<div class="feedback-container">
+  <div class="feedback-content">
+    <!-- Authentication Required -->
+    <div *ngIf="!isAuthenticated" class="auth-required">
+      <div class="auth-message">
+        <h2>Sign In to Share Feedback</h2>
+        <p>Please log in to submit feedback about the Bracket Challenge.</p>
+        <a routerLink="/login" class="login-button">Go to Login</a>
+      </div>
+    </div>
+
+    <!-- Feedback Form -->
+    <div *ngIf="isAuthenticated" class="feedback-form-wrapper">
+      <div class="form-header">
+        <h1>Share Your Feedback</h1>
+        <p class="subtitle">Help us improve the Bracket Challenge experience</p>
+      </div>
+
+      <form [formGroup]="feedbackForm" (ngSubmit)="submitFeedback()" class="feedback-form">
+        <div class="form-group">
+          <label for="feedback_text" class="form-label">Your Feedback</label>
+          <textarea
+            id="feedback_text"
+            formControlName="feedback_text"
+            class="feedback-textarea"
+            [placeholder]="placeholderText"
+            rows="8"
+          ></textarea>
+          <div class="form-hint">Minimum 10 characters</div>
+          <div class="form-error" *ngIf="feedbackForm.get('feedback_text')?.invalid && feedbackForm.get('feedback_text')?.touched">
+            <span *ngIf="feedbackForm.get('feedback_text')?.errors?.['required']">Feedback is required</span>
+            <span *ngIf="feedbackForm.get('feedback_text')?.errors?.['minlength']">Feedback must be at least 10 characters</span>
+          </div>
+        </div>
+
+        <button 
+          type="submit" 
+          class="submit-btn"
+          [disabled]="!feedbackForm.valid || isSubmitting"
+        >
+          <span *ngIf="!isSubmitting">Submit Feedback</span>
+          <span *ngIf="isSubmitting">Submitting...</span>
+        </button>
+
+        <!-- Messages -->
+        <div class="messages">
+          <div *ngIf="successMessage" class="success-message">
+            <span class="icon">✓</span>
+            {{ successMessage }}
+          </div>
+          <div *ngIf="errorMessage" class="error-message">
+            <span class="icon">✕</span>
+            {{ errorMessage }}
+          </div>
+        </div>
+      </form>
+
+      <div class="feedback-info">
+        <h3>What We'd Like to Know</h3>
+        <ul>
+          <li>How can we improve the bracket experience?</li>
+          <li>Are there features you'd like to see?</li>
+          <li>Did you encounter any issues?</li>
+          <li>What's working well?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

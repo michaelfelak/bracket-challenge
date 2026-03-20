@@ -11,11 +11,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { SecurityInterceptor } from './shared/interceptors/security.interceptor';
 import { PlatformSwitcherComponent } from './shared/components/platform-switcher.component';
-import { FeedbackFormComponent } from './shared/components/feedback-form/feedback-form.component';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, BrowserAnimationsModule, AppRoutingModule, HttpClientModule, PlatformSwitcherComponent, FeedbackFormComponent],
+  imports: [BrowserModule, BrowserAnimationsModule, AppRoutingModule, HttpClientModule, PlatformSwitcherComponent],
   providers: [
     BracketService,
     AuthService,

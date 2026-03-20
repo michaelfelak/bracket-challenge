@@ -209,6 +209,20 @@ main {
   max-width: 100%;
 }
 
+.username-subtitle {
+  display: block;
+  font-size: 12px;
+  font-style: italic;
+  color: #666;
+  margin-top: 0;
+  margin-left: 0;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
 .superfan-col {
   width: 18%;
   text-align: center;

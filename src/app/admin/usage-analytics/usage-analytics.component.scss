@@ -111,6 +111,44 @@
     }
   }
 
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 15px;
+
+    h3 {
+      margin: 0;
+    }
+  }
+
+  .filter-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #666;
+    white-space: nowrap;
+    user-select: none;
+
+    input[type="checkbox"] {
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+      accent-color: #4a90e2;
+    }
+
+    span {
+      font-weight: 500;
+    }
+
+    &:hover {
+      color: #333;
+    }
+  }
+
   .event-breakdown {
     display: flex;
     flex-direction: column;

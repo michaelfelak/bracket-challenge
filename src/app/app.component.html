@@ -40,6 +40,7 @@
     <a routerLink="scores" routerLinkActive="active" (click)="closeMenu()">Bracket</a>
     <a routerLink="scenario" routerLinkActive="active" (click)="closeMenu()">Simulator</a>
     <a routerLink="winners" routerLinkActive="active" (click)="closeMenu()">Points</a>
+    <a *ngIf="isAuthenticated" routerLink="feedback" routerLinkActive="active" (click)="closeMenu()">Feedback</a>
     <a routerLink="about" routerLinkActive="active" (click)="closeMenu()">About</a>
     <a *ngIf="isAdmin" routerLink="admin" routerLinkActive="active" (click)="closeMenu()">Admin</a>
   </nav>
@@ -64,14 +65,13 @@
     <a routerLink="scores" routerLinkActive="active" (click)="closeMenu()">Bracket</a>
     <a routerLink="scenario" routerLinkActive="active" (click)="closeMenu()">Simulator</a>
     <a routerLink="winners" routerLinkActive="active" (click)="closeMenu()">Points</a>
+    <a *ngIf="isAuthenticated" routerLink="feedback" routerLinkActive="active" (click)="closeMenu()">Feedback</a>
     <a routerLink="about" routerLinkActive="active" (click)="closeMenu()">About</a>
     <a *ngIf="isAdmin" routerLink="admin" routerLinkActive="active" (click)="closeMenu()">Admin</a>
   </nav>
 
   <!-- Auth Section -->
   <div class="spacer"></div>
-  <!-- Feedback Link (testing - always visible for now) -->
-  <button class="feedback-link" (click)="toggleFeedback()" title="Send feedback" aria-label="Send feedback">📢 Feedback</button>
   <div class="auth-section">
     <ng-container *ngIf="isAuthenticated; else notLoggedIn">
       <!-- User Avatar Dropdown -->
@@ -107,6 +107,3 @@
 </div>
 
 <router-outlet></router-outlet>
-
-<!-- Feedback form component (not shown on admin page) -->
-<app-feedback-form *ngIf="!isAdmin"></app-feedback-form>

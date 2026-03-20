@@ -102,7 +102,18 @@
 
     <!-- Top Users -->
     <div class="section">
-      <h3>Top Active Users</h3>
+      <div class="section-header">
+        <h3>Top Active Users</h3>
+        <label class="filter-checkbox">
+          <input 
+            type="checkbox" 
+            [checked]="hideCurrentUser" 
+            (change)="toggleHideCurrentUser()"
+            *ngIf="currentUser"
+          >
+          <span *ngIf="currentUser">Hide {{ currentUser }}</span>
+        </label>
+      </div>
       <div class="user-activity">
         <table>
           <thead>
@@ -113,7 +124,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let user of topItems(analyticsData.userActivity, 10)">
+            <tr *ngFor="let user of getFilteredUserActivity(analyticsData.userActivity)">
               <td class="user-name">{{ user.userId }}</td>
               <td>{{ user.eventCount | number }}</td>
               <td class="timestamp">{{ user.lastEvent | date: 'short' }}</td>

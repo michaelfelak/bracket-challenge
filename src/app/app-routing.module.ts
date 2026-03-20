@@ -9,6 +9,7 @@ import { SimulatorComponent } from './bracket/scenario/simulator.component';
 import { EntryComponent } from './entry/entry.component';
 import { AdminRouteGuard } from './admin/index.guard';
 import { PointsComponent } from './points/points.component';
+import { FeedbackComponent } from './feedback/feedback.component';
 // import { TimelineComponent } from './timeline/timeline.component';
 import { LoginComponent } from './auth/login.component';
 import { AuthGuard } from './shared/guards/auth.guard';
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'about',
     component: AboutComponent,
+  },
+  {
+    path: 'feedback',
+    component: FeedbackComponent,
   },
   {
     path: 'my-profile',

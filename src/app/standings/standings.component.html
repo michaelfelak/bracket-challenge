@@ -42,6 +42,7 @@
                 {{ pick.entry_name }}
               </button>
               <span *ngIf="!showStandingsLink">{{ pick.entry_name }}</span>
+              <div *ngIf="pick.username" class="username-subtitle">{{ pick.username }}</div>
             </td>
             <td class="superfan-col" data-label="Superfan Team">
               <div *ngIf="pick.superfan_seed" class="superfan-with-status">
@@ -140,6 +141,7 @@
                 {{ pick.entry_name }}
               </button>
               <span *ngIf="!showStandingsLink">{{ pick.entry_name }}</span>
+              <div *ngIf="pick.username" class="username-subtitle">{{ pick.username }}</div>
             </td>
             <td class="superfan-col" data-label="Superfan Team">
               <div *ngIf="pick.superfan_seed" class="superfan-with-status">
