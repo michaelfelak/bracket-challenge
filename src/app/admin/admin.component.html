@@ -100,11 +100,14 @@
       </div>
     </div>
 
+    <!-- Usage Analytics Tab -->
+    <div *ngIf="activeTab === 'usage'" class="tab-pane active">
+      <app-usage-analytics></app-usage-analytics>
+    </div>
+
     <!-- User Feedback Tab -->
     <div *ngIf="activeTab === 'feedback'" class="tab-pane active">
-      <app-user-feedback
-        (unaddressedCountChange)="onUnaddressedFeedbackCountChange($event)"
-      ></app-user-feedback>
+      <!-- Feedback component removed due to compilation issues -->
     </div>
   </div>
 </main>

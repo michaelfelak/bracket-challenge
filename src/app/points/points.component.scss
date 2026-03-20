@@ -300,3 +300,21 @@ main {
     font-size: 11px;
   }
 }
+/* School Logo Section */
+.school-with-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .school-logo {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .school-text {
+    display: flex;
+    align-items: center;
+  }
+}

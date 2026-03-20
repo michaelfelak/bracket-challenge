@@ -174,10 +174,9 @@ export class SelectWinnersComponent implements OnInit {
         if (!teamsByRegion.has(region)) {
           teamsByRegion.set(region, []);
         }
-        // Mark teams that are winners or losers
+        // Mark teams that are losers (don't mark winners - they advance to next round)
         const teamWithStatus: TeamWithStatus = {
           ...team,
-          isWinner: team.seed_id ? winningSeedIds.has(team.seed_id) : false,
           isLoser: team.seed_id ? losingSeedIds.has(team.seed_id) : false
         };
         teamsByRegion.get(region)!.push(teamWithStatus);
@@ -195,12 +194,32 @@ export class SelectWinnersComponent implements OnInit {
         regionData.set(region, teams);
       });
 
+      // Check if all teams in this round are losers
+      const allTeamsInRegions = Array.from(regionData.values()).flat();
+      const allTeamsAreLoser = allTeamsInRegions.length > 0 && allTeamsInRegions.every(t => t.isLoser);
+
       this.roundsData.push({
         round: round,
         roundName: roundNames[round - 1],
-        isCollapsed: round > 1,
+        isCollapsed: allTeamsAreLoser || round > 1,
         regionData: regionData,
       });
+    }
+
+    // If a round is auto-collapsed because all teams are losers, expand the next round
+    for (let i = 0; i < this.roundsData.length - 1; i++) {
+      const currentRound = this.roundsData[i];
+      const nextRound = this.roundsData[i + 1];
+      
+      // If current round is collapsed and has teams, check if it's a loser-only round
+      const currentRoundTeams = Array.from(currentRound.regionData.values()).flat();
+      if (currentRoundTeams.length > 0 && currentRoundTeams.every(t => t.isLoser)) {
+        // This round is all losers, so expand the next round if it has teams
+        const nextRoundTeams = Array.from(nextRound.regionData.values()).flat();
+        if (nextRoundTeams.length > 0) {
+          nextRound.isCollapsed = false;
+        }
+      }
     }
   }
 

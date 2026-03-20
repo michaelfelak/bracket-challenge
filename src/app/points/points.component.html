@@ -53,7 +53,18 @@
               </td>
               <td class="region-col" data-label="Region">{{ team.region_name }}</td>
               <td class="seed-col" data-label="Seed">#{{ team.seed_number }}</td>
-              <td class="school-col" data-label="School">{{ team.school_name }}</td>
+              <td class="school-col" data-label="School">
+                <div class="school-with-logo">
+                  <img
+                    *ngIf="team.logo_id"
+                    [src]="'assets/logos/' + team.logo_id + '.png'"
+                    [alt]="team.school_name"
+                    class="school-logo"
+                    (error)="onLogoError($event)"
+                  />
+                  <span class="school-text">{{ team.school_name }}</span>
+                </div>
+              </td>
               <td class="points-col" data-label="Points">{{ team.points }}</td>
               <td class="wins-col" data-label="Wins">{{ team.wins }}</td>
               <td class="entries-col" data-label="Entries Selected">{{ team.entries_selected }}</td>

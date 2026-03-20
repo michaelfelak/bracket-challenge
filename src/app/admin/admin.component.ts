@@ -16,8 +16,8 @@ import { SkyRepeaterModule } from '@skyux/lists';
 import { PaidStatusComponent } from './paid-status/paid-status.component';
 import { Settings } from '../shared/models/settings.model';
 import { AddBlogComponent } from './add-blog/add-blog.component';
-import { UserFeedbackComponent } from './user-feedback/user-feedback.component';
 import { BlogPostGeneratorComponent } from './blog-post-generator/blog-post-generator.component';
+import { UsageAnalyticsComponent } from './usage-analytics/usage-analytics.component';
 
 interface Tab {
   id: string;
@@ -37,8 +37,8 @@ interface Tab {
     SkyRepeaterModule,
     PaidStatusComponent,
     AddBlogComponent,
-    UserFeedbackComponent,
     BlogPostGeneratorComponent,
+    UsageAnalyticsComponent,
   ],
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -62,6 +62,7 @@ export class AdminComponent implements OnInit {
     { id: 'entries', label: 'Entries' },
     { id: 'paid-status', label: 'Paid Status' },
     { id: 'blog', label: 'Blog' },
+    { id: 'usage', label: 'Usage Analytics' },
     { id: 'feedback', label: 'User Feedback' },
     { id: 'settings', label: 'Settings' },
   ];

@@ -175,6 +175,31 @@ a:hover {
   margin-right: 16px;
 }
 
+.feedback-link {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 10px 12px;
+  transition: all 0.2s;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  white-space: nowrap;
+
+  &:hover {
+    color: #eeff00;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
 .username {
   color: white;
   font-weight: 500;

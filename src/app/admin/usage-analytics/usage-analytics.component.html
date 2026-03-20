@@ -1,0 +1,159 @@
+<div class="usage-analytics">
+  <h2>Usage Analytics</h2>
+  
+  <!-- Day Selector -->
+  <div class="day-selector">
+    <button 
+      (click)="selectDay(4)" 
+      [class.active]="selectedDay === 4"
+      class="day-btn">
+      Thursday
+    </button>
+    <button 
+      (click)="selectDay(5)" 
+      [class.active]="selectedDay === 5"
+      class="day-btn">
+      Friday
+    </button>
+    <button 
+      (click)="selectDay(6)" 
+      [class.active]="selectedDay === 6"
+      class="day-btn">
+      Saturday
+    </button>
+    <button 
+      (click)="selectDay(0)" 
+      [class.active]="selectedDay === 0"
+      class="day-btn">
+      Sunday
+    </button>
+    <button 
+      (click)="selectDay(1)" 
+      [class.active]="selectedDay === 1"
+      class="day-btn">
+      Monday
+    </button>
+    <button 
+      (click)="selectDay(2)" 
+      [class.active]="selectedDay === 2"
+      class="day-btn">
+      Tuesday
+    </button>
+    <button 
+      (click)="selectDay(3)" 
+      [class.active]="selectedDay === 3"
+      class="day-btn">
+      Wednesday
+    </button>
+  </div>
+  <div *ngIf="selectedDateDisplay" class="selected-date">{{ selectedDateDisplay }}</div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading">
+    <p>Loading analytics...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error">
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Analytics Content -->
+  <div *ngIf="analyticsData && !isLoading" class="analytics-content">
+    
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+      <div class="stat-card">
+        <h3>Total Events</h3>
+        <p class="stat-value">{{ analyticsData.summary.totalEvents | number }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Unique Users</h3>
+        <p class="stat-value">{{ analyticsData.summary.uniqueUsers | number }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Pages Visited</h3>
+        <p class="stat-value">{{ analyticsData.summary.uniquePages | number }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Event Types</h3>
+        <p class="stat-value">{{ analyticsData.summary.uniqueEventTypes | number }}</p>
+      </div>
+    </div>
+
+    <!-- Event Types Breakdown -->
+    <div class="section">
+      <h3>Event Type Breakdown</h3>
+      <div class="event-breakdown">
+        <div 
+          *ngFor="let event of analyticsData.eventCounts | keyvalue" 
+          class="event-item">
+          <span class="event-name">{{ event.key }}</span>
+          <span class="event-count">{{ event.value | number }}</span>
+          <div class="bar">
+            <div 
+              class="bar-fill" 
+              [style.width]="((event.value / getMaxEventCount()) * 100) + '%'">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Users -->
+    <div class="section">
+      <h3>Top Active Users</h3>
+      <div class="user-activity">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Events</th>
+              <th>Last Activity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of topItems(analyticsData.userActivity, 10)">
+              <td class="user-name">{{ user.userId }}</td>
+              <td>{{ user.eventCount | number }}</td>
+              <td class="timestamp">{{ user.lastEvent | date: 'short' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Daily Trends -->
+    <div class="section">
+      <h3>Daily Event Trends</h3>
+      <div class="daily-trends">
+        <div class="trends-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Events</th>
+                <th>Visualization</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let trend of analyticsData.dailyTrends">
+                <td class="date">{{ trend.day }}</td>
+                <td class="count">{{ trend.count | number }}</td>
+                <td>
+                  <div class="trend-bar">
+                    <div 
+                      class="trend-bar-fill" 
+                      [style.width]="((trend.count / getMaxTrendCount()) * 100) + '%'">
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

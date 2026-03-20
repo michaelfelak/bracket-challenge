@@ -3,6 +3,7 @@ export interface Winner {
   region_name: string;
   seed_number: number;
   school_name: string;
+  logo_id: number;
   points: number;
   wins: number;
   entries_selected: number;
