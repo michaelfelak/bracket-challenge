@@ -8,6 +8,11 @@ export class StandingsRecord {
   win_total?: number;
   teams_remaining?: number;
   user_id?: number;
+  superfan_seed?: number;
+  superfan_seed_id?: number;
+  superfan_school?: string;
+  superfan_logo_id?: number;
+  superfan_eliminated?: boolean;
 }
 
 export class CompletedEntry {

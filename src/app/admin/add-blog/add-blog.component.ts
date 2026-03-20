@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { BracketService } from '../../shared/services/bracket.service';
+import { BlogContentService } from '../../shared/services/blog-content.service';
 import { BlogEntry } from '../../shared/models/blog.model';
 
 @Component({
@@ -28,11 +29,21 @@ export class AddBlogComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private bracketService: BracketService
+    private bracketService: BracketService,
+    private blogContentService: BlogContentService
   ) {}
 
   public ngOnInit() {
     this.initializeForm();
+    this.subscribeToBllogContent();
+  }
+
+  private subscribeToBllogContent() {
+    this.blogContentService.blogContent$.subscribe(content => {
+      if (content) {
+        this.blogForm.get('body')?.setValue(content);
+      }
+    });
   }
 
   private initializeForm() {

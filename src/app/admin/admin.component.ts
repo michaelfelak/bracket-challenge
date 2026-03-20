@@ -17,6 +17,7 @@ import { PaidStatusComponent } from './paid-status/paid-status.component';
 import { Settings } from '../shared/models/settings.model';
 import { AddBlogComponent } from './add-blog/add-blog.component';
 import { UserFeedbackComponent } from './user-feedback/user-feedback.component';
+import { BlogPostGeneratorComponent } from './blog-post-generator/blog-post-generator.component';
 
 interface Tab {
   id: string;
@@ -37,6 +38,7 @@ interface Tab {
     PaidStatusComponent,
     AddBlogComponent,
     UserFeedbackComponent,
+    BlogPostGeneratorComponent,
   ],
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -50,6 +52,10 @@ export class AdminComponent implements OnInit {
   public selectedBracketIdLocal: number = 0;
   public isAdmin: boolean = false;
   public unaddressedFeedbackCount: number = 0;
+  public draggedTabId: string | null = null;
+  
+  private readonly TAB_ORDER_KEY = 'admin_tab_order';
+  private readonly ACTIVE_TAB_KEY = 'admin_active_tab';
 
   public tabs: Tab[] = [
     { id: 'winners', label: 'Select Winners' },
@@ -76,6 +82,8 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadTabOrder();
+    this.loadActiveTab();
     this.getSettings();
     this.loadUnaddressedFeedbackCount();
     this.service.getBracketList().subscribe((result) => {
@@ -88,6 +96,7 @@ export class AdminComponent implements OnInit {
 
   public selectTab(tabId: string): void {
     this.activeTab = tabId;
+    this.saveActiveTab();
   }
 
   public onUnaddressedFeedbackCountChange(count: number): void {
@@ -95,6 +104,74 @@ export class AdminComponent implements OnInit {
     const feedbackTab = this.tabs.find(tab => tab.id === 'feedback');
     if (feedbackTab) {
       feedbackTab.label = count > 0 ? `User Feedback (${count})` : 'User Feedback';
+    }
+  }
+
+  public onTabDragStart(event: DragEvent, tabId: string): void {
+    this.draggedTabId = tabId;
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move';
+    }
+  }
+
+  public onTabDragOver(event: DragEvent): void {
+    event.preventDefault();
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = 'move';
+    }
+  }
+
+  public onTabDrop(event: DragEvent, targetTabId: string): void {
+    event.preventDefault();
+    if (!this.draggedTabId || this.draggedTabId === targetTabId) {
+      this.draggedTabId = null;
+      return;
+    }
+
+    const draggedIndex = this.tabs.findIndex(tab => tab.id === this.draggedTabId);
+    const targetIndex = this.tabs.findIndex(tab => tab.id === targetTabId);
+
+    if (draggedIndex > -1 && targetIndex > -1) {
+      [this.tabs[draggedIndex], this.tabs[targetIndex]] = [this.tabs[targetIndex], this.tabs[draggedIndex]];
+      this.saveTabOrder();
+    }
+
+    this.draggedTabId = null;
+  }
+
+  public onTabDragEnd(): void {
+    this.draggedTabId = null;
+  }
+
+  private saveTabOrder(): void {
+    const tabOrder = this.tabs.map(tab => tab.id);
+    localStorage.setItem(this.TAB_ORDER_KEY, JSON.stringify(tabOrder));
+  }
+
+  private loadTabOrder(): void {
+    const savedOrder = localStorage.getItem(this.TAB_ORDER_KEY);
+    if (savedOrder) {
+      try {
+        const tabIds = JSON.parse(savedOrder) as string[];
+        const tabMap = new Map(this.tabs.map(tab => [tab.id, tab]));
+        this.tabs = tabIds
+          .filter(id => tabMap.has(id))
+          .map(id => tabMap.get(id) as Tab)
+          .concat(this.tabs.filter(tab => !tabIds.includes(tab.id)));
+      } catch (error) {
+        this.logger.error('Error loading tab order:', error);
+      }
+    }
+  }
+
+  private saveActiveTab(): void {
+    localStorage.setItem(this.ACTIVE_TAB_KEY, this.activeTab);
+  }
+
+  private loadActiveTab(): void {
+    const savedTab = localStorage.getItem(this.ACTIVE_TAB_KEY);
+    if (savedTab && this.tabs.some(tab => tab.id === savedTab)) {
+      this.activeTab = savedTab;
     }
   }
 

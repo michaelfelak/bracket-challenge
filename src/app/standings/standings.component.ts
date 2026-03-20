@@ -9,10 +9,12 @@ import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../shared/services/auth.service';
+import { SkyIconModule } from '@skyux/indicators';
+import { SchoolLogoComponent } from '../shared/school-logo/school-logo.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FooterComponent, FormsModule],
+  imports: [CommonModule, FooterComponent, FormsModule, SkyIconModule, SchoolLogoComponent],
   selector: 'app-standings',
   templateUrl: './standings.component.html',
   styleUrls: ['./standings.component.scss'],
@@ -206,5 +208,13 @@ export class StandingsComponent implements OnInit {
         });
       }
     }
+  }
+
+  public onLogoError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    const src = img.src || 'unknown';
+    const alt = img.alt || 'unknown';
+    console.warn(`[Bracket Challenge] Superfan logo not found - School: ${alt}, Path: ${src}`);
+    img.style.display = 'none';
   }
 }
