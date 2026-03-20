@@ -11,6 +11,7 @@ import { AddWinnerRequest } from 'src/app/shared/models/winner.model';
 
 interface TeamWithStatus extends WinnerByRound {
   isWinner?: boolean;
+  isLoser?: boolean;
 }
 
 interface RoundData {
@@ -73,50 +74,59 @@ export class SelectWinnersComponent implements OnInit {
         this.logger.debug('Round 1 teams generated:', round1Teams.length);
         this.logger.debug('Sample round1 teams:', round1Teams.slice(0, 10).map(t => ({ name: t.school_name, region: t.region_name, seed: t.seed_number })));
         
-        // Load existing winners for rounds 2-6
-        this.service.getWinnersByRound(this.effectiveBracketId).subscribe({
-          next: (winnersData) => {
-            this.logger.debug('Winners data received (raw):', winnersData);
-            this.logger.debug('Winners data type:', typeof winnersData);
-            this.logger.debug('Winners data is array:', Array.isArray(winnersData));
-            
-            // Handle null or undefined
-            const winnersList = winnersData || [];
-            this.logger.debug('Winners list after null check:', winnersList);
-            
-            if (winnersList.length > 0) {
-              this.logger.debug('Sample winners with rounds:', winnersList.slice(0, 5).map(w => ({ name: w.school_name, round: w.round, seedId: w.seed_id })));
-              this.logger.debug('FULL winner object:', JSON.stringify(winnersList[0]));
+        // Load existing winners and losers 
+        const winnersObservable = this.service.getWinnersByRound(this.effectiveBracketId);
+        const losersObservable = this.service.getLosersByRound(this.effectiveBracketId);
+
+        Promise.all([
+          winnersObservable.toPromise(),
+          losersObservable.toPromise()
+        ]).then(([winnersData, losersData]) => {
+          this.logger.debug('Winners data received (raw):', winnersData);
+          this.logger.debug('Losers data received (raw):', losersData);
+          
+          // Handle null or undefined
+          const winnersList = winnersData || [];
+          const losersList = losersData || [];
+          
+          this.logger.debug('Winners list after null check:', winnersList);
+          this.logger.debug('Losers list after null check:', losersList);
+          
+          // Create Sets for quick lookup
+          const winningSeedIds = new Set<number>();
+          const losingSeedIds = new Set<number>();
+          
+          winnersList.forEach(winner => {
+            if (winner.seed_id) {
+              winningSeedIds.add(winner.seed_id);
             }
-            
-            // Create a Set of winning seed IDs for quick lookup
-            const winningSeedIds = new Set<number>();
-            if (winnersList) {
-              winnersList.forEach(winner => {
-                if (winner.seed_id) {
-                  winningSeedIds.add(winner.seed_id);
-                }
-              });
+          });
+          
+          losersList.forEach(loser => {
+            if (loser.seed_id) {
+              losingSeedIds.add(loser.seed_id);
             }
-            this.logger.debug('Winning seed IDs:', Array.from(winningSeedIds));
-            
-            // Mark Round 1 teams that are winners
-            const round1TeamsWithWinners = round1Teams.map(team => ({
-              ...team,
-              round: undefined, // Ensure Round 1 seeds don't have a round property
-              isWinner: team.seed_id ? winningSeedIds.has(team.seed_id) : false
-            }));
-            
-            // Keep Round 1 and winners separate for proper filtering
-            this.allTeams = round1TeamsWithWinners;
-            this.organizeBracketByRoundAndRegion([...round1TeamsWithWinners, ...winnersList], winningSeedIds);
-            this.isLoading = false;
-          },
-          error: (error) => {
-            this.logger.error('Error loading winners:', error);
-            this.errorMessage = 'Failed to load tournament data.';
-            this.isLoading = false;
-          }
+          });
+          
+          this.logger.debug('Winning seed IDs:', Array.from(winningSeedIds));
+          this.logger.debug('Losing seed IDs:', Array.from(losingSeedIds));
+          
+          // Mark Round 1 teams that are winners or losers
+          const round1TeamsWithStatus = round1Teams.map(team => ({
+            ...team,
+            round: undefined, // Ensure Round 1 seeds don't have a round property
+            isWinner: team.seed_id ? winningSeedIds.has(team.seed_id) : false,
+            isLoser: team.seed_id ? losingSeedIds.has(team.seed_id) : false
+          }));
+          
+          // Keep Round 1 and winners separate for proper filtering
+          this.allTeams = round1TeamsWithStatus;
+          this.organizeBracketByRoundAndRegion([...round1TeamsWithStatus, ...winnersData || []], winningSeedIds, losingSeedIds);
+          this.isLoading = false;
+        }).catch(error => {
+          this.logger.error('Error loading winners/losers:', error);
+          this.errorMessage = 'Failed to load tournament data.';
+          this.isLoading = false;
         });
       },
       error: (error) => {
@@ -127,7 +137,7 @@ export class SelectWinnersComponent implements OnInit {
     });
   }
 
-  private organizeBracketByRoundAndRegion(allTeams: WinnerByRound[], winningSeedIds: Set<number>): void {
+  private organizeBracketByRoundAndRegion(allTeams: WinnerByRound[], winningSeedIds: Set<number>, losingSeedIds: Set<number>): void {
     this.roundsData = [];
     const roundNames = [
       'Round 1 (Field of 64)',
@@ -164,17 +174,24 @@ export class SelectWinnersComponent implements OnInit {
         if (!teamsByRegion.has(region)) {
           teamsByRegion.set(region, []);
         }
-        // Mark teams that are winners
-        const teamWithWinner: TeamWithStatus = {
+        // Mark teams that are winners or losers
+        const teamWithStatus: TeamWithStatus = {
           ...team,
-          isWinner: team.seed_id ? winningSeedIds.has(team.seed_id) : false
+          isWinner: team.seed_id ? winningSeedIds.has(team.seed_id) : false,
+          isLoser: team.seed_id ? losingSeedIds.has(team.seed_id) : false
         };
-        teamsByRegion.get(region)!.push(teamWithWinner);
+        teamsByRegion.get(region)!.push(teamWithStatus);
       });
 
-      // Sort teams by seed number in ascending order
+      // Sort teams by: 1) loser status (losers at bottom), 2) seed number
       teamsByRegion.forEach((teams, region) => {
-        teams.sort((a, b) => (a.seed_number || 0) - (b.seed_number || 0));
+        teams.sort((a, b) => {
+          // Losers go to bottom
+          if (a.isLoser && !b.isLoser) return 1;
+          if (!a.isLoser && b.isLoser) return -1;
+          // Sort by seed number
+          return (a.seed_number || 0) - (b.seed_number || 0);
+        });
         regionData.set(region, teams);
       });
 

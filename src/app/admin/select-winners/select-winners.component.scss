@@ -186,6 +186,16 @@
     }
   }
 
+  &.loser {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+    
+    .team-info {
+      color: #721c24;
+      font-weight: 600;
+    }
+  }
+
   .team-info {
     display: flex;
     gap: 4px;
