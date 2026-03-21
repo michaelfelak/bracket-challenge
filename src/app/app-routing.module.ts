@@ -23,6 +23,7 @@ const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'about',
@@ -31,6 +32,7 @@ const routes: Routes = [
   {
     path: 'feedback',
     component: FeedbackComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'my-profile',
@@ -49,10 +51,12 @@ const routes: Routes = [
   {
     path: 'winners',
     component: PointsComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'scores',
     component: BracketComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'admin',
@@ -62,10 +66,12 @@ const routes: Routes = [
   {
     path: 'standings',
     component: StandingsComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'scenario',
     component: SimulatorComponent,
+    canActivate: [AuthGuard]
   },
 ];
 
