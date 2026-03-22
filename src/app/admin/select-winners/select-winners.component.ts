@@ -18,6 +18,7 @@ interface RoundData {
   round: number;
   roundName: string;
   isCollapsed: boolean;
+  isVisible: boolean;
   regionData: Map<string, TeamWithStatus[]>;
 }
 
@@ -149,18 +150,41 @@ export class SelectWinnersComponent implements OnInit {
     ];
     const regions = ['East', 'South', 'Midwest', 'West'];
 
+    // Build a map of each seed to its highest round of advancement
+    const seedToMaxRound = new Map<number, number>();
+    allTeams.forEach((team) => {
+      if (team.seed_id && team.round !== undefined) {
+        const maxRound = seedToMaxRound.get(team.seed_id) || 0;
+        seedToMaxRound.set(team.seed_id, Math.max(maxRound, team.round));
+      }
+    });
+
     for (let round = 1; round <= 6; round++) {
       const regionData = new Map<string, TeamWithStatus[]>();
       regions.forEach((region) => regionData.set(region, []));
 
       // Get teams for this round
-      // Round 1: Show initial seeds that haven't been marked as winners anywhere
-      // Round N>1: Show teams that won in round N-1
+      // Round 1: Show initial seeds that haven't been marked as winners or losers
+      // Round N>1: Show teams that won in round N-1, excluding any that have been marked as losers
       const teamsInRound = allTeams.filter((t) => {
+        const teamSeedId = t.seed_id || 0;
+        
+        // Exclude any team marked as a loser
+        if (losingSeedIds.has(teamSeedId)) {
+          return false;
+        }
+        
         if (round === 1) {
           // Show seeds that are not yet in any winners list
-          return !winningSeedIds.has(t.seed_id || 0);
+          return !winningSeedIds.has(teamSeedId);
         } else {
+          // For Round N>1: Show teams that are at this exact round (not at a later round)
+          // A team should only be shown in its current round, not in earlier rounds if it advanced
+          const maxRound = seedToMaxRound.get(teamSeedId);
+          if (maxRound !== undefined && maxRound !== t.round) {
+            // This is an old record for a team that advanced to a later round
+            return false;
+          }
           return t.round === round - 1;
         }
       });
@@ -197,11 +221,13 @@ export class SelectWinnersComponent implements OnInit {
       // Check if all teams in this round are losers
       const allTeamsInRegions = Array.from(regionData.values()).flat();
       const allTeamsAreLoser = allTeamsInRegions.length > 0 && allTeamsInRegions.every(t => t.isLoser);
+      const hasTeams = allTeamsInRegions.length > 0;
 
       this.roundsData.push({
         round: round,
         roundName: roundNames[round - 1],
         isCollapsed: allTeamsAreLoser || round > 1,
+        isVisible: hasTeams && !allTeamsAreLoser,
         regionData: regionData,
       });
     }
@@ -281,5 +307,12 @@ export class SelectWinnersComponent implements OnInit {
   public refreshData(): void {
     this.logger.debug(`[SELECT-WINNERS] Refreshing bracket data`);
     this.loadBracketData();
+  }
+
+  /**
+   * Check if there are any visible rounds
+   */
+  public hasVisibleRounds(): boolean {
+    return this.roundsData.some(round => round.isVisible);
   }
 }
